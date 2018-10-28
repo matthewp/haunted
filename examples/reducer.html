@@ -1,0 +1,34 @@
+<!doctype html>
+
+<my-counter></my-counter>
+
+
+<script type="module">
+  import { html } from 'https://unpkg.com/lit-html/lit-html.js';
+  import { component, useReducer } from '../haunted.js';
+
+  const initialState = {count: 0};
+
+  function reducer(state, action) {
+    switch (action.type) {
+      case 'reset': return initialState;
+      case 'increment': return {count: state.count + 1};
+      case 'decrement': return {count: state.count - 1};
+    }
+  }
+
+  function Counter() {
+    const [state, dispatch] = useReducer(reducer, initialState);
+
+    return html`
+      Count: ${state.count}
+      <button @click=${() => dispatch({type: 'reset'})}>
+        Reset
+      </button>
+      <button @click=${() => dispatch({type: 'increment'})}>+</button>
+      <button @click=${() => dispatch({type: 'decrement'})}>-</button>
+    `;
+  }
+
+  customElements.define('my-counter', component(Counter));
+</script>

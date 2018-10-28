@@ -1,0 +1,20 @@
+<!doctype html>
+
+<my-counter></my-counter>
+
+
+<script type="module">
+  import { html } from 'https://unpkg.com/lit-html/lit-html.js';
+  import { component, useState } from '../haunted.js';
+
+  function Counter() {
+    const [count, setCount] = useState(0);
+
+    return html`
+      <div id="count">${count}</div>
+      <button type="button" @click=${() => setCount(count + 1)}>Increment</button>
+    `;
+  }
+
+  customElements.define('my-counter', component(Counter));
+</script>
