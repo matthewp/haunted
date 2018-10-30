@@ -34,4 +34,4 @@ function initiateState(map, id, args) {
 
 const useState = makeState.bind(null, initiateState);
 
-export { setState, makeState, useState };
+export { setState, makeState, useState, stateMap };

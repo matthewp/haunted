@@ -2,6 +2,7 @@ import { render } from 'https://unpkg.com/lit-html/lit-html.js';
 
 const phaseSymbol = Symbol.for('haunted.phase');
 const stateSymbol = Symbol.for('haunted.state');
+const memoValuesSymbol = Symbol.for('haunted.memoValues');
 
 const updateSymbol = Symbol.for('haunted.update');
 const commitSymbol = Symbol.for('haunted.commit');
@@ -162,4 +163,30 @@ function initiateState$1(map, id, [reducer, initial]) {
 
 const useReducer = makeState.bind(null, initiateState$1);
 
-export { component, useEffect, useState, useReducer };
+function resolve(id, fn, values) {
+  let valuesMap = current[memoValuesSymbol];
+  const lastValues = valuesMap.get(id);
+  let changed = values.some((value, i) => lastValues[i] !== value);
+  if(changed) {
+    valuesMap.set(id, values);
+    setState(stateMap(current), id, fn());
+  }
+}
+
+function useMemo(fn, values) {
+  let id = notify();
+  let map = stateMap(current);
+  if(!map.has(id)) {
+    const initialValue = fn();
+    if(!current[memoValuesSymbol]) {
+      let valuesMap = current[memoValuesSymbol] = new Map();
+      valuesMap.set(id, values);
+    }
+    setState(map, id, initialValue);
+  } else {
+    resolve(id, fn, values);
+  }
+  return map.get(id);
+}
+
+export { component, useEffect, useState, useReducer, useMemo };

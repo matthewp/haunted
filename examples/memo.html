@@ -1,0 +1,28 @@
+<!doctype html>
+
+<my-counter></my-counter>
+
+
+<script type="module">
+  import { html } from 'https://unpkg.com/lit-html/lit-html.js';
+  import { component, useMemo, useState } from '../haunted.js';
+
+  function fibonacci(num) {
+    if (num <= 1) return 1;
+
+    return fibonacci(num - 1) + fibonacci(num - 2);
+  }
+
+  function App() {
+    const [value, setVal] = useState(12);
+    const fib = useMemo(() => fibonacci(value), [value]);
+
+    return html`
+      <h1>Fibonacci</h1>
+      <input type="text" @change=${ev => setVal(Number(ev.target.value))} value="${value}">
+      <div>Fibonacci <strong>${fib}</strong></div>
+    `;
+  }
+
+  customElements.define('my-counter', component(App));
+</script>
