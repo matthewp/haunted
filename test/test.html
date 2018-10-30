@@ -1,0 +1,19 @@
+<!doctype html>
+<title>Haunted tests</title>
+<link href="https://unpkg.com/mocha@4.1.0/mocha.css" rel="stylesheet" />
+<div id="mocha"></div>
+<div id="host"></div>
+
+<script src="https://unpkg.com/chai/chai.js"></script>
+<script src="https://unpkg.com/mocha@4.1.0/mocha.js"></script>
+<script>
+  mocha.setup('bdd');
+  assert = chai.assert;
+</script>
+
+<script type="module" src="./test-npm.js"></script>
+<script type="module">
+  window.addEventListener('load', () => {
+    mocha.run();
+  });
+</script>
