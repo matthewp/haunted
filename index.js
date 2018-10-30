@@ -1,4 +1,4 @@
-import { render } from '../node_modules/lit-html/lit-html.js';
+import { render } from '../../node_modules/lit-html/lit-html.js';
 
 const phaseSymbol = Symbol.for('haunted.phase');
 const stateSymbol = Symbol.for('haunted.state');
