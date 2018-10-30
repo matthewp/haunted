@@ -1,0 +1,26 @@
+
+<my-parent></my-parent>
+
+<script type="module">
+  import { html } from 'https://unpkg.com/lit-html/lit-html.js';
+  import { component, useState } from '../haunted.js';
+
+  function MyParent() {
+    const [name, setName] = useState('');
+
+    return html`
+      <input type="text" value="${name}" @keyup=${ev => setName(ev.target.value)}>
+      <my-child .name=${name}></my-child>
+    `;
+  }
+
+  customElements.define('my-parent', component(MyParent));
+
+  function MyChild({ name }) {
+    return html`
+      <div>${name}</div>
+    `;
+  }
+
+  customElements.define('my-child', component(MyChild));
+</script>

@@ -50,7 +50,7 @@ const read = scheduler();
 const write = scheduler();
 
 function component(renderer, BaseElement = HTMLElement) {
-  return class extends BaseElement {
+  class Element extends BaseElement {
     constructor() {
       super();
       this.attachShadow({ mode: 'open' });
@@ -102,7 +102,48 @@ function component(renderer, BaseElement = HTMLElement) {
       clear();
       return result;
     }
-  };
+  }
+  function reflectiveProp(initialValue) {
+    let value = initialValue;
+    return Object.freeze({
+      enumerable: true,
+      configurable: true,
+      get() {
+        return value;
+      },
+      set(newValue) {
+        value = newValue;
+        this._update();
+      }
+    })
+  }
+
+  const proto = new Proxy(BaseElement.prototype, {
+    set(target, key, value, receiver) {
+      if(key in target) {
+        Reflect.set(target, key, value);
+      }
+      let desc;
+      if(typeof key === 'symbol' || key[0] === '_') {
+        desc = {
+          enumerable: true,
+          configurable: true,
+          writable: true,
+          value
+        }; 
+      } else {
+        desc = reflectiveProp(value);
+      }
+      Object.defineProperty(receiver, key, desc);
+
+      return true;
+    }
+  });
+
+  Object.setPrototypeOf(Element.prototype, proto);
+
+
+  return Element;
 }
 
 function useEffect(callback) {
