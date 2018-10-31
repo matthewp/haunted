@@ -28,6 +28,10 @@ const write = scheduler();
 
 function component(renderer, BaseElement = HTMLElement) {
   class Element extends BaseElement {
+    static get observedAttributes() {
+      return renderer.observedAttributes || [];
+    }
+
     constructor() {
       super();
       this.attachShadow({ mode: 'open' });
@@ -40,6 +44,10 @@ function component(renderer, BaseElement = HTMLElement) {
 
     connectedCallback() {
       this._update();
+    }
+
+    attributeChangedCallback(name, _, newValue) {
+      Reflect.set(this, name, newValue);
     }
 
     _update() {
@@ -113,6 +121,10 @@ function component(renderer, BaseElement = HTMLElement) {
         desc = reflectiveProp(value);
       }
       Object.defineProperty(receiver, key, desc);
+
+      if(desc.set) {
+        desc.set.call(receiver, value);
+      }
 
       return true;
     }
