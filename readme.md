@@ -25,13 +25,21 @@ React's Hook API but for standard web components and [lit-html](https://polymer.
 </script>
 ```
 
-## Install
+## Use
 
 For now it is available as the `@matthewp/haunted` package. In the future I hope to get the non-scoped name.
 
 ```shell
 npm install @matthewp/haunted
 ```
+
+### Builds
+
+Haunted comes in a few builds, pick the one depending on which environment you are using:
+
+* __index.js__ is available for bundlers such as Webpack and Rollup. Use with: `import { useState } from '@matthewp/haunted';`;
+* __web.js__ is avaible for use with the web's native module support. Use with: `import { useState } from '../node_modules/@matthewp/haunted/web.js';`.
+* __haunted.js__ is available via the CDN [unpkg](https://unpkg.com). This is great for small apps or for local development without having to install anything. Use with `import { useState } from 'https://unpkg.com/@matthewp/haunted/haunted.js';`
 
 ## API
 

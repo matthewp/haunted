@@ -8,7 +8,8 @@
   },
   "files": [
     "haunted.js",
-    "index.js"
+    "index.js",
+    "web.js"
   ],
   "repository": {
     "type": "git",
