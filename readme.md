@@ -1,12 +1,12 @@
 # Haunted 🦇 🎃
 
-React's Hook API but for standard web components and [lit-html](https://polymer.github.io/lit-html/). 
+React's Hooks API but for standard web components and [lit-html](https://polymer.github.io/lit-html/). 
 
 ```html
 <!doctype html>
+<html lang="en">
 
 <my-counter></my-counter>
-
 
 <script type="module">
   import { html } from 'https://unpkg.com/lit-html/lit-html.js';
@@ -25,9 +25,13 @@ React's Hook API but for standard web components and [lit-html](https://polymer.
 </script>
 ```
 
+## Getting started
+
+A starter app is available on [codesandbox](https://codesandbox.io/s/github/matthewp/haunted-starter-app/tree/master/) and also can be clone from [this repo](https://github.com/matthewp/haunted-starter-app). This app gives you the basics of how to use Haunted and build components.
+
 ## Use
 
-For now it is available as the `@matthewp/haunted` package. In the future I hope to get the non-scoped name.
+Currently __Haunted__ is available as the `@matthewp/haunted` package. In the future I hope to get the non-scoped name.
 
 ```shell
 npm install @matthewp/haunted
