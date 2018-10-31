@@ -15,7 +15,7 @@ export function afterMutations() {
   });
 }
 
-export function later(fn) {
+export function later(fn = Function.prototype) {
   return new Promise(resolve => {
     setTimeout(() => {
       resolve(fn());

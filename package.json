@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "testee --browsers firefox test/test.html"
+    "build": "make",
+    "testee": "testee --browsers firefox test/test.html",
+    "test": "npm run build && npm run testee"
   },
   "files": [
     "haunted.js",
