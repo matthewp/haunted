@@ -1,6 +1,6 @@
 import { commitSymbol, stateSymbol, phaseSymbol, updateSymbol } from './symbols.js';
 import { setCurrent, clear } from './interface.js';
-import { render } from 'https://unpkg.com/lit-html/lit-html.js';
+import { render, html } from 'https://unpkg.com/lit-html@^0.12.0/lit-html.js';
 
 function scheduler() {
   let tasks = [];
@@ -124,4 +124,4 @@ function component(renderer, BaseElement = HTMLElement) {
   return Element;
 }
 
-export { component };
+export { component, html };

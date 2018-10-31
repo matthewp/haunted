@@ -14,3 +14,11 @@ export function afterMutations() {
     mo.observe(host, { childList: true, subtree: true });
   });
 }
+
+export function later(fn) {
+  return new Promise(resolve => {
+    setTimeout(() => {
+      resolve(fn());
+    }, 100);
+  })
+}
