@@ -25,11 +25,18 @@ const useEffect = hook(class extends Hook {
   caller() {
     if(this.values) {
       if(this.hasChanged()) {
-        this.callback.call(this.el);
+        this.run();
       }
     } else {
-      this.callback.call(this.el);
+      this.run();
     }
+  }
+
+  run() {
+    if(this.teardown) {
+      this.teardown();
+    }
+    this.teardown = this.callback.call(this.el);
   }
 
   hasChanged() {

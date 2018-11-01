@@ -89,6 +89,49 @@ Useful for side-effects that run after the render has been commited.
 </script>
 ```
 
+#### Memoization
+
+Like `useMemo`, `useEffect` can take a second argument that are values that are memoized. The effect will only run when these values change.
+
+```js
+function App() {
+  let [name, setName] = useState('Dracula');
+
+  useEffect(() => {
+    // This only occurs when name changes.
+    document.title = `Hello ${name}`;
+  }, [name]);
+
+  return html`...`;
+}
+```
+
+#### Cleaning up side-effects
+
+Since effects are used for side-effectual things and might run many times in the lifecycle of a component, `useEffect` supports returning a teardown function.
+
+An example if when you might use this is if you are setting up an event listener.
+
+```js
+function App() {
+  let [name, setName] = useState('Wolf Man');
+
+  useEffect(() => {
+    function updateNameFromWorker(ev) {
+      setName(ev.data);
+    }
+
+    worker.addEventListener('message', updateNameFromWorker);
+
+    return () => {
+      worker.addEventListener('message', updateNameFromWorker);
+    }
+  });
+
+  return html`...`;
+}
+```
+
 ### useReducer
 
 Create state that updates after being ran through a reducer function.
