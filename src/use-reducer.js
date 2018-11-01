@@ -1,19 +1,21 @@
-import { current } from './interface.js';
-import { makeState, setState } from './use-state.js';
+import { hook, Hook } from './hook.js';
 
-function makeUpdateState(element, map, id, reducer) {
-  const updater = function(action) {
-    const currentValue = map.get(id)[0];
-    const newValue = reducer(currentValue, action);
-    setState(map, id, [newValue, updater]);
-    element._update();
-  };
-  return updater;
-}
+const useReducer = hook(class extends Hook {
+  constructor(id, el, _, initialState) {
+    super(id, el);
+    this.dispatch = this.dispatch.bind(this);
+    this.state = initialState;
+  }
 
-function initiateState(map, id, [reducer, initial]) {
-  const updater = makeUpdateState(current, map, id, reducer);
-  return [initial, updater];
-}
+  update(reducer) {
+    this.reducer = reducer;
+    return [this.state, this.dispatch];
+  }
 
-export const useReducer = makeState.bind(null, initiateState);
+  dispatch(action) {
+    this.state = this.reducer(this.state, action);
+    this.el._update();
+  }
+});
+
+export { useReducer };

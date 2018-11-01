@@ -1,37 +1,24 @@
-import { current, notify } from './interface.js';
-import { stateSymbol } from './symbols.js';
+import { hook, Hook } from './hook.js';
 
-function stateMap(element) {
-  return element[stateSymbol];
-}
-
-function makeUpdateState(element, map, id) {
-  const updater = function(value) {
-    setState(map, id, [value, updater]);
-    element._update();
-  };
-  return updater;
-}
-
-function setState(map, id, value) {
-  map.set(id, Object.freeze(value));
-}
-
-function makeState(setup, ...args) {
-  let id = notify();
-  let map = stateMap(current);
-  if(!map.has(id)) {
-    const initialValue = setup(map, id, args);
-    setState(map, id, initialValue);
+const useState = hook(class extends Hook {
+  constructor(id, el, initialValue) {
+    super(id, el);
+    this.updater = this.updater.bind(this);
+    this.makeArgs(initialValue);
   }
-  return map.get(id);
-}
 
-function initiateState(map, id, args) {
-  const updater = makeUpdateState(current, map, id);
-  return [args[0], updater];
-}
+  update() {
+    return this.args;
+  }
 
-const useState = makeState.bind(null, initiateState);
+  updater(value) {
+    this.makeArgs(value);
+    this.el._update();
+  }
 
-export { setState, makeState, useState, stateMap };
+  makeArgs(value) {
+    this.args = Object.freeze([value, this.updater]);
+  }
+});
+
+export { useState };
