@@ -1,31 +1,23 @@
-import { current, notify } from './interface.js';
-import { memoValuesSymbol } from './symbols.js';
-import { setState, stateMap } from './use-state.js';
+import { hook, Hook } from './hook.js';
 
-function resolve(id, fn, values) {
-  let valuesMap = current[memoValuesSymbol]
-  const lastValues = valuesMap.get(id);
-  let changed = values.some((value, i) => lastValues[i] !== value);
-  if(changed) {
-    valuesMap.set(id, values);
-    setState(stateMap(current), id, fn());
+const useMemo = hook(class extends Hook {
+  constructor(id, el, fn, values) {
+    super(id, el);
+    this.value = fn();
+    this.values = values;
   }
-}
 
-function useMemo(fn, values) {
-  let id = notify();
-  let map = stateMap(current);
-  if(!map.has(id)) {
-    const initialValue = fn();
-    if(!current[memoValuesSymbol]) {
-      let valuesMap = current[memoValuesSymbol] = new Map();
-      valuesMap.set(id, values);
+  update(fn, values) {
+    if(this.hasChanged(values)) {
+      this.values = values;
+      this.value = fn();
     }
-    setState(map, id, initialValue);
-  } else {
-    resolve(id, fn, values);
+    return this.value;
   }
-  return map.get(id);
-}
+
+  hasChanged(values) {
+    return values.some((value, i) => this.values[i] !== value);
+  }
+});
 
 export { useMemo };

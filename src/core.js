@@ -1,4 +1,4 @@
-import { commitSymbol, stateSymbol, phaseSymbol, updateSymbol } from './symbols.js';
+import { commitSymbol, phaseSymbol, updateSymbol, hookSymbol, effectsSymbol } from './symbols.js';
 import { setCurrent, clear } from './interface.js';
 import { render, html } from 'https://unpkg.com/lit-html@^0.12.0/lit-html.js';
 
@@ -36,9 +36,8 @@ function component(renderer, BaseElement = HTMLElement) {
       super();
       this.attachShadow({ mode: 'open' });
 
-      
+      this[hookSymbol] = new Map();
       this[phaseSymbol] = null;
-      this[stateSymbol] = new Map();
       this._updateQueued = false;
     }
 
@@ -56,6 +55,12 @@ function component(renderer, BaseElement = HTMLElement) {
         let result = this._handlePhase(updateSymbol);
         write(() => {
           this._handlePhase(commitSymbol, result);
+
+          if(this[effectsSymbol]) {
+            write(() => {
+              this._handlePhase(effectsSymbol);
+            });
+          }
         });
         this._updateQueued = false;
       });
@@ -67,18 +72,14 @@ function component(renderer, BaseElement = HTMLElement) {
       switch(phase) {
         case commitSymbol: return this._commit(arg);
         case updateSymbol: return this._render();
+        case effectsSymbol: return this._runEffects(effectsSymbol);
       }
       this[phaseSymbol] = null;
     }
 
     _commit(result) {
       render(result, this.shadowRoot);
-      let effects = this[commitSymbol];
-      if(effects) {
-        for(let [,effect] of effects) {
-          effect.call(this);
-        }
-      }
+      this._runEffects(commitSymbol);
     }
 
     _render() {
@@ -86,6 +87,17 @@ function component(renderer, BaseElement = HTMLElement) {
       let result = renderer(this);
       clear();
       return result;
+    }
+
+    _runEffects(symbol) {
+      let effects = this[symbol];
+      if(effects) {
+        setCurrent(this);
+        for(let effect of effects) {
+          effect.call(this);
+        }
+        clear();
+      }
     }
   };
 
