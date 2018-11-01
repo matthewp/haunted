@@ -28,4 +28,37 @@ describe('useEffect', () => {
     assert.equal(effects, 1, 'effects ran once');
     teardown();
   });
+
+  it('Can teardown subscriptions', async () => {
+    const tag = 'teardown-effect-test';
+    let subs = [];
+    let set;
+
+    function app() {
+      let [val, setVal] = useState(0);
+      set = setVal;
+
+      useEffect(() => {
+        subs.push(val);
+        return () => {
+          subs.splice(subs.indexOf(val), 1);
+        };
+      });
+
+      return html`Test`;
+    }
+    customElements.define(tag, component(app));
+
+    const teardown = attach(tag);
+    await later();
+
+    set(1);
+    await later();
+
+    set(2);
+    await later();
+    
+    assert.equal(subs.length, 1, 'Unsubscribed on re-renders');
+    teardown();
+  })
 });
