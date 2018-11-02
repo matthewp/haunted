@@ -1,6 +1,6 @@
 # Haunted 🦇 🎃
 
-React's Hooks API but for standard web components and [lit-html](https://polymer.github.io/lit-html/). 
+React's Hooks API but for standard web components and [hyperHTML](https://codepen.io/WebReflection/pen/pxXrdy?editors=0010) or [lit-html](https://polymer.github.io/lit-html/). 
 
 ```html
 <!doctype html>
