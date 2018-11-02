@@ -45,6 +45,15 @@ function component(renderer, BaseElement = HTMLElement) {
       this._update();
     }
 
+    disconnectedCallback() {
+      let effects = this[effectsSymbol];
+      if(effects) {
+        for(let effect of effects) {
+          effect.teardown();
+        }
+      }
+    }
+
     attributeChangedCallback(name, _, newValue) {
       Reflect.set(this, name, newValue);
     }

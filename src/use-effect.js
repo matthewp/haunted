@@ -11,9 +11,8 @@ function setEffects(el, cb) {
 const useEffect = hook(class extends Hook {
   constructor(id, el) {
     super(id, el);
-    this.caller = this.caller.bind(this);
     this.values = [];
-    setEffects(el, this.caller);
+    setEffects(el, this);
   }
 
   update(callback, values) {
@@ -22,7 +21,7 @@ const useEffect = hook(class extends Hook {
     this.values = values;
   }
 
-  caller() {
+  call() {
     if(this.values) {
       if(this.hasChanged()) {
         this.run();
@@ -33,10 +32,14 @@ const useEffect = hook(class extends Hook {
   }
 
   run() {
-    if(this.teardown) {
-      this.teardown();
+    this.teardown();
+    this._teardown = this.callback.call(this.el);
+  }
+
+  teardown() {
+    if(this._teardown) {
+      this._teardown();
     }
-    this.teardown = this.callback.call(this.el);
   }
 
   hasChanged() {
