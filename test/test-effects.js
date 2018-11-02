@@ -60,5 +60,33 @@ describe('useEffect', () => {
     
     assert.equal(subs.length, 1, 'Unsubscribed on re-renders');
     teardown();
-  })
+  });
+
+  it('Tears-down on unmount', async () => {
+    const tag = 'teardown-effect-unmount-test';
+    let subs = [];
+
+    function app() {
+      let val = Math.random();
+
+      useEffect(() => {
+        subs.push(val);
+        return () => {
+          subs.splice(subs.indexOf(val), 1);
+        };
+      });
+
+      return html`Test`;
+    }
+
+    customElements.define(tag, component(app));
+
+    const teardown = attach(tag);
+    await later();
+
+    teardown();
+    await later();
+    
+    assert.equal(subs.length, 0, 'Torn down on unmount');
+  });
 });
