@@ -1,5 +1,5 @@
 import { component, html } from '../web.js';
-import { attach, afterMutations, mount, later } from './helpers.js';
+import { attach, mount, cycle } from './helpers.js';
 
 describe('Observed attributes', () => {
   it('Trigger rerenders', async () => {
@@ -13,14 +13,13 @@ describe('Observed attributes', () => {
 
     customElements.define(tag, component(app));
 
-    let p = afterMutations();
     let teardown = attach(tag);
-    await later();
+    await cycle();
 
     let inst = document.querySelector(tag);
     inst.setAttribute('name', 'world');
 
-    await later();
+    await cycle();
 
     let div = host.firstChild.shadowRoot.firstElementChild;
     assert.equal(div.textContent, 'Hello world');
@@ -38,19 +37,18 @@ describe('Observed attributes', () => {
 
     customElements.define(tag, component(app));
 
-    let p = afterMutations();
     let template = document.createElement('template');
     template.innerHTML = `
       <attrs-initial-test name="world"></attrs-initial-test>
     `;
     let frag = template.content.cloneNode(true);
     host.appendChild(frag);
-    await later();
+    await cycle();
 
     let inst = document.querySelector(tag);
     inst.setAttribute('name', 'world');
 
-    await later();
+    await cycle();
 
     let div = host.firstElementChild.shadowRoot.firstElementChild;
     assert.equal(div.textContent, 'Hello world');
@@ -73,7 +71,7 @@ describe('Observed attributes', () => {
       <attrs-boolean-test open></attrs-boolean-test>
     `);
 
-    await later();
+    await cycle();
     teardown();
 
     assert.equal(typeof val, 'boolean');

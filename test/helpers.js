@@ -29,3 +29,15 @@ export function later(fn = Function.prototype) {
     }, 80);
   })
 }
+
+export function cycle() {
+  return new Promise(resolve => {
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          resolve();
+        });
+      });
+    });
+  });
+}
