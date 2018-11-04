@@ -55,7 +55,8 @@ function component(renderer, BaseElement = HTMLElement) {
     }
 
     attributeChangedCallback(name, _, newValue) {
-      Reflect.set(this, name, newValue);
+      let val = newValue === '' ? true : newValue;
+      Reflect.set(this, name, val);
     }
 
     _update() {
