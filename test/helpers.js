@@ -5,6 +5,13 @@ export function attach(element) {
   return () => host.removeChild(el);
 }
 
+export function mount(str) {
+  let template = document.createElement('template');
+  template.innerHTML = str;
+  host.appendChild(template.content.cloneNode(true));
+  return () => host.innerHTML = '';
+}
+
 export function afterMutations() {
   return new Promise(resolve => {
     const mo = new MutationObserver(() => {
