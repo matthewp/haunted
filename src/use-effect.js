@@ -11,7 +11,7 @@ function setEffects(el, cb) {
 const useEffect = hook(class extends Hook {
   constructor(id, el) {
     super(id, el);
-    this.values = [];
+    this.values = false;
     setEffects(el, this);
   }
 
@@ -43,7 +43,7 @@ const useEffect = hook(class extends Hook {
   }
 
   hasChanged() {
-    return this.values.some((value, i) => this.lastValues[i] !== value);
+    return this.lastValues === false || this.values.some((value, i) => this.lastValues[i] !== value);
   }
 });
 

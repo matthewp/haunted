@@ -89,4 +89,25 @@ describe('useEffect', () => {
     
     assert.equal(subs.length, 0, 'Torn down on unmount');
   });
+
+  it('useEffect(fn, []) runs the effect only once', async () => {
+    const tag = 'empty-array-effect-test';
+    let calls = 0;
+
+    function App() {
+      useEffect(() => {
+        calls++;
+      }, []);
+    }
+
+    customElements.define(tag, component(App));
+    const teardown = attach(tag);
+
+    await cycle();
+    assert.equal(calls, 1, 'called once');
+
+    document.querySelector(tag).prop = 'foo';
+    await cycle();
+    assert.equal(calls, 1, 'still called once');
+  });
 });
