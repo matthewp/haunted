@@ -1,6 +1,6 @@
 import { html } from '../node_modules/lit-html/lit-html.js';
 import { component } from '../web.js';
-import { attach, afterMutations } from './helpers.js';
+import { attach, cycle } from './helpers.js';
 
 describe('npm package', () => {
   it('works', async () => {
@@ -10,17 +10,10 @@ describe('npm package', () => {
       return html`Test`;
     }));
 
-    let p = afterMutations();
     let teardown = attach('npm-test');
+    await cycle();
 
-    return new Promise(resolve => {
-      setTimeout(() => {
-        assert.equal(host.firstChild.shadowRoot.firstChild.nextSibling.nodeValue, 'Test', 'Rendered');
-        teardown();
-        resolve();
-      }, 100);
-    })
-
-
+    assert.equal(host.firstChild.shadowRoot.firstChild.nextSibling.nodeValue, 'Test', 'Rendered');
+    teardown();
   });
 })

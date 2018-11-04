@@ -1,5 +1,5 @@
 import { component, html, useEffect, useState } from '../web.js';
-import { attach, afterMutations, later } from './helpers.js';
+import { attach, cycle } from './helpers.js';
 
 describe('useEffect', () => {
   it('Memoizes values', async () => {
@@ -20,10 +20,10 @@ describe('useEffect', () => {
     customElements.define(tag, component(app));
 
     const teardown = attach(tag);
-    await later();
+    await cycle();
 
     set(2);
-    await later();
+    await cycle();
     
     assert.equal(effects, 1, 'effects ran once');
     teardown();
@@ -50,13 +50,13 @@ describe('useEffect', () => {
     customElements.define(tag, component(app));
 
     const teardown = attach(tag);
-    await later();
+    await cycle();
 
     set(1);
-    await later();
+    await cycle();
 
     set(2);
-    await later();
+    await cycle();
     
     assert.equal(subs.length, 1, 'Unsubscribed on re-renders');
     teardown();
@@ -82,10 +82,10 @@ describe('useEffect', () => {
     customElements.define(tag, component(app));
 
     const teardown = attach(tag);
-    await later();
+    await cycle();
 
     teardown();
-    await later();
+    await cycle();
     
     assert.equal(subs.length, 0, 'Torn down on unmount');
   });

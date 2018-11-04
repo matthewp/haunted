@@ -1,5 +1,5 @@
 import { component, html } from '../web.js';
-import { attach, afterMutations, later } from './helpers.js';
+import { attach, cycle } from './helpers.js';
 
 describe('Component exports', () => {
   it('works', async () => {
@@ -7,12 +7,10 @@ describe('Component exports', () => {
       return html`Test`;
     }));
 
-    let p = afterMutations();
     let teardown = attach('exports-test');
+    await cycle();
 
-    return later(() => {
-      assert.equal(host.firstChild.shadowRoot.firstChild.nextSibling.nodeValue, 'Test', 'Rendered');
-      teardown();
-    });
+    assert.equal(host.firstChild.shadowRoot.firstChild.nextSibling.nodeValue, 'Test', 'Rendered');
+    teardown();
   });
 })
