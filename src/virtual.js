@@ -2,6 +2,11 @@ import { Container } from './core.js';
 import { directive } from './lit.js';
 
 class DirectiveContainer extends Container {
+  constructor(renderer, part) {
+    super(renderer, part);
+    this.virtual = true;
+  }
+
   commit(result) {
     this.host.setValue(result);
     this.host.commit();

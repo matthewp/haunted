@@ -282,6 +282,63 @@ Create a memoized state value. Only reruns the function when dependent values ha
 </script>
 ```
 
+#### useContext
+
+Grabs context value from the closest provider up in the tree and updates component when value of a provider changes.
+Limited only to "real" components for now
+
+```html
+<!doctype html>
+
+<my-app></my-app>
+
+<script type="module">
+  import { html } from 'https://unpkg.com/lit-html/lit-html.js';
+  import { component, createContext, useContext } from 'https://unpkg.com/@matthewp/haunted/haunted.js';
+
+  const ThemeContext = createContext('dark');
+
+  customElements.define('theme-provider', ThemeContext.Provider);
+  customElements.define('theme-consumer', ThemeContext.Consumer);
+
+  function Consumer() {
+    const context = useContext(ThemeContext);
+
+    return context;
+  }
+
+  customElements.define('my-consumer', component(Consumer));
+
+  function App() {
+    const [theme, setTheme] = useState('light');
+    
+    return html`
+      <select value=${theme} @change=${(e) => setTheme(e.target.value)}>
+        <option value="dark">Dark</option>
+        <option value="light">Light</option>
+      </select>
+      
+      <theme-provider .value=${theme}>
+        
+        <my-consumer></my-consumer>
+
+        <!-- creates context with inverted theme -->
+        <theme-provider .value=${theme === 'dark' ? 'light' : 'dark'}> 
+          
+          <theme-consumer
+            .render=${value => html`<h1>${value}</h1>`}
+          ></theme-consumer>
+        
+        </theme-provider>
+      
+      </theme-provider>
+    `;
+  }
+
+  customElements.define('my-app', component(App));
+</script>
+```
+
 ## License
 
 BSD-2-Clause
