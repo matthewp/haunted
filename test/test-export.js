@@ -13,4 +13,4 @@ describe('Component exports', () => {
     assert.equal(host.firstChild.shadowRoot.firstChild.nextSibling.nodeValue, 'Test', 'Rendered');
     teardown();
   });
-})
+});

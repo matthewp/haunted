@@ -94,7 +94,7 @@ function component(renderer, BaseElement = HTMLElement) {
 
     _render() {
       setCurrent(this);
-      let result = renderer(this);
+      let result = renderer.call(this, this);
       clear();
       return result;
     }

@@ -124,7 +124,7 @@ function App() {
     worker.addEventListener('message', updateNameFromWorker);
 
     return () => {
-      worker.addEventListener('message', updateNameFromWorker);
+      worker.removeEventListener('message', updateNameFromWorker);
     }
   });
 

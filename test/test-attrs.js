@@ -77,4 +77,28 @@ describe('Observed attributes', () => {
     assert.equal(typeof val, 'boolean');
     assert.equal(val, true, 'is a boolean');
   });
+
+  it('renderer receives component as this context', async () => {
+    const tag = 'attrs-test-2';
+
+    function app({ name = '' }) {
+      return html`<div>${name} ${this.name}</div>`;
+    }
+
+    app.observedAttributes = ['name'];
+
+    customElements.define(tag, component(app));
+
+    let teardown = attach(tag);
+    await cycle();
+
+    let inst = document.querySelector(tag);
+    inst.setAttribute('name', 'test');
+
+    await cycle();
+
+    let div = host.firstChild.shadowRoot.firstElementChild;
+    assert.equal(div.textContent, 'test test');
+    teardown();
+  });
 })
