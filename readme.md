@@ -27,7 +27,7 @@ React's Hooks API but for standard web components and [lit-html](https://polymer
 
 ## Getting started
 
-A starter app is available on [codesandbox](https://codesandbox.io/s/github/matthewp/haunted-starter-app/tree/master/) and also can be clone from [this repo](https://github.com/matthewp/haunted-starter-app). This app gives you the basics of how to use Haunted and build components.
+A starter app is available on [codesandbox](https://codesandbox.io/s/github/matthewp/haunted-starter-app/tree/master/) and also can be cloned from [this repo](https://github.com/matthewp/haunted-starter-app). This app gives you the basics of how to use Haunted and build components.
 
 ## Use
 
@@ -39,7 +39,7 @@ npm install @matthewp/haunted
 
 ### Builds
 
-Haunted comes in a few builds, pick the one depending on which environment you are using:
+Haunted comes in a few builds. Pick one based on your chosen environment:
 
 * __index.js__ is available for bundlers such as Webpack and Rollup. Use with: `import { useState } from '@matthewp/haunted';`;
 * __web.js__ is avaible for use with the web's native module support. Use with: `import { useState } from '../node_modules/@matthewp/haunted/web.js';`.
@@ -110,7 +110,7 @@ function App() {
 
 Since effects are used for side-effectual things and might run many times in the lifecycle of a component, `useEffect` supports returning a teardown function.
 
-An example if when you might use this is if you are setting up an event listener.
+An example of when you might use this is if you are setting up an event listener.
 
 ```js
 function App() {
