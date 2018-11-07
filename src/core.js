@@ -26,136 +26,77 @@ function scheduler() {
 const read = scheduler();
 const write = scheduler();
 
-function component(renderer, BaseElement = HTMLElement) {
-  class Element extends BaseElement {
-    static get observedAttributes() {
-      return renderer.observedAttributes || [];
-    }
-
-    constructor() {
-      super();
-      this.attachShadow({ mode: 'open' });
-
-      this[hookSymbol] = new Map();
-      this[phaseSymbol] = null;
-      this._updateQueued = false;
-    }
-
-    connectedCallback() {
-      this._update();
-    }
-
-    disconnectedCallback() {
-      let effects = this[effectsSymbol];
-      if(effects) {
-        for(let effect of effects) {
-          effect.teardown();
-        }
-      }
-    }
-
-    attributeChangedCallback(name, _, newValue) {
-      let val = newValue === '' ? true : newValue;
-      Reflect.set(this, name, val);
-    }
-
-    _update() {
-      if(this._updateQueued) return;
-      read(() => {
-        let result = this._handlePhase(updateSymbol);
-        write(() => {
-          this._handlePhase(commitSymbol, result);
-
-          if(this[effectsSymbol]) {
-            write(() => {
-              this._handlePhase(effectsSymbol);
-            });
-          }
-        });
-        this._updateQueued = false;
-      });
-      this._updateQueued = true;
-    }
-
-    _handlePhase(phase, arg) {
-      this[phaseSymbol] = phase;
-      switch(phase) {
-        case commitSymbol: return this._commit(arg);
-        case updateSymbol: return this._render();
-        case effectsSymbol: return this._runEffects(effectsSymbol);
-      }
-      this[phaseSymbol] = null;
-    }
-
-    _commit(result) {
-      render(result, this.shadowRoot);
-      this._runEffects(commitSymbol);
-    }
-
-    _render() {
-      setCurrent(this);
-      let result = renderer.call(this, this);
-      clear();
-      return result;
-    }
-
-    _runEffects(symbol) {
-      let effects = this[symbol];
-      if(effects) {
-        setCurrent(this);
-        for(let effect of effects) {
-          effect.call(this);
-        }
-        clear();
-      }
-    }
-  };
-
-  function reflectiveProp(initialValue) {
-    let value = initialValue;
-    return Object.freeze({
-      enumerable: true,
-      configurable: true,
-      get() {
-        return value;
-      },
-      set(newValue) {
-        value = newValue;
-        this._update();
-      }
-    })
+class Container {
+  constructor(renderer, frag, host) {
+    this.renderer = renderer;
+    this.frag = frag;
+    this.host = host || frag;
+    this[hookSymbol] = new Map();
+    this[phaseSymbol] = null;
+    this._updateQueued = false;
   }
 
-  const proto = new Proxy(BaseElement.prototype, {
-    set(target, key, value, receiver) {
-      if(key in target) {
-        Reflect.set(target, key, value);
-      }
-      let desc;
-      if(typeof key === 'symbol' || key[0] === '_') {
-        desc = {
-          enumerable: true,
-          configurable: true,
-          writable: true,
-          value
-        }; 
-      } else {
-        desc = reflectiveProp(value);
-      }
-      Object.defineProperty(receiver, key, desc);
+  update() {
+    if(this._updateQueued) return;
+    read(() => {
+      let result = this.handlePhase(updateSymbol);
+      write(() => {
+        this.handlePhase(commitSymbol, result);
 
-      if(desc.set) {
-        desc.set.call(receiver, value);
-      }
+        if(this[effectsSymbol]) {
+          write(() => {
+            this.handlePhase(effectsSymbol);
+          });
+        }
+      });
+      this._updateQueued = false;
+    });
+    this._updateQueued = true;
+  }
 
-      return true;
+  handlePhase(phase, arg) {
+    this[phaseSymbol] = phase;
+    switch(phase) {
+      case commitSymbol: return this.commit(arg);
+      case updateSymbol: return this.render();
+      case effectsSymbol: return this.runEffects(effectsSymbol);
     }
-  });
+    this[phaseSymbol] = null;
+  }
 
-  Object.setPrototypeOf(Element.prototype, proto);
+  commit(result) {
+    render(result, this.frag);
+    this.runEffects(commitSymbol);
+  }
 
+  render() {
+    setCurrent(this);
+    let result = this.args ?
+      this.renderer.apply(this.host, this.args) :
+      this.renderer.call(this.host, this.host);
+    clear();
+    return result;
+  }
 
-  return Element;
+  runEffects(symbol) {
+    let effects = this[symbol];
+    if(effects) {
+      setCurrent(this);
+      for(let effect of effects) {
+        effect.call(this);
+      }
+      clear();
+    }
+  }
+
+  teardown() {
+    let effects = this[effectsSymbol];
+    if(effects) {
+      for(let effect of effects) {
+        effect.teardown();
+      }
+    }
+  }
 }
 
-export { component, html };
+export { Container, html, render };
