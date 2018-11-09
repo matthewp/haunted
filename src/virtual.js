@@ -1,5 +1,5 @@
 import { Container } from './core.js';
-import { directive } from 'https://unpkg.com/lit-html@^0.12.0/lit-html.js';
+import { directive } from './lit.js';
 
 class DirectiveContainer extends Container {
   commit(result) {
@@ -8,19 +8,22 @@ class DirectiveContainer extends Container {
   }
 }
 
+const map = new WeakMap();
+
 function withHooks(renderer) {
-  const inst = new WeakMap();
-  return function(...args){
-    return directive(part => {
-      let cont = inst.get(part);
+  function factory(...args) {
+    return part => {
+      let cont = map.get(part);
       if(!cont) {
         cont = new DirectiveContainer(renderer, part);
-        inst.set(part, cont);
+        map.set(part, cont);
       }
       cont.args = args;
       cont.update();
-    });
-  };
+    };
+  }
+
+  return directive(factory);
 }
 
 export { withHooks, withHooks as virtual }

@@ -81,4 +81,38 @@ describe('withHooks()', () => {
     let span = el.firstElementChild.firstElementChild;
     assert.equal(span.textContent, 'bar-qux');
   });
+
+  it('Rerender parent doesn\'t create a new child', async () => {
+    let el = document.createElement('div');
+    let setParent, setChild;
+
+    const Child = () => {
+      const [count, setCount] = useState(0);
+      setChild = setCount;
+
+      return html`<span>${count}</span>`;
+    };
+
+    const Parent = withHooks(() => {
+      const [, set] = useState('');
+      setParent = set;
+      return html`<div>${withHooks(Child)()}</div>`;
+    });
+
+    render(Parent(), el);
+
+    await cycle();
+
+    // Change the child's state.
+    setChild(1);
+
+    await cycle();
+    setParent('foo');
+
+    await cycle();
+    await cycle();
+
+    let span = el.firstElementChild.firstElementChild;
+    assert.equal(span.textContent, '1');
+  });
 });
