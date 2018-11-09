@@ -47,11 +47,86 @@ Haunted comes in a few builds. Pick one based on your chosen environment:
 
 ## API
 
-*Haunted* supports the same API as React Hooks. My hope is that by doing so you can reuse hooks available on npm simply by aliasing package names in your bundler's config.
+Haunted is all about writing plain functions that can contain their own state. The follow docs is divided between creating *components* (the functions) and using *hooks* the state.
+
+### Components
+
+Components are functions that contain state and return HTML via lit-html or hyperHTML. Through the `component()` and `virtual()` they become connected to a lifecycle that keeps the HTML up-to-date when state changes.
+
+Using Haunted you can create custom elements or *virtual* components (components that contain state but have no element tag).
+
+#### Custom elements
+
+The easiest way to create components is by importing `component` and creating a custom element like so:
+
+```js
+import { component } from '@matthewp/haunted';
+import { html } from 'lit-html';
+
+const App = component(({ name }) => {
+  return html`Hello ${name}!`;
+});
+
+customElements.define('my-app', App);
+```
+
+You can now use this anywhere you use HTML (directly in a `.html` file, in JSX, in lit-html templates, whereever).
+
+Here's an example of rendering with lit-html the above app:
+
+```js
+import { render, html } from 'lit-html';
+
+render(html`
+  <my-app name="world"><my-app>
+`, document.body);
+```
+
+#### Virtual components
+
+Haunted also has the concept of *virtual components*. These are components that are not defined as a tag. Rather they are functions that can be called from within another template. They have their own state and will rerender when that state changes, *without* causing any parent components to rerender.
+
+The following is an example of using virtual components:
+
+```js
+import { useState, virtual, component } from '@matthewp/haunted';
+import { html, render } from 'lit-html';
+
+const Counter = virtual(() => {
+  const [count, setCount] = useState(0);
+
+  return html`
+    <button type="button"
+      @click=${() => setCount(count + 1)}>${count}</button>
+  `;
+});
+
+const App = component(() => {
+  return html`
+    <main>
+      <h1>My app</h1>
+
+      ${Counter()}
+    </main>
+  `;
+});
+
+customElements.define('my-app', App);
+```
+
+Notice that we have `Counter`, a virtual component, and `App`, a custom element. You can use virtual components within custom elements and custom elements within virtual components.
+
+The only difference is that custom elements are used by using their `<my-app>` tag name and virtual components are called as functions.
+
+If you wanted you could create an entire app of virtual components.
+
+### Hooks
+
+Haunted supports the same API as React Hooks. The hope is that by doing so you can reuse hooks available on npm simply by aliasing package names in your bundler's config.
 
 Currently Haunted supports the following hooks:
 
-### useState
+#### useState
 
 Create a tuple of state and a function to change that state.
 
@@ -59,7 +134,7 @@ Create a tuple of state and a function to change that state.
 const [count, setCount] = useState(0);
 ```
 
-### useEffect
+#### useEffect
 
 Useful for side-effects that run after the render has been commited.
 
@@ -89,7 +164,7 @@ Useful for side-effects that run after the render has been commited.
 </script>
 ```
 
-#### Memoization
+##### Memoization
 
 Like `useMemo`, `useEffect` can take a second argument that are values that are memoized. The effect will only run when these values change.
 
@@ -106,7 +181,7 @@ function App() {
 }
 ```
 
-#### Cleaning up side-effects
+##### Cleaning up side-effects
 
 Since effects are used for side-effectual things and might run many times in the lifecycle of a component, `useEffect` supports returning a teardown function.
 
@@ -132,7 +207,7 @@ function App() {
 }
 ```
 
-### useReducer
+#### useReducer
 
 Create state that updates after being ran through a reducer function.
 
@@ -173,7 +248,7 @@ Create state that updates after being ran through a reducer function.
 </script>
 ```
 
-### useMemo
+#### useMemo
 
 Create a memoized state value. Only reruns the function when dependent values have changed.
 
