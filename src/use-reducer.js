@@ -14,7 +14,7 @@ const useReducer = hook(class extends Hook {
 
   dispatch(action) {
     this.state = this.reducer(this.state, action);
-    this.el._update();
+    this.el.update();
   }
 });
 

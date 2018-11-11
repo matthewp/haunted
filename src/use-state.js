@@ -13,7 +13,7 @@ const useState = hook(class extends Hook {
 
   updater(value) {
     this.makeArgs(value);
-    this.el._update();
+    this.el.update();
   }
 
   makeArgs(value) {

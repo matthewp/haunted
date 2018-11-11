@@ -12,6 +12,8 @@ export function mount(str) {
   return () => host.innerHTML = '';
 }
 
+export { mount as insert };
+
 export function afterMutations() {
   return new Promise(resolve => {
     const mo = new MutationObserver(() => {
