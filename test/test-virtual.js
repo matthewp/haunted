@@ -1,4 +1,4 @@
-import { html, render, useState, withHooks } from '../web.js';
+import { html, render, useState, useEffect, withHooks } from '../web.js';
 import { cycle } from './helpers.js';
 
 describe('withHooks()', () => {
@@ -114,5 +114,20 @@ describe('withHooks()', () => {
 
     let span = el.firstElementChild.firstElementChild;
     assert.equal(span.textContent, '1');
+  });
+
+  it('Can use effects', async () => {
+    let effect = false;
+    const App = withHooks(() => {
+      useEffect(() => {
+        effect = true;
+      });
+    });
+
+    let el = document.createElement('div');
+    render(App(), el);
+
+    await cycle();
+    assert.equal(effect, true, 'Effect ran within the virtual component');
   });
 });
