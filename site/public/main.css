@@ -1,0 +1,92 @@
+@font-face {
+  font-family: 'gilroy';
+  font-style: normal;
+  font-weight: 400;
+  src: url('./fonts/gilroy-light-webfont.woff2') format('woff2'),
+    url('./fonts/gilroy-light-webfont.woff') format('woff');
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'gilroy';
+  font-style: normal;
+  font-weight: 500;
+  src: url('./fonts/gilroy-extrabold-webfont.woff2') format('woff2'),
+    url('./fonts/gilroy-extrabold-webfont.woff') format('woff');
+  font-display: swap;
+}
+
+body {
+  font-family: gilroy,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto;
+  background-color: #1F2131;
+  --main-color: #fff;
+  --secondary-color: #C7C7CB;
+  color: #fff;
+}
+
+a, a:visited {
+  text-decoration: none;
+  color: var(--main-color);
+}
+
+main > nav,
+main > section,
+main > footer {
+  margin: 0 10em;
+}
+
+main > nav {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 2em;
+  margin-bottom: 4em;
+}
+
+main > nav .contribute {
+  display: flex;
+  align-items: center;
+}
+
+main > nav .contribute svg {
+  height: 25px;
+  margin-right: 5px;
+  fill: var(--main-color);
+}
+
+main > hr {
+  border-style: solid;
+  border-color: #5C5D69;
+  border-top-width: 0px;
+  width: 70%;
+}
+
+.hero {
+  display: flex;
+  margin-bottom: 3em;
+}
+
+.hero > * {
+  flex: 1;
+}
+
+.hero header {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.hero h1 {
+  font-size: 300%;
+  letter-spacing: 2px;
+  margin-bottom: 0;
+}
+
+.hero h2 {
+  font-weight: 400;
+  color: var(--secondary-color);
+}
+
+footer {
+  text-align: center;
+  font-size: 115%;
+}
