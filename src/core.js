@@ -1,4 +1,4 @@
-import { commitSymbol, phaseSymbol, updateSymbol, hookSymbol, effectsSymbol } from './symbols.js';
+import { commitSymbol, phaseSymbol, updateSymbol, hookSymbol, effectsSymbol, contextSymbol } from './symbols.js';
 import { setCurrent, clear } from './interface.js';
 import { render, html } from './lit.js';
 
@@ -94,6 +94,13 @@ class Container {
     if(effects) {
       for(let effect of effects) {
         effect.teardown();
+      }
+    }
+
+    let contexts = this[contextSymbol];
+    if(contexts) {
+      for(let context of contexts) {
+        context.unsubscribe();
       }
     }
   }
