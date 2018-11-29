@@ -36,6 +36,12 @@ Currently __Haunted__ is available as the `@matthewp/haunted` package. In the fu
 ```shell
 npm install @matthewp/haunted
 ```
+For Internet Explorer 11, you'll need to use a proxy polyfill, in addition to the usual webcomponentsjs polyfills. 
+eg.
+```html
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/proxy-polyfill@0.3.0/proxy.min.js"></script> 
+```
+For a full example see - https://github.com/crisward/haunted-ie11
 
 ### Builds
 
