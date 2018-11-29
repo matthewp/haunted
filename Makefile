@@ -10,7 +10,7 @@ index.js: haunted.js
 	sed 's/https:\/\/unpkg\.com\/lit-html@\^0\.13\.0\/lit-html\.js/lit-html/' $^ > $@
 
 web.js: haunted.js
-	sed 's/https:\/\/unpkg\.com\/lit-html@\^0\.13\.0\/lit-html\.js/\.\.\/\.\.\/node_modules\/lit-html\/lit-html\.js/' $^ > $@
+	sed 's/https:\/\/unpkg\.com\/lit-html@\^0\.13\.0\/lit-html\.js/\.\.\/node_modules\/lit-html\/lit-html\.js/' $^ > $@
 
 clean:
 	@rm -f haunted.js index.js web.js

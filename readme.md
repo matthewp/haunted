@@ -10,7 +10,7 @@ React's Hooks API but for standard web components and [hyperHTML](https://codepe
 
 <script type="module">
   import { html } from 'https://unpkg.com/lit-html/lit-html.js';
-  import { component, useState } from 'https://unpkg.com/@matthewp/haunted/haunted.js';
+  import { component, useState } from 'https://unpkg.com/haunted/haunted.js';
 
   function Counter() {
     const [count, setCount] = useState(0);
@@ -31,10 +31,10 @@ A starter app is available on [codesandbox](https://codesandbox.io/s/github/matt
 
 ## Use
 
-Currently __Haunted__ is available as the `@matthewp/haunted` package. In the future I hope to get the non-scoped name.
+Currently __Haunted__ is available as the `haunted` package. In the future I hope to get the non-scoped name.
 
 ```shell
-npm install @matthewp/haunted
+npm install haunted
 ```
 For Internet Explorer 11, you'll need to use a proxy polyfill, in addition to the usual webcomponentsjs polyfills. 
 eg.
@@ -47,9 +47,9 @@ For a full example see - https://github.com/crisward/haunted-ie11
 
 Haunted comes in a few builds. Pick one based on your chosen environment:
 
-* __index.js__ is available for bundlers such as Webpack and Rollup. Use with: `import { useState } from '@matthewp/haunted';`;
-* __web.js__ is avaible for use with the web's native module support. Use with: `import { useState } from '../node_modules/@matthewp/haunted/web.js';`.
-* __haunted.js__ is available via the CDN [unpkg](https://unpkg.com). This is great for small apps or for local development without having to install anything. Use with `import { useState } from 'https://unpkg.com/@matthewp/haunted/haunted.js';`
+* __index.js__ is available for bundlers such as Webpack and Rollup. Use with: `import { useState } from 'haunted';`;
+* __web.js__ is avaible for use with the web's native module support. Use with: `import { useState } from '../node_modules/haunted/web.js';`.
+* __haunted.js__ is available via the CDN [unpkg](https://unpkg.com). This is great for small apps or for local development without having to install anything. Use with `import { useState } from 'https://unpkg.com/haunted/haunted.js';`
 
 ## API
 
@@ -66,7 +66,7 @@ Using Haunted you can create custom elements or *virtual* components (components
 The easiest way to create components is by importing `component` and creating a custom element like so:
 
 ```js
-import { component } from '@matthewp/haunted';
+import { component } from 'haunted';
 import { html } from 'lit-html';
 
 const App = component(({ name }) => {
@@ -95,7 +95,7 @@ Haunted also has the concept of *virtual components*. These are components that 
 The following is an example of using virtual components:
 
 ```js
-import { useState, virtual, component } from '@matthewp/haunted';
+import { useState, virtual, component } from 'haunted';
 import { html, render } from 'lit-html';
 
 const Counter = virtual(() => {
@@ -151,7 +151,7 @@ Useful for side-effects that run after the render has been commited.
 
 <script type="module">
   import { html } from 'https://unpkg.com/lit-html/lit-html.js';
-  import { component, useState, useEffect } from 'https://unpkg.com/@matthewp/haunted/haunted.js';
+  import { component, useState, useEffect } from 'https://unpkg.com/haunted/haunted.js';
 
   function Counter() {
     const [count, setCount] = useState(0);
@@ -225,7 +225,7 @@ Create state that updates after being ran through a reducer function.
 
 <script type="module">
   import { html } from 'https://unpkg.com/lit-html/lit-html.js';
-  import { component, useReducer } from 'https://unpkg.com/@matthewp/haunted/haunted.js';
+  import { component, useReducer } from 'https://unpkg.com/haunted/haunted.js';
 
   const initialState = {count: 0};
 
@@ -265,7 +265,7 @@ Create a memoized state value. Only reruns the function when dependent values ha
 
 <script type="module">
   import { html } from 'https://unpkg.com/lit-html/lit-html.js';
-  import { component, useMemo, useState } from 'https://unpkg.com/@matthewp/haunted/haunted.js';
+  import { component, useMemo, useState } from 'https://unpkg.com/haunted/haunted.js';
 
   function fibonacci(num) {
     if (num <= 1) return 1;
@@ -300,7 +300,7 @@ Limited only to "real" components for now
 
 <script type="module">
   import { html } from 'https://unpkg.com/lit-html/lit-html.js';
-  import { component, createContext, useContext } from 'https://unpkg.com/@matthewp/haunted/haunted.js';
+  import { component, createContext, useContext } from 'https://unpkg.com/haunted/haunted.js';
 
   const ThemeContext = createContext('dark');
 
