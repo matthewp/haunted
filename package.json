@@ -29,6 +29,6 @@
     "testee": "^0.8.1"
   },
   "dependencies": {
-    "lit-html": "^0.13.0"
+    "lit-html": "^0.14.0"
   }
 }
