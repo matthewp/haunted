@@ -12,6 +12,12 @@ const useState = hook(class extends Hook {
   }
 
   updater(value) {
+    if (typeof value === "function") {
+      const updaterFn = value;
+      const [previousValue] = this.args;
+      value = updaterFn(previousValue);
+    }
+
     this.makeArgs(value);
     this.el.update();
   }
