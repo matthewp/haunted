@@ -88,6 +88,26 @@ render(html`
 `, document.body);
 ```
 
+##### Attributes
+
+In custom elements, attributes must be pre-defined. Properties, on the other hand, do not. Do define what attributes your component supports, set the `observedAttributes` property on the functional component. For example:
+
+```js
+const App = ({name}) => {
+  return `Hello ${name}!`;
+};
+
+App.observedAttributes = ['name'];
+
+customElements.define('hello-app', App);
+```
+
+Which allows you to author (in HTML):
+
+```html
+<hello-app name="world"></hello-app>
+```
+
 #### Virtual components
 
 Haunted also has the concept of *virtual components*. These are components that are not defined as a tag. Rather they are functions that can be called from within another template. They have their own state and will rerender when that state changes, *without* causing any parent components to rerender.
