@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "make",
+    "preversion": "make",
     "testee": "testee --browsers firefox test/test.html",
     "test": "npm run build && npm run testee"
   },
