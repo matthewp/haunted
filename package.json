@@ -30,6 +30,6 @@
     "testee": "^0.8.1"
   },
   "dependencies": {
-    "lit-html": "^0.14.0"
+    "lit-html": "1.0.0-rc.2"
   }
 }

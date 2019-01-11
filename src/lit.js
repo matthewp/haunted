@@ -1,1 +1,1 @@
-export * from 'https://unpkg.com/lit-html@^0.14.0/lit-html.js';
+export * from 'https://unpkg.com/lit-html@^1.0.0-rc.2/lit-html.js';
