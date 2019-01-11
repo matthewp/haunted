@@ -31,6 +31,8 @@ A starter app is available on [codesandbox](https://codesandbox.io/s/github/matt
 
 ## Use
 
+> Note that lit-html 1.0.0-rc is available as latest on npm. If you want to use this version with Haunted, install `haunted@next`.
+
 Currently __Haunted__ is available as the `haunted` package. In the future I hope to get the non-scoped name.
 
 ```shell
