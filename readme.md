@@ -43,6 +43,12 @@ eg.
 ```
 For a full example see - https://github.com/crisward/haunted-ie11
 
+You can also use Custom Elements without Shadow DOM if you wish.
+eg.
+```
+component(() => html`...`, HTMLElement, {useShadowDOM: false}))
+```
+
 ### Builds
 
 Haunted comes in a few builds. Pick one based on your chosen environment:
@@ -364,6 +370,16 @@ Limited only to "real" components for now
   customElements.define('my-app', component(App));
 </script>
 ```
+
+### Function Signatures
+
+`component(renderer, BaseElement, options): Element`
+- renderer = ``` (element) => html`...` ```  
+- BaseElement = `HTMLElement`
+- options = `{useShadowDOM: true}`
+
+`virtual(renderer): directive`
+- renderer = ``` (element) => html`...` ```  
 
 ## License
 
