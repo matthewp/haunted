@@ -1,6 +1,6 @@
 import { Container } from './core.js';
 
-function component(renderer, BaseElement = HTMLElement) {
+function component(renderer, BaseElement = HTMLElement, options = {useShadowDOM: true}) {
   class Element extends BaseElement {
     static get observedAttributes() {
       return renderer.observedAttributes || [];
@@ -8,8 +8,12 @@ function component(renderer, BaseElement = HTMLElement) {
 
     constructor() {
       super();
-      this.attachShadow({ mode: 'open' });
-      this._container = new Container(renderer, this.shadowRoot, this);
+      if (options.useShadowDOM === false) {
+        this._container = new Container(renderer, this);
+      } else {
+        this.attachShadow({ mode: 'open' });
+        this._container = new Container(renderer, this.shadowRoot, this);        
+      }
     }
 
     connectedCallback() {
