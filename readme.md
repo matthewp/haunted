@@ -371,6 +371,26 @@ Limited only to "real" components for now
 </script>
 ```
 
+#### Write Your Own Hook
+
+Most functionality can be achieved with the provided hooks above, but you can also create your own hooks for custom functionality.
+
+```html
+import { hook, Hook } from 'haunted';
+
+const useMyHook = hook(class extends Hook {
+  constructor(id, el) {
+    super(id, el);
+    ...
+  }
+
+  update() { ... }
+
+  teardown() { ... }
+
+});
+```
+
 ### Function Signatures
 
 `component(renderer, BaseElement, options): Element`

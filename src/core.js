@@ -90,19 +90,12 @@ class Container {
   }
 
   teardown() {
-    let effects = this[effectsSymbol];
-    if(effects) {
-      for(let effect of effects) {
-        effect.teardown();
+    let hooks = this[hookSymbol];
+    hooks.forEach((hook) => {
+      if (typeof hook.teardown === 'function') {
+        hook.teardown();
       }
-    }
-
-    let contexts = this[contextSymbol];
-    if(contexts) {
-      for(let context of contexts) {
-        context.unsubscribe();
-      }
-    }
+    })
   }
 }
 
