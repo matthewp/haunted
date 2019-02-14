@@ -45,11 +45,6 @@ describe('Observed attributes', () => {
     host.appendChild(frag);
     await cycle();
 
-    let inst = document.querySelector(tag);
-    inst.setAttribute('name', 'world');
-
-    await cycle();
-
     let div = host.firstElementChild.shadowRoot.firstElementChild;
     assert.equal(div.textContent, 'Hello world');
     host.innerHTML =  '';
@@ -101,4 +96,48 @@ describe('Observed attributes', () => {
     assert.equal(div.textContent, 'test test');
     teardown();
   });
+
+  it('observed attribute names turn into camelCase props', async () => {
+    const tag = 'attrs-camelcase-test';
+    let el;
+
+    function Drawer(element) {
+      el = element;
+      return html`Test`;
+    }
+
+    Drawer.observedAttributes = [
+      'open',
+      'open-a',
+      'open-b-b',
+      'openc-',
+      'open-d',
+      'open-ee',
+      'open--fff'
+    ];
+
+    customElements.define(tag, component(Drawer));
+    let teardown = mount(`
+      <attrs-camelcase-test 
+        open
+        open-a
+        open-b-b
+        openc-
+        open-d
+        open-ee
+        open--fff
+        ></attrs-camelcase-test>
+    `);
+
+    await cycle();
+    teardown();
+    assert.equal(el.open, true, 'is defined');
+    assert.equal(el.openA, true, 'is defined');
+    assert.equal(el.openBB, true, 'is defined');
+    assert.equal(el.openc, true, 'is defined');
+    assert.equal(el.openD, true, 'is defined');
+    assert.equal(el.openEe, true, 'is defined');
+    assert.equal(el.openFff, true, 'is defined');
+  });
+
 })

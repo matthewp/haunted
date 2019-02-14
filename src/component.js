@@ -1,5 +1,11 @@
 import { Container } from './core.js';
 
+function toCamelCase(val = '') {
+  return val.indexOf('-') === -1 ? val.toLowerCase() : val.toLowerCase().split('-').reduce((out, part) => {
+    return out ? out + part.charAt(0).toUpperCase() + part.slice(1) : part;
+  },'') 
+}
+
 function component(renderer, BaseElement = HTMLElement, options = {useShadowDOM: true}) {
   class Element extends BaseElement {
     static get observedAttributes() {
@@ -26,7 +32,7 @@ function component(renderer, BaseElement = HTMLElement, options = {useShadowDOM:
 
     attributeChangedCallback(name, _, newValue) {
       let val = newValue === '' ? true : newValue;
-      Reflect.set(this, name, val);
+      Reflect.set(this, toCamelCase(name), val);
     }
   };
 
