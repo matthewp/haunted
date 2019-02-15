@@ -50,7 +50,7 @@ const useContext = hook(class extends Hook {
     this._unsubscribe = unsubscribe;
   }
 
-  unsubscribe() {
+  teardown() {
     if (this._unsubscribe) {
       this._unsubscribe();
     }

@@ -8,3 +8,4 @@ export { useMemo } from './use-memo.js';
 export { withHooks, virtual } from './virtual.js';
 export { useContext } from './use-context.js';
 export { createContext } from './create-context.js';
+export { hook, Hook } from './hook.js';
