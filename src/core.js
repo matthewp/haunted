@@ -2,6 +2,8 @@ import { commitSymbol, phaseSymbol, updateSymbol, hookSymbol, effectsSymbol, con
 import { setCurrent, clear } from './interface.js';
 import { render, html } from './lit.js';
 
+const defer = typeof Promise=='function' ? Promise.resolve().then.bind(Promise.resolve()) : setTimeout;
+
 function scheduler() {
   let tasks = [];
   let id;
@@ -18,7 +20,7 @@ function scheduler() {
   return function(task) {
     tasks.push(task);
     if(id == null) {
-      id = requestAnimationFrame(runTasks);
+      id = defer(runTasks);
     }
   };
 }
