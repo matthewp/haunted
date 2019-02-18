@@ -2,7 +2,7 @@ import { commitSymbol, phaseSymbol, updateSymbol, hookSymbol, effectsSymbol, con
 import { setCurrent, clear } from './interface.js';
 import { render, html } from './lit.js';
 
-const defer = typeof Promise=='function' ? Promise.resolve().then.bind(Promise.resolve()) : setTimeout;
+const defer = Promise.resolve().then.bind(Promise.resolve());
 
 function scheduler() {
   let tasks = [];
