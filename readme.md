@@ -1,6 +1,6 @@
 # Haunted 🦇 🎃
 
-React's Hooks API but for standard web components and [hyperHTML](https://codepen.io/WebReflection/pen/pxXrdy?editors=0010) or [lit-html](https://polymer.github.io/lit-html/). 
+React's Hooks API but for standard web components and [hyperHTML](https://codepen.io/WebReflection/pen/pxXrdy?editors=0010) or [lit-html](https://lit-html.polymer-project.org/). 
 
 ```html
 <!doctype html>
@@ -94,7 +94,7 @@ render(html`
 
 ##### Attributes
 
-In custom elements, attributes must be pre-defined. Properties, on the other hand, do not. Do define what attributes your component supports, set the `observedAttributes` property on the functional component. For example:
+In custom elements, attributes must be pre-defined. Properties, on the other hand, do not. To define what attributes your component supports, set the `observedAttributes` property on the functional component. For example:
 
 ```js
 const App = ({name}) => {
@@ -315,7 +315,7 @@ Create a memoized state value. Only reruns the function when dependent values ha
 #### useContext
 
 Grabs context value from the closest provider up in the tree and updates component when value of a provider changes.
-Limited only to "real" components for now
+Limited only to "real" components for now.
 
 ```html
 <!doctype html>
