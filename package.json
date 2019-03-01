@@ -12,7 +12,8 @@
   "files": [
     "haunted.js",
     "index.js",
-    "web.js"
+    "web.js",
+    "index.d.ts"
   ],
   "repository": {
     "type": "git",
