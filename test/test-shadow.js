@@ -1,4 +1,4 @@
-import { html } from '../node_modules/lit-html/lit-html.js';
+import { html } from '../lit-html/lit-html.js';
 import { component } from '../web.js';
 import { attach, cycle } from './helpers.js';
 

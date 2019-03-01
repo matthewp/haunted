@@ -1,7 +1,7 @@
-import { html, render, useState, useEffect, withHooks } from '../web.js';
-import { cycle } from './helpers.js';
+import { component, html, render, useState, useEffect, withHooks, virtual } from '../web.js';
+import { attach, cycle } from './helpers.js';
 
-describe('withHooks()', () => {
+describe('virtual()', () => {
   it('Creates virtual components', async () => {
     let el = document.createElement('div');
     let set;
@@ -129,5 +129,42 @@ describe('withHooks()', () => {
 
     await cycle();
     assert.equal(effect, true, 'Effect ran within the virtual component');
+  });
+
+  it('Teardown is invoked', async () => {
+    const tag = 'app-with-virtual-teardown';
+    let teardownCalled = 0;
+    let set;
+
+    const Counter = () => {
+      useEffect(() => {
+        console.log("connected component");
+        return () => {
+          console.log("disconnected component");
+          teardownCalled++;
+        };
+      }, []);
+      return html`<div>STUFF</div>`;
+    };
+
+    const Main = () => {
+      const [show2, toggle2] = useState(true);
+      set = toggle2;
+      return html`
+        Virtual:
+        ${show2 ? virtual(Counter)() : undefined}
+      `;
+    };
+
+    customElements.define(tag, component(Main));
+
+    let teardown = attach(tag);
+    await cycle();
+
+    set(false);
+    await cycle();
+    teardown();
+
+    assert.equal(teardownCalled, 1, 'Use effect teardown called');
   });
 });

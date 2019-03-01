@@ -1,6 +1,9 @@
 import { Container } from './core.js';
 import { directive } from './lit.js';
 
+const partToContainer = new WeakMap();
+const containerToPart = new WeakMap();
+
 class DirectiveContainer extends Container {
   constructor(renderer, part) {
     super(renderer, part);
@@ -11,17 +14,25 @@ class DirectiveContainer extends Container {
     this.host.setValue(result);
     this.host.commit();
   }
+
+  teardown() {
+    super.teardown();
+    let part = containerToPart.get(this);
+    partToContainer.delete(part);
+  }
 }
 
-const map = new WeakMap();
+
 
 function withHooks(renderer) {
   function factory(...args) {
     return part => {
-      let cont = map.get(part);
+      let cont = partToContainer.get(part);
       if(!cont) {
         cont = new DirectiveContainer(renderer, part);
-        map.set(part, cont);
+        partToContainer.set(part, cont);
+        containerToPart.set(cont, part);
+        teardownOnRemove(cont, part);
       }
       cont.args = args;
       cont.update();
@@ -29,6 +40,31 @@ function withHooks(renderer) {
   }
 
   return directive(factory);
+}
+
+const includes = Array.prototype.includes;
+
+function teardownOnRemove(cont, part, node = part.startNode) {
+  let frag = node.parentNode;
+  let mo = new MutationObserver(mutations => {
+    for(let mutation of mutations) {
+      if(includes.call(mutation.removedNodes, node)) {
+        mo.disconnect();
+
+        if(node.parentNode instanceof ShadowRoot) {
+          teardownOnRemove(cont, part);
+        } else {
+          cont.teardown();
+        }
+        break;
+      } else if(includes.call(mutation.addedNodes, node.nextSibling)) {
+        mo.disconnect();
+        teardownOnRemove(cont, part, node.nextSibling);
+        break;
+      }
+    }
+  });
+  mo.observe(frag, { childList: true });
 }
 
 export { withHooks, withHooks as virtual }
