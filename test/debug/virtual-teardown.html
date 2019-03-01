@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Haunted</title>
+  </head>
+  <body>
+    <counter-app></counter-app>
+    <script type="module">
+import { html, render } from "https://unpkg.com/lit-html/lit-html.js";
+import {
+  component,
+  useEffect,
+  virtual,
+  useState
+} from "../src/haunted.js";
+
+const Counter = () => {
+  useEffect(() => {
+    console.log("connected component");
+    return () => {
+      console.log("disconnected component");
+    };
+  }, []);
+  const [count, setCount] = useState(0);
+
+  return html`
+    <button type="button" @click="${() => setCount(count + 1)}">
+      Count: ${count}
+    </button>
+  `;
+};
+
+customElements.define("component-counter", component(Counter));
+
+const Main = () => {
+  const [show, toggle] = useState(true);
+  const [show2, toggle2] = useState(true);
+  return html`
+    Component:
+    <button @click="${() => toggle(!show)}">${show ? "Hide" : "Show"}</button>
+    ${
+      show
+        ? html`
+            <component-counter></component-counter>
+          `
+        : undefined
+    } <br /><br />
+    Virtual:
+    <button @click="${() => toggle2(!show2)}">
+      ${show2 ? "Hide" : "Show"}
+    </button>
+    ${show2 ? virtual(Counter)() : undefined}
+  `;
+};
+
+customElements.define("counter-app", component(Main));
+    
+    </script>
+  </body>
+</html>

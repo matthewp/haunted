@@ -6,7 +6,7 @@
   "scripts": {
     "build": "make",
     "preversion": "make",
-    "testee": "testee --browsers firefox test/test.html",
+    "testee": "testee --browsers chrome test/test.html --config=testee.json",
     "test": "npm run build && npm run testee"
   },
   "files": [
