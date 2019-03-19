@@ -88,7 +88,7 @@ Here's an example of rendering with lit-html the above app:
 import { render, html } from 'lit-html';
 
 render(html`
-  <my-app name="world"><my-app>
+  <my-app name="world"></my-app>
 `, document.body);
 ```
 
