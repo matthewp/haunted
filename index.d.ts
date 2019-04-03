@@ -7,7 +7,7 @@ export function component(renderer: (el: HTMLElement) => TemplateResult, BaseEle
 
 export function useCallback(fn: Function, inputs: any[]): Function;
 
-export function useEffect(fn: () => Function | void): void;
+export function useEffect(fn: () => Function | void, inputs?: any[]): void;
 
 export function useState(intialValue?: any): [any, Function];
 
