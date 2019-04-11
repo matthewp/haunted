@@ -1,6 +1,5 @@
 import { commitSymbol, phaseSymbol, updateSymbol, hookSymbol, effectsSymbol, contextSymbol } from './symbols.js';
 import { setCurrent, clear } from './interface.js';
-import { render, html } from './lit.js';
 
 const defer = Promise.resolve().then.bind(Promise.resolve());
 
@@ -29,7 +28,8 @@ const read = scheduler();
 const write = scheduler();
 
 class Container {
-  constructor(renderer, frag, host) {
+  constructor(render, renderer, frag, host) {
+    this._renderFunction = render
     this.renderer = renderer;
     this.frag = frag;
     this.host = host || frag;
@@ -67,7 +67,7 @@ class Container {
   }
 
   commit(result) {
-    render(result, this.frag);
+    this._renderFunction(result, this.frag);
     this.runEffects(commitSymbol);
   }
 
@@ -101,4 +101,4 @@ class Container {
   }
 }
 
-export { Container, html, render };
+export { Container };

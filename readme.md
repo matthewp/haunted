@@ -112,6 +112,27 @@ Which allows you to author (in HTML):
 <hello-app name="world"></hello-app>
 ```
 
+#### Configure component function to use different render engine
+
+Swap version of lit-html:
+
+```js
+import {render, html} from "lit-html"
+import {configureComponent} from "haunted/src/configure-component.js"
+const component = configureComponent({render})
+const App = component(() => {/*...*/})
+```
+
+Use lighterhtml instead:
+
+```js
+import {render, html} from "lighterhtml"
+import {adaptLighterHtml} from "haunted/src/adapt-lighter-html.js"
+import {configureComponent} from "haunted/src/configure-component.js"
+const component = configureComponent({render: adaptLighterHtml(render)})
+const App = component(() => {/*...*/})
+```
+
 #### Virtual components
 
 Haunted also has the concept of *virtual components*. These are components that are not defined as a tag. Rather they are functions that can be called from within another template. They have their own state and will rerender when that state changes, *without* causing any parent components to rerender.

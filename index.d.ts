@@ -1,9 +1,19 @@
-import { html, render, TemplateResult } from 'lit-html';    
-export { html, render, TemplateResult }    
+import { html, render, TemplateResult, RenderOptions, directive } from 'lit-html';
 
-export function component(renderer: (el: HTMLElement) => TemplateResult, BaseElement?: Function, options?: {
-    useShadowDOM: boolean
-}): Function;
+type RenderFunction = typeof render
+type DirectiveFunction = typeof directive
+
+export function component(
+    renderer: (el: HTMLElement) => TemplateResult,
+    BaseElement?: Function,
+    options?: {
+        useShadowDOM: boolean
+    }
+): Function;
+
+export function configureComponent(options: {
+    render: RenderFunction
+});
 
 export function useCallback(fn: Function, inputs: any[]): Function;
 
@@ -15,8 +25,13 @@ export function useReducer(reducer: (state: any, action: any) => any, initialSta
 
 export function useMemo(fn: Function, values: any[]): any;
 
-export function withHooks(renderer: Function): Function;
 export function virtual(renderer: Function): Function;
+export const withHooks: typeof virtual;
+
+export function configureVirtual(options: {
+    directive: DirectiveFunction,
+    render: RenderFunction
+}): (renderer: Function) => Function;
 
 interface Context {
     Provider: Function;
@@ -31,3 +46,6 @@ export class Hook {
     id: number;
     el: HTMLElement;
 }
+
+type LighterHtmlRenderFunction = (node: Element | DocumentFragment, callback: () => DocumentFragment) => void;
+export function adaptLighterHtml(render: LighterHtmlRenderFunction): RenderFunction;

@@ -1,0 +1,20 @@
+<!doctype html>
+
+<my-counter></my-counter>
+
+<script type="module">
+  import { html } from '../lighterhtml.js';
+  import { useState } from '../src/use-state.js';
+  import { lighterComponent as component } from '../src/lighter-component.js';
+
+  function Counter() {
+    const [count, setCount] = useState(0);
+
+    return html`
+      <div id="count">${count}</div>
+      <button type="button" onclick=${() => setCount(count + 1)}>Increment</button>
+    `;
+  }
+
+  customElements.define('my-counter', component(Counter, HTMLElement));
+</script>

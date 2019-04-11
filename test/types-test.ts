@@ -6,6 +6,8 @@
  */
 
 import { component, 
+         configureComponent,
+         configureVirtual,
          useCallback, 
          useEffect, 
          useState, 
@@ -18,6 +20,7 @@ import { component,
          hook, 
          Hook,
          html, 
+         directive,
          render } from '../index.js';
 
 class MyElement extends HTMLElement {}
@@ -38,6 +41,16 @@ const componentTest2 = component(()=>{}, HTMLElement, {
     foo: 'bar'
 });
 componentTest2 + 1;
+
+// configureComponent() and configureVirtual() tests
+// positive tests, should all pass
+configureComponent({render})
+configureVirtual({directive, render})
+
+// configureComponent() and configureVirtual() tests
+// negative tests, should all fail
+configureComponent({})
+configureVirtual({})
 
 // useCallback tests
 // positive tests, should all pass
