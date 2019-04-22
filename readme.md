@@ -77,7 +77,7 @@ const App = component(({ name }) => {
   return html`Hello ${name}!`;
 });
 
-customElements.define('my-app', App);
+customElements.define('my-app', component(App));
 ```
 
 You can now use this anywhere you use HTML (directly in a `.html` file, in JSX, in lit-html templates, whereever).
