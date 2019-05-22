@@ -27,4 +27,28 @@ describe('Shadow DOM', () => {
     teardown();
   });
 
+  it('defaults to not delegating focus from the Shadow DOM', async () => {
+    customElements.define('default-delegates-focus', component(() => {
+      return html`does not delegate focus`;
+    }));
+
+    let teardown = attach('default-delegates-focus');
+    await cycle();
+
+    assert.equal(host.firstChild.shadowRoot.delegatesFocus, false, 'Does not delegate focus from the Shadow DOM');
+    teardown();
+  })
+
+  it('allows delegating focus from the Shadow DOM', async () => {
+    customElements.define('delegates-focus', component(() => {
+      return html`delegates focus`;
+    }, HTMLElement, {shadowRootInit: {delegatesFocus: true}));
+
+    let teardown = attach('delegates-focus');
+    await cycle();
+
+    assert.equal(host.firstChild.shadowRoot.delegatesFocus, true, 'Delegates focus from the Shadow DOM');
+    teardown();
+  })
+
 })

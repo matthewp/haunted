@@ -2,7 +2,11 @@ import { html, render, TemplateResult } from 'lit-html';
 export { html, render, TemplateResult }    
 
 export function component(renderer: (el: HTMLElement) => TemplateResult, BaseElement?: Function, options?: {
-    useShadowDOM: boolean
+    useShadowDOM: boolean,
+    shadowRootInit?: {
+        mode?: string
+        delegatesFocus?: boolean,
+    }
 }): Function;
 
 export function useCallback(fn: Function, inputs: any[]): Function;
