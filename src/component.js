@@ -6,7 +6,7 @@ function toCamelCase(val = '') {
   },'') 
 }
 
-function component(renderer, BaseElement = HTMLElement, options = {useShadowDOM: true}) {
+function component(renderer, BaseElement = HTMLElement, {useShadowDOM = true, shadowRootInit = {}} = {}) {
   class Element extends BaseElement {
     static get observedAttributes() {
       return renderer.observedAttributes || [];
@@ -14,10 +14,10 @@ function component(renderer, BaseElement = HTMLElement, options = {useShadowDOM:
 
     constructor() {
       super();
-      if (options.useShadowDOM === false) {
+      if (useShadowDOM === false) {
         this._container = new Container(renderer, this);
       } else {
-        this.attachShadow({ mode: 'open' });
+        this.attachShadow({ mode: "open", ...shadowRootInit});
         this._container = new Container(renderer, this.shadowRoot, this);        
       }
     }
