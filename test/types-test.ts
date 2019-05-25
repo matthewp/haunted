@@ -26,7 +26,10 @@ class MyElement extends HTMLElement {}
 // positive tests, should all pass
 component(() => html``)
 component(() => html``, MyElement)
-const componentTest1 = component(() => html``, HTMLElement, { useShadowDOM: true});
+const componentTest1 = component((el) => {
+    console.log(el.foo);
+    return html``
+}, HTMLElement, { useShadowDOM: true});
 customElements.define('test-element', componentTest1);
 // negative tests, should all fail
 component();

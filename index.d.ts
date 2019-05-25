@@ -1,7 +1,7 @@
 import { html, render, TemplateResult } from 'lit-html';    
 export { html, render, TemplateResult }    
 
-export function component(renderer: (el: HTMLElement) => TemplateResult, BaseElement?: Function, options?: {
+export function component(renderer: (el: HTMLElement & any) => TemplateResult, BaseElement?: Function, options?: {
     useShadowDOM: boolean,
     shadowRootInit?: {
         mode?: string
