@@ -22,13 +22,13 @@ export function useMemo(fn: Function, values: any[]): any;
 export function withHooks(renderer: Function): Function;
 export function virtual(renderer: Function): Function;
 
-interface Context {
+interface Context<T> {
     Provider: Function;
     Consumer: Function;
-    defaultValue: any;
+    defaultValue: T;
 }
-export function createContext(defaultValue: any): Context
-export function useContext(Context: Context): any
+export function createContext<T = any>(defaultValue: T): Context<T>
+export function useContext<T>(Context: Context<T>): T
 
 export function hook(Hook: Function): Function;
 export class Hook {
