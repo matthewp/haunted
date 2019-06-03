@@ -22,7 +22,7 @@ export function useMemo(fn: Function, values: any[]): any;
 export function withHooks(renderer: Function): Function;
 export function virtual(renderer: Function): Function;
 
-interface Context<T> {
+export interface Context<T> {
     Provider: Function;
     Consumer: Function;
     defaultValue: T;
