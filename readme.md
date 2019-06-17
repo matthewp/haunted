@@ -73,9 +73,9 @@ The easiest way to create components is by importing `component` and creating a 
 import { component } from 'haunted';
 import { html } from 'lit-html';
 
-const App = component(({ name }) => {
+const App = ({ name }) => {
   return html`Hello ${name}!`;
-});
+};
 
 customElements.define('my-app', component(App));
 ```
