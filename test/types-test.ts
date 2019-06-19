@@ -11,6 +11,7 @@ import { component,
          useState, 
          useReducer, 
          useMemo, 
+         useRef,
          withHooks, 
          virtual,
          useContext, 
@@ -92,6 +93,16 @@ useMemo(() => {}, [1]);
 useMemo();
 useMemo(1, 1);
 useMemo(() => {}, 1);
+
+// useRef tests
+// positive tests, should all pass
+useRef(1);
+useRef(() => {});
+useRef({foo: 1}).current;
+// negactive tests, should all fail
+useRef();
+useRef(1, 1);
+useRef(1).foo;
 
 // withHooks tests
 // positive tests, should all pass
