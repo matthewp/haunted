@@ -1,4 +1,4 @@
-import { component, html, hook, Hook } from '../web.js';
+import { component, html, hook, Hook } from '../haunted.js';
 import { attach, cycle } from './helpers.js';
 
 let constructorRan = false;

@@ -1,4 +1,4 @@
-import { component, html, createContext, useContext, useState } from '../web.js';
+import { component, html, createContext, useContext, useState } from '../haunted.js';
 import { attach, cycle } from './helpers.js';
 
 describe('context', function() {

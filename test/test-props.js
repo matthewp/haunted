@@ -1,4 +1,4 @@
-import { component, html } from '../web.js';
+import { component, html } from '../haunted.js';
 import { attach, later } from './helpers.js';
 
 describe('Passing props', () => {

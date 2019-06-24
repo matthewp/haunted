@@ -1,4 +1,4 @@
-import { component, html, render, useState, useEffect, withHooks, virtual } from '../web.js';
+import { component, html, render, useState, useEffect, withHooks, virtual } from '../haunted.js';
 import { attach, cycle } from './helpers.js';
 
 describe('virtual()', () => {
