@@ -13,8 +13,6 @@
   },
   "files": [
     "haunted.js",
-    "index.js",
-    "web.js",
     "index.d.ts"
   ],
   "repository": {

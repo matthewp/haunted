@@ -1,17 +1,12 @@
 COMPILE = node_modules/.bin/compile
 
-all: haunted.js index.js web.js
+all: haunted.js
 .PHONY: all
 
 haunted.js: src/*.js
-	$(COMPILE) -f es -o $@ -e https://unpkg.com/lit-html@^1.0.0/lit-html.js src/haunted.js
-
-index.js: haunted.js
-	sed 's/https:\/\/unpkg\.com\/lit-html@\^1\.0\.0\/lit-html\.js/lit-html/' $^ > $@
-
-web.js: haunted.js
-	sed 's/https:\/\/unpkg\.com\/lit-html@\^1\.0\.0\/lit-html\.js/\.\.\/lit-html\/lit-html\.js/' $^ > $@
-
+	$(COMPILE) -f es -o $@ -e lit-html src/haunted.js
+	sed -i.bu 's/lit-html/https:\/\/unpkg\.com\/lit-html@\^1\.0\.0\/lit-html\.js/' $@
+	rm -f $@.bu
 clean:
-	@rm -f haunted.js index.js web.js
+	@rm -f haunted.js
 .PHONY: clean
