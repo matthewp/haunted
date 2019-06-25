@@ -1,4 +1,4 @@
-import { component, html, render, useState, useEffect, withHooks, virtual } from '../haunted.js';
+import { component, html, render, useState, useEffect, virtual } from '../haunted.js';
 import { attach, cycle } from './helpers.js';
 
 describe('virtual()', () => {
@@ -6,7 +6,7 @@ describe('virtual()', () => {
     let el = document.createElement('div');
     let set;
 
-    const App = withHooks(() => {
+    const App = virtual(() => {
       const [count, setCount] = useState(0);
       set = setCount;
 
@@ -28,7 +28,7 @@ describe('virtual()', () => {
     let set;
 
     let childRenders = 0;
-    const Child = withHooks(() => {
+    const Child = virtual(() => {
       childRenders++;
       const [count, setCount] = useState(0);
       set = setCount;
@@ -36,7 +36,7 @@ describe('virtual()', () => {
     });
 
     let parentRenders = 0;
-    const Parent = withHooks(() => {
+    const Parent = virtual(() => {
       parentRenders++;
       
       return html`
@@ -64,11 +64,11 @@ describe('virtual()', () => {
   it('Parent can pass args to the child', async () => {
     let el = document.createElement('div');
 
-    const Child = withHooks((foo, baz) => {
+    const Child = virtual((foo, baz) => {
       return html`<span>${foo}-${baz}</span>`;
     });
 
-    const Parent = withHooks(() => {
+    const Parent = virtual(() => {
       return html`
         <section>${Child('bar', 'qux')}</section>
       `;
@@ -93,10 +93,10 @@ describe('virtual()', () => {
       return html`<span>${count}</span>`;
     };
 
-    const Parent = withHooks(() => {
+    const Parent = virtual(() => {
       const [, set] = useState('');
       setParent = set;
-      return html`<div>${withHooks(Child)()}</div>`;
+      return html`<div>${virtual(Child)()}</div>`;
     });
 
     render(Parent(), el);
@@ -118,7 +118,7 @@ describe('virtual()', () => {
 
   it('Can use effects', async () => {
     let effect = false;
-    const App = withHooks(() => {
+    const App = virtual(() => {
       useEffect(() => {
         effect = true;
       });
@@ -138,9 +138,7 @@ describe('virtual()', () => {
 
     const Counter = () => {
       useEffect(() => {
-        console.log("connected component");
         return () => {
-          console.log("disconnected component");
           teardownCalled++;
         };
       }, []);
