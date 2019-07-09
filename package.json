@@ -13,6 +13,7 @@
   },
   "files": [
     "haunted.js",
+    "src",
     "index.d.ts"
   ],
   "repository": {
