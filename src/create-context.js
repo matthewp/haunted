@@ -8,38 +8,39 @@ export const createContext = (defaultValue) => {
   Context.Provider = class extends HTMLElement {
     constructor() {
       super();
-      this.listeners = [];
+      this.listeners = new Set();
   
-      this.eventHandler = (event) => {
-        const { detail } = event;
-      
-        if (detail.Context === Context) {
-          detail.value = this.value;
-      
-          detail.unsubscribe = () => {
-            const index = this.listeners.indexOf(detail.callback)
-
-            if (index > -1) {
-              this.listeners.splice(index, 1);
-            }
-          }
-
-          this.listeners.push(detail.callback);
-  
-          event.stopPropagation();
-        }
-      }
-  
-      this.addEventListener(contextEvent, this.eventHandler);
+      this.addEventListener(contextEvent, this);
     }
   
     disconnectedCallback() {
-      this.removeEventListener(contextEvent, this.eventHandler);
+      this.removeEventListener(contextEvent, this);
+    }
+
+    handleEvent(event) {
+      const { detail } = event;
+
+      if (detail.Context === Context) {
+        detail.value = this.value;
+        detail.unsubscribe = this.unsubscribe.bind(this, detail.callback);
+
+        this.listeners.add(detail.callback);
+
+        event.stopPropagation();
+      }
+    }
+
+    unsubscribe(callback) {
+      if(this.listeners.has(callback)) {
+        this.listeners.delete(callback);
+      }
     }
 
     set value(value) {
       this._value = value;
-      this.listeners.forEach(callback => callback(value));
+      for(let callback of this.listeners) {
+        callback(value);
+      }
     }
 
     get value() {
