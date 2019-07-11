@@ -47,4 +47,4 @@ const useEffect = hook(class extends Hook {
   }
 });
 
-export { useEffect };
+export { setEffects, useEffect };

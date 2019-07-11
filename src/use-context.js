@@ -1,5 +1,6 @@
 import { contextSymbol, contextEvent } from './symbols.js';
 import { hook, Hook } from './hook.js';
+import { setEffects } from './use-effect.js';
 
 function setContexts(el, consumer) {
   if(!(contextSymbol in el)) {
@@ -13,6 +14,9 @@ const useContext = hook(class extends Hook {
     super(id, el);
     setContexts(el, this);
     this._updater = this._updater.bind(this);
+    this._ranEffect = false;
+    this._unsubscribe = null;
+    setEffects(el, this);
   }
 
   update(Context) {
@@ -26,6 +30,15 @@ const useContext = hook(class extends Hook {
     }
 
     return this.value;
+  }
+
+  call() {
+    if(!this._ranEffect) {
+      this._ranEffect = true;
+      if(this._unsubscribe) this._unsubscribe();
+      this._subscribe(this.Context);
+      this.el.update();
+    }
   }
 
   _updater(value) {
