@@ -109,5 +109,6 @@ describe('useEffect', () => {
     document.querySelector(tag).prop = 'foo';
     await cycle();
     assert.equal(calls, 1, 'still called once');
+    teardown();
   });
 });
