@@ -42,7 +42,7 @@ describe('Shadow DOM', () => {
   it('allows delegating focus from the Shadow DOM', async () => {
     customElements.define('delegates-focus', component(() => {
       return html`delegates focus`;
-    }, HTMLElement, {shadowRootInit: {delegatesFocus: true}));
+    }, HTMLElement, {shadowRootInit: {delegatesFocus: true} }));
 
     let teardown = attach('delegates-focus');
     await cycle();

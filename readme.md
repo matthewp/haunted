@@ -164,6 +164,14 @@ Create a tuple of state and a function to change that state.
 const [count, setCount] = useState(0);
 ```
 
+Additionally you can provide a function as the argument to useState, in which case the function is called to initialize the first state, but never called again.
+
+```js
+const [count, setCount] = useState(() => {
+  return expensiveFunction();
+});
+```
+
 #### useEffect
 
 Useful for side-effects that run after the render has been commited.

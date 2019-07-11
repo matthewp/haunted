@@ -4,6 +4,11 @@ const useState = hook(class extends Hook {
   constructor(id, el, initialValue) {
     super(id, el);
     this.updater = this.updater.bind(this);
+
+    if(typeof initialValue === 'function') {
+      initialValue = initialValue();
+    }
+
     this.makeArgs(initialValue);
   }
 
