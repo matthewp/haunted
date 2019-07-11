@@ -312,6 +312,31 @@ Create a memoized state value. Only reruns the function when dependent values ha
 </script>
 ```
 
+#### useRef
+
+Create and returns an object with one property "current" which can be assigned any value and is unaffected by multiple renders.
+
+```html
+<!doctype html>
+
+<my-app></my-app>
+
+<script type="module">
+  import { html } from 'https://unpkg.com/lit-html/lit-html.js';
+  import { component, useRef } from 'https://unpkg.com/haunted/haunted.js';
+
+  function App() {
+    const myRef = useRef(0);
+
+    return html`
+      ${myRef.current}
+    `;
+  }
+
+  customElements.define('my-app', component(App));
+</script>
+```
+
 #### useContext
 
 Grabs context value from the closest provider up in the tree and updates component when value of a provider changes.

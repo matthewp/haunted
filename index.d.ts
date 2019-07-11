@@ -19,6 +19,8 @@ export function useReducer(reducer: (state: any, action: any) => any, initialSta
 
 export function useMemo(fn: Function, values: any[]): any;
 
+export function useRef(initialValue: any): { current: any};
+
 export function withHooks(renderer: Function): Function;
 export function virtual(renderer: Function): Function;
 
