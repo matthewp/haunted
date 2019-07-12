@@ -83,14 +83,20 @@ const App = component(() => {
 
 #### Web modules
 
-__Haunted__ can work directly in the browser without using any build tools. Simply import the `haunted.js` bundle. You can use the [unpkg] CDN. This works great for demo pages and small apps:
+__Haunted__ can work directly in the browser without using any build tools. Simply import the `haunted.js` bundle. You can use the [unpkg] or [pika](https://www.pika.dev/cdn) CDNs. This works great for demo pages and small apps. Here's an example with unpkg:
 
 ```js
 import { html } from 'https://unpkg.com/lit-html/lit-html.js';
 import { component, useState, useEffect } from 'https://unpkg.com/haunted/haunted.js';
 ```
 
-If you install Haunted locally this build is located at `node_modules/haunted/haunted.js`.
+If using pika then use the `html` export from Haunted, as pika bundles everything together:
+
+```js
+import { useState, component, html } from 'https://cdn.pika.dev/haunted';
+```
+
+If you install Haunted __locally__ this build is located at `node_modules/haunted/haunted.js`.
 
 ## API
 
