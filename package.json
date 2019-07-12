@@ -13,6 +13,8 @@
   },
   "files": [
     "haunted.js",
+    "web.js",
+    "core.js",
     "lib",
     "index.d.ts"
   ],
