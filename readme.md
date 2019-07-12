@@ -1,6 +1,6 @@
 # Haunted 🦇 🎃
 
-React's Hooks API but for standard web components and [hyperHTML](https://codepen.io/WebReflection/pen/pxXrdy?editors=0010) or [lit-html](https://lit-html.polymer-project.org/). 
+React's Hooks API but for standard web components and [lit-html](https://lit-html.polymer-project.org/) or [hyperHTML](https://codepen.io/WebReflection/pen/pxXrdy?editors=0010).
 
 ```html
 <!doctype html>
@@ -34,26 +34,69 @@ A starter app is available on [codesandbox](https://codesandbox.io/s/github/matt
 ```shell
 npm install haunted
 ```
+
 For Internet Explorer 11, you'll need to use a proxy polyfill, in addition to the usual webcomponentsjs polyfills. 
+
 eg.
 ```html
-<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/proxy-polyfill@0.3.0/proxy.min.js"></script> 
+<script src="https://cdn.jsdelivr.net/npm/proxy-polyfill@0.3.0/proxy.min.js"></script> 
 ```
-For a full example see - https://github.com/crisward/haunted-ie11
+
+For a full example with Internet Explorer 11, see - https://github.com/crisward/haunted-ie11
 
 You can also use Custom Elements without Shadow DOM if you wish.
 eg.
+
+```js
+component(() => html`...`, HTMLElement, { useShadowDOM: false }));
 ```
-component(() => html`...`, HTMLElement, {useShadowDOM: false}))
+
+### Importing
+
+__Haunted__ can be imported just like any other library when using a bundler of your choice:
+
+```js
+import { component, html, useState } from 'haunted';
 ```
 
-### Builds
+The main entry point is intended for [lit-html](https://github.com/Polymer/lit-html) users.
 
-Haunted comes in a few builds. Pick one based on your chosen environment:
+#### lighterhtml, etc
 
-* __index.js__ is available for bundlers such as Webpack and Rollup. Use with: `import { useState } from 'haunted';`;
-* __web.js__ is avaible for use with the web's native module support. Use with: `import { useState } from '../node_modules/haunted/web.js';`.
-* __haunted.js__ is available via the CDN [unpkg](https://unpkg.com). This is great for small apps or for local development without having to install anything. Use with `import { useState } from 'https://unpkg.com/haunted/haunted.js';`
+If you are using [lighterhtml](https://github.com/WebReflection/lighterhtml) or [hyperHTML](https://github.com/WebReflection/hyperHTML) then instead import `haunted/core`. This export gives you a function that creates Hooks that work with any template library.
+
+```js
+import haunted, { useState } from 'haunted/core';
+import { html, render } from 'lighterhtml';
+
+const { component } = haunted({
+  render(what, where) {
+    render(where, () => what);
+  }
+});
+
+const App = component(() => {
+  const [count, setCount] = useState(0);
+  return html`Using lighterhtml! Count: ${count}`;
+});
+```
+
+#### Web modules
+
+__Haunted__ can work directly in the browser without using any build tools. Simply import the `haunted.js` bundle. You can use the [unpkg] or [pika](https://www.pika.dev/cdn) CDNs. This works great for demo pages and small apps. Here's an example with unpkg:
+
+```js
+import { html } from 'https://unpkg.com/lit-html/lit-html.js';
+import { component, useState, useEffect } from 'https://unpkg.com/haunted/haunted.js';
+```
+
+If using pika then use the `html` export from Haunted, as pika bundles everything together:
+
+```js
+import { useState, component, html } from 'https://cdn.pika.dev/haunted';
+```
+
+If you install Haunted __locally__ this build is located at `node_modules/haunted/haunted.js`.
 
 ## API
 

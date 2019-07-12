@@ -1,6 +1,8 @@
 <!doctype html>
+<html lang="en">
 <title>Haunted tests</title>
-<link href="https://unpkg.com/mocha@4.1.0/mocha.css" rel="stylesheet" />
+<link href="https://unpkg.com/mocha@4.1.0/mocha.css" rel="stylesheet">
+
 <div id="mocha"></div>
 <div id="host"></div>
 
@@ -11,18 +13,19 @@
   assert = chai.assert;
 </script>
 
-<script type="module" src="./test-shadow.js"></script>
-<script type="module" src="./test-export.js"></script>
-<script type="module" src="./test-attrs.js"></script>
-<script type="module" src="./test-effects.js"></script>
-<script type="module" src="./test-use-ref.js"></script>
-<script type="module" src="./test-props.js"></script>
-<script type="module" src="./test-virtual.js"></script>
-<script type="module" src="./test-context.js"></script>
-<script type="module" src="./test-custom-hook.js"></script>
-<script type="module" src="./test-use-state.js"></script>
-
 <script type="module">
+  import './test-shadow.js';
+  import './test-export.js';
+  import './test-attrs.js';
+  import './test-effects.js';
+  import './test-use-ref.js';
+  import './test-props.js';
+  import './test-virtual.js';
+  import './test-context.js';
+  import './test-custom-hook.js';
+  import './test-use-state.js';
+  import './test-core.js';
+
   window.addEventListener('load', () => {
     mocha.run();
   });

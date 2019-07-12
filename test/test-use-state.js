@@ -1,4 +1,4 @@
-import { component, html, useState } from '../web.js';
+import { component, html, useState } from '../haunted.js';
 import { attach, cycle } from './helpers.js';
 
 describe('useState', () => {

@@ -1,5 +1,4 @@
-import { html } from '../lit-html/lit-html.js';
-import { component } from '../web.js';
+import { component, html } from '../haunted.js';
 import { attach, cycle } from './helpers.js';
 
 describe('Shadow DOM', () => {
@@ -42,7 +41,6 @@ describe('Shadow DOM', () => {
   it('allows delegating focus from the Shadow DOM', async () => {
     customElements.define('delegates-focus', component(() => {
       return html`delegates focus`;
-
     }, HTMLElement, { shadowRootInit: { delegatesFocus: true } }));
 
     let teardown = attach('delegates-focus');

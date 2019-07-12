@@ -1,9 +1,9 @@
 {
   "name": "haunted",
   "version": "4.4.0",
-  "description": "",
-  "main": "index.js",
-  "module": "index.js",
+  "description": "Hooks for web components",
+  "main": "lib/haunted.js",
+  "module": "lib/haunted.js",
   "type": "module",
   "scripts": {
     "build": "make",
@@ -13,8 +13,9 @@
   },
   "files": [
     "haunted.js",
-    "index.js",
     "web.js",
+    "core.js",
+    "lib",
     "index.d.ts"
   ],
   "repository": {

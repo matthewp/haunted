@@ -1,4 +1,4 @@
-import { component, html } from '../web.js';
+import { component, html } from '../haunted.js';
 import { attach, cycle } from './helpers.js';
 
 describe('Component exports', () => {
