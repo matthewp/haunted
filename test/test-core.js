@@ -1,4 +1,4 @@
-import haunted from '../core.js';
+import haunted, { useState } from '../core.js';
 import { attach, cycle } from './helpers.js';
 
 // This is just to get the lit-html export for testing.
@@ -16,7 +16,8 @@ describe('haunted/core', () => {
       });
 
       function App() {
-        return html`Test`;
+        let [name] = useState('Matthew');
+        return html`<span>Test-${name}</span>`;
       }
 
       customElements.define(tag, component(App));
@@ -24,7 +25,8 @@ describe('haunted/core', () => {
       let teardown = attach(tag);
       await cycle();
   
-      assert.equal(host.firstChild.shadowRoot.firstChild.nextSibling.nodeValue, 'Test', 'Rendered');
+      let span = host.firstChild.shadowRoot.firstElementChild;
+      assert.equal(span.textContent, 'Test-Matthew', 'Rendered');
       teardown();
     });
   })
