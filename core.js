@@ -1,1 +1,1 @@
-export { default } from './src/core.js'
+export { default } from './lib/core.js'
