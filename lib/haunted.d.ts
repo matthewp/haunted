@@ -1,39 +1,56 @@
-import { html, render, TemplateResult } from 'lit-html';    
-export { html, render, TemplateResult }    
+import { html, render, TemplateResult } from 'lit-html';
+import { DirectiveFactory } from "lit-html/lib/directive";
+export { html, render, TemplateResult, DirectiveFactory }
 
-export function component(renderer: (el: HTMLElement) => TemplateResult, BaseElement?: Function, options?: {
-    useShadowDOM: boolean,
-    shadowRootInit?: {
-        mode?: string
-        delegatesFocus?: boolean,
-    }
-}): Function;
+export type ComponentLike = HTMLElement | ShadowRoot;
+export type ComponentType<P, T extends ComponentLike = HTMLElement> = new(...args: any[]) => T & P;
 
-export function useCallback(fn: Function, inputs: any[]): Function;
+export function component<P, T extends ComponentLike = HTMLElement>(
+  renderer: (this: T, el: P & T) => TemplateResult | void,
+  BaseElement?: new(...args: any[]) => T,
+  options?: {
+      useShadowDOM: boolean,
+      shadowRootInit?: {
+          mode?: string
+          delegatesFocus?: boolean,
+      }
+  }): ComponentType<P, T>;
 
-export function useEffect(fn: () => Function | void, inputs?: any[]): void;
+export function useCallback<T extends Function>(fn: T, inputs: any[]): T;
 
-export function useState(intialValue?: any): [any, Function];
+export function useEffect(fn: () => void | VoidFunction, inputs?: any[]): void;
 
-export function useReducer(reducer: (state: any, action: any) => any, initialState: any): [any, Function];
+export type StateUpdater<T> = (value: T | (() => T)) => void;
+export function useState<T>(intialValue?: T): [T, StateUpdater<T>];
 
-export function useMemo(fn: Function, values: any[]): any;
+export function useReducer<S = any, A = any>(reducer: (state: S, action: A) => S, initialState: S): [S, (action: A) => void];
 
-export function useRef(initialValue: any): { current: any};
+export function useMemo<T>(fn: () => T, values: any[]): T;
+
+export function useRef<T>(initialValue: T): { current: T};
 
 export function withHooks(renderer: Function): Function;
-export function virtual(renderer: Function): Function;
+export function virtual<P, T extends ComponentLike = HTMLElement>(renderer: (this: T, el: P) => TemplateResult | void): () => DirectiveFactory;
 
 export interface Context<T> {
-    Provider: Function;
-    Consumer: Function;
+    Provider: ComponentType<T>;
+    Consumer: ComponentType<T>;
     defaultValue: T;
 }
 export function createContext<T = any>(defaultValue: T): Context<T>
 export function useContext<T>(Context: Context<T>): T
 
-export function hook(Hook: Function): Function;
-export class Hook {
+export class Hook<T extends ComponentLike = HTMLElement> {
     id: number;
-    el: HTMLElement;
+    el: T;
+    constructor(id: number,  el: T);
 }
+
+interface HookWithLifecycle<T extends ComponentLike = HTMLElement, P extends any[] = null, R = void> extends Hook<T> {
+    update?(...args: P): R;
+    teardown?(): void;
+}
+
+export function hook<T extends ComponentLike = HTMLElement>(Hook: new(id: number, el: T) => Hook<T>): () => void;
+export function hook<T extends ComponentLike = HTMLElement, P extends any[] = void[], R = void>(Hook: new (id: number, el: T, ...args: P) => HookWithLifecycle<T, P, R>): (...args: P) => R;
+

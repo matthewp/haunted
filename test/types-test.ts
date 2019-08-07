@@ -42,9 +42,9 @@ componentTest2 + 1;
 
 // useCallback tests
 // positive tests, should all pass
-useCallback(() => {}, ['foo']); 
-useCallback(() => {}, ['foo', 2]); 
-const useCallbackTest1 = useCallback(() => {}, ['foo', 2]); 
+useCallback(() => {}, ['foo']);
+useCallback(() => {}, ['foo', 2]);
+const useCallbackTest1 = useCallback(() => {}, ['foo', 2]);
 useCallbackTest1();
 // negative tests, should all fail
 useCallback();
@@ -72,7 +72,7 @@ useEffectTest1 + 1;
 useState();
 useState('foo');
 const [state, setState] = useState('foo');
-setState(1);
+setState('foo1');
 // negative tests, should all fail
 useState(1, 1);
 const [state2, setState2] = useState(); setState2 + 1;
@@ -126,11 +126,21 @@ useContext(ThemeContext);
 // positive tests, should all pass
 const hookTest = hook(Hook);
 hookTest();
-hook(class extends Hook {});
+const hookTest1 = hook(class A extends Hook {
+  constructor(id, el, fn, store = []) { super(id, el)}
+  update(fn, store) { return 1 }
+});
+hookTest1((a, b) => {});
+hookTest1((a, b) => {}, []);
 // negative tests, should all fail
 hook();
 hook(3);
-
+const hookTest2 = hook(class A extends Hook {
+  constructor(id, el, fn, store) { super(id, el)}
+  update(fn, store) { return 1 }
+});
+hookTest(1);
+hookTest2(() => 1);
 
 // html
 // positive tests, should all pass
