@@ -20,7 +20,7 @@ export function useCallback<T extends Function>(fn: T, inputs: any[]): T;
 
 export function useEffect(fn: () => void | VoidFunction, inputs?: any[]): void;
 
-export type StateUpdater<T> = (value: T | (() => T)) => void;
+export type StateUpdater<T> = (value: T | ((state?: T) => T)) => void;
 export function useState<T>(intialValue?: T): [T, StateUpdater<T>];
 
 export function useReducer<S = any, A = any>(reducer: (state: S, action: A) => S, initialState: S): [S, (action: A) => void];
