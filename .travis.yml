@@ -1,8 +1,11 @@
+dist: trusty
 language: node_js
-node_js:
-  - "10"
-before_install:
-  - "export DISPLAY=:99.0"
-  - "sh -e /etc/init.d/xvfb start"
+node_js: node
 addons:
   chrome: stable
+before_script:
+  - npm run server &
+  - npm run build
+  - sleep 3
+script:
+  - npm run test-ci

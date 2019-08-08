@@ -8,8 +8,8 @@
   "scripts": {
     "build": "make",
     "preversion": "make",
-    "testee": "testee --browsers chrome test/test.html --config=testee.json",
-    "test": "npm run build && npm run testee"
+    "server": "http-server -p 1991",
+    "test-ci": "mocha-headless-chrome -f http://localhost:1991/test/test.html"
   },
   "files": [
     "haunted.js",
@@ -31,7 +31,8 @@
   "typings": "index.d.ts",
   "devDependencies": {
     "@matthewp/compile": "^1.3.1",
-    "testee": "^0.8.1"
+    "http-server": "^0.11.1",
+    "mocha-headless-chrome": "^2.0.3"
   },
   "dependencies": {
     "lit-html": "^1.0.0"
