@@ -30,7 +30,7 @@
   "homepage": "https://github.com/matthewp/haunted#readme",
   "typings": "index.d.ts",
   "devDependencies": {
-    "@matthewp/compile": "^1.3.1",
+    "@matthewp/compile": "^2.4.3",
     "http-server": "^0.11.1",
     "mocha-headless-chrome": "^2.0.3"
   },
