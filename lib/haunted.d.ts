@@ -1,13 +1,16 @@
 import { html, render, TemplateResult } from 'lit-html';    
 export { html, render, TemplateResult }    
 
-export function component(renderer: (el: HTMLElement) => TemplateResult, BaseElement?: Function, options?: {
+type Options = {
     useShadowDOM: boolean,
     shadowRootInit?: {
         mode?: string
         delegatesFocus?: boolean,
     }
-}): Function;
+}
+
+export function component(renderer: (el: HTMLElement) => TemplateResult, BaseElement?: Function, options?: Options): Function;
+export function component(renderer: (el: HTMLElement) => TemplateResult, options?: Options & { baseElement: Function }): Function;
 
 export function useCallback(fn: Function, inputs: any[]): Function;
 

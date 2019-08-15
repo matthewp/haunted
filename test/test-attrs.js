@@ -26,6 +26,28 @@ describe('Observed attributes', () => {
     teardown();
   });
 
+  it('Trigger rerenders while declared as an option', async () => {
+    const tag = 'attrs-options-test';
+
+    function app({ name = '' }) {
+      return html`<div>Hello ${name}</div>`;
+    }
+
+    customElements.define(tag, component(app, {observedAttributes: ['name']}));
+
+    let teardown = attach(tag);
+    await cycle();
+
+    let inst = document.querySelector(tag);
+    inst.setAttribute('name', 'world');
+
+    await cycle();
+
+    let div = host.firstChild.shadowRoot.firstElementChild;
+    assert.equal(div.textContent, 'Hello world');
+    teardown();
+  });
+
   it('Initial attributes are reflected', async () => {
     const tag = 'attrs-initial-test';
 

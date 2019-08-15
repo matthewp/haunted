@@ -48,7 +48,7 @@ You can also use Custom Elements without Shadow DOM if you wish.
 eg.
 
 ```js
-component(() => html`...`, HTMLElement, { useShadowDOM: false }));
+component(() => html`...`, { useShadowDOM: false }));
 ```
 
 ### Importing
@@ -146,7 +146,13 @@ const App = ({name}) => {
 
 App.observedAttributes = ['name'];
 
-customElements.define('hello-app', App);
+customElements.define('hello-app', component(App));
+```
+
+Alternatively, you can pass `observedAttributes` as an option to `component()`:
+
+```js
+customElements.define('hello-app', component(App, {observedAttributes: ['name']}));
 ```
 
 Which allows you to author (in HTML):
@@ -467,10 +473,11 @@ const useMyHook = hook(class extends Hook {
 
 ### Function Signatures
 
+`component(renderer, options): Element`
 `component(renderer, BaseElement, options): Element`
 - renderer = ``` (element) => html`...` ```  
 - BaseElement = `HTMLElement`
-- options = `{useShadowDOM: true}`
+- options = `{baseElement: HTMLElement, observedAttributes: [], useShadowDOM: true}`
 
 `virtual(renderer): directive`
 - renderer = ``` (element) => html`...` ```  
