@@ -453,14 +453,14 @@ Limited only to "real" components for now.
 
 #### Write Your Own Hook
 
-Most functionality can be achieved with the provided hooks above, but you can also create your own hooks for custom functionality.
+Most functionality can be achieved with the provided hooks above, but you can also create your own hooks for custom functionality like so:
 
-```html
+```js
 import { hook, Hook } from 'haunted';
 
 const useMyHook = hook(class extends Hook {
-  constructor(id, el) {
-    super(id, el);
+  constructor(id, state) {
+    super(id, state);
     ...
   }
 
@@ -470,6 +470,62 @@ const useMyHook = hook(class extends Hook {
 
 });
 ```
+
+### State
+
+At its heart, Haunted is a container for state derived from hooks. The `component` and `virtual` signatures build on top of this state container.
+
+In order to use Haunted outside of its component types, such as to extend another custom element base class, you can use the `State` constructor.
+
+It has a signature of: `new State(update, [ hostElement ])`.
+
+> Note that the second argument `hostElement` is optional. If you want to use the `useContext` hook you will need to provide a host element, however.
+
+Here's an example how it can be used to run hooks code:
+
+```js
+import { State, useState } from 'haunted';
+
+let state = new State(() => {
+  update();
+});
+
+function update() {
+  state.run(() => {
+    const [count, setCount] = useState(0);
+
+    console.log('count is', count);
+
+    setTimeout(() => setCount(count + 1), 3000);
+  });
+}
+
+update();
+```
+
+The above will result in the count being incremented every 3 seconds and the current count being logged.
+
+A more practical example is integration with a custom element base class. Here's a simple integration with [LitElement](https://lit-element.polymer-project.org/):
+
+```js
+import { LitElement } from 'lit-element';
+import { State } from 'haunted';
+
+export default class LitHauntedElement extends LitElement {
+  constructor() {
+    super();
+
+    this.hauntedState = new State(() => this.requestUpdate(), this);
+  }
+
+  update(changedProperties) {
+    this.hauntedState.run(() => super.update(changedProperties));
+    this.hauntedState.runEffects();
+  }
+}
+```
+
+More example integrations can be found in [this gist](https://gist.github.com/matthewp/92c4daa6588eaef484c6f389d20d5700).
 
 ### Function Signatures
 
