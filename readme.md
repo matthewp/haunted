@@ -523,6 +523,7 @@ export default class LitHauntedElement extends LitElement {
 
   update(changedProperties) {
     this.hauntedState.run(() => super.update(changedProperties));
+    this.hauntedState.runEffects();
   }
 }
 ```
