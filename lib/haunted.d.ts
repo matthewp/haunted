@@ -34,7 +34,6 @@ export function useMemo<T>(fn: () => T, values: any[]): T;
 
 export function useRef<T>(initialValue: T): { current: T};
 
-export function withHooks(renderer: Function): Function;
 export function virtual<P, T extends ComponentLike = HTMLElement>(renderer: (this: T, el: P) => TemplateResult | void): () => DirectiveFactory;
 
 export interface Context<T> {
