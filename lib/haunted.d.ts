@@ -2,29 +2,24 @@ import { html, render, TemplateResult } from 'lit-html';
 import { DirectiveFactory } from "lit-html/lib/directive";
 export { html, render, TemplateResult, DirectiveFactory }
 
-type Options = {
-    useShadowDOM: boolean,
-    shadowRootInit?: {
-        mode?: string
-        delegatesFocus?: boolean,
-    }
-}
-
-export function component(renderer: (el: HTMLElement) => TemplateResult, BaseElement?: Function, options?: Options): Function;
-export function component(renderer: (el: HTMLElement) => TemplateResult, options?: Options & { baseElement: Function }): Function;
 export type ComponentLike = HTMLElement | ShadowRoot;
 export type ComponentType<P, T extends ComponentLike = HTMLElement> = new(...args: any[]) => T & P;
+
+type Options = {
+  useShadowDOM: boolean,
+  shadowRootInit?: {
+    mode?: string
+    delegatesFocus?: boolean,
+  }
+}
 
 export function component<P, T extends ComponentLike = HTMLElement>(
   renderer: (this: T, el: P & T) => TemplateResult | void,
   BaseElement?: new(...args: any[]) => T,
-  options?: {
-      useShadowDOM: boolean,
-      shadowRootInit?: {
-          mode?: string
-          delegatesFocus?: boolean,
-      }
-  }): ComponentType<P, T>;
+  options?: Options): ComponentType<P, T>;
+export function component<P, T extends ComponentLike = HTMLElement>(
+  renderer: (this: T, el: P & T) => TemplateResult | void,
+  options?: Options & { baseElement: new(...args: any[]) => T} ): ComponentType<P, T>;
 
 export function useCallback<T extends Function>(fn: T, inputs: any[]): T;
 
