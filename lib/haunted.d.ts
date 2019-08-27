@@ -1,5 +1,5 @@
 import { html, render, TemplateResult } from 'lit-html';
-import { DirectiveFactory } from "lit-html/lib/directive";
+import { DirectiveFactory } from 'lit-html/lib/directive';
 export { html, render, TemplateResult, DirectiveFactory }
 
 export type ComponentLike = HTMLElement | ShadowRoot;
