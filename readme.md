@@ -1,5 +1,8 @@
 # Haunted 🦇 🎃
 
+[![npm](https://img.shields.io/npm/dt/haunted)](https://npm.im/haunted)
+[![npm](https://img.shields.io/npm/v/haunted)](https://npm.im/haunted)
+
 React's Hooks API but for standard web components and [lit-html](https://lit-html.polymer-project.org/) or [hyperHTML](https://codepen.io/WebReflection/pen/pxXrdy?editors=0010).
 
 ```html
