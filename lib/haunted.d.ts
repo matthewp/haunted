@@ -7,10 +7,7 @@ export type ComponentType<P, T extends ComponentLike = HTMLElement> = new(...arg
 
 type Options = {
   useShadowDOM: boolean,
-  shadowRootInit?: {
-    mode?: string
-    delegatesFocus?: boolean,
-  }
+  shadowRootInit?: ShadowRootInit,
 }
 
 export function component<P, T extends ComponentLike = HTMLElement>(
