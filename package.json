@@ -28,7 +28,7 @@
     "url": "https://github.com/matthewp/haunted/issues"
   },
   "homepage": "https://github.com/matthewp/haunted#readme",
-  "typings": " lib/haunted.d.ts",
+  "typings": "lib/haunted.d.ts",
   "devDependencies": {
     "@matthewp/compile": "^2.4.3",
     "http-server": "^0.11.1",
