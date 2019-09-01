@@ -7,10 +7,7 @@ export type ComponentType<P, T extends ComponentLike = HTMLElement> = new(...arg
 
 type Options = {
   useShadowDOM: boolean,
-  shadowRootInit?: {
-    mode?: string
-    delegatesFocus?: boolean,
-  }
+  shadowRootInit?: ShadowRootInit,
 }
 
 export function component<P, T extends ComponentLike = HTMLElement>(
@@ -50,7 +47,7 @@ export class Hook<T extends ComponentLike = HTMLElement> {
     constructor(id: number,  el: T);
 }
 
-interface HookWithLifecycle<T extends ComponentLike = HTMLElement, P extends any[] = null, R = void> extends Hook<T> {
+interface HookWithLifecycle<T extends ComponentLike = HTMLElement, P extends any[] = [], R = void> extends Hook<T> {
     update?(...args: P): R;
     teardown?(): void;
 }
