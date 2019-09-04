@@ -1,5 +1,5 @@
 import { State } from './state';
-import { commitSymbol, phaseSymbol, updateSymbol, effectsSymbol, Phase } from './symbols';
+import { commitSymbol, phaseSymbol, updateSymbol, effectsSymbol, Phase, layoutEffectsSymbol, EffectsSymbols } from './symbols';
 import { GenericRenderer } from './core';
 
 const defer = Promise.resolve().then.bind(Promise.resolve());
@@ -65,9 +65,12 @@ abstract class BaseScheduler<R extends GenericRenderer, H> {
   handlePhase(phase: Phase, arg?: unknown) {
     this[phaseSymbol] = phase;
     switch(phase) {
-      case commitSymbol: return this.commit(arg);
+      case commitSymbol:
+        this.commit(arg);
+        this.runEffects(layoutEffectsSymbol);
+        return;
       case updateSymbol: return this.render();
-      case effectsSymbol: return this.runEffects();
+      case effectsSymbol: return this.runEffects(effectsSymbol);
     }
     this[phaseSymbol] = null;
   }
@@ -76,8 +79,8 @@ abstract class BaseScheduler<R extends GenericRenderer, H> {
     return this.state.run(() => this.renderer.call(this.host, this.host))
   }
 
-  runEffects(): void {
-    this.state.runEffects();
+  runEffects(phase: EffectsSymbols): void {
+    this.state.runEffects(phase);
   }
 
   abstract commit(result: unknown): void;

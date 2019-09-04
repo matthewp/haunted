@@ -18,6 +18,7 @@ function haunted({ render }: Options): { component: ComponentCreator, createCont
 export { haunted as default, Options, GenericRenderer, RenderFunction };
 export { useCallback } from './use-callback';
 export { useEffect } from './use-effect';
+export { useLayoutEffect } from './use-layout-effect';
 export { useState } from './use-state';
 export { useReducer } from './use-reducer';
 export { useMemo } from './use-memo';
