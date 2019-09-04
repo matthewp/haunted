@@ -1,4 +1,4 @@
-import { component, html, render, useState, useEffect, virtual } from '../haunted.js';
+import { component, html, render, useState, useEffect, useLayoutEffect, virtual } from '../haunted.js';
 import { attach, cycle } from './helpers.js';
 
 describe('virtual()', () => {
@@ -38,7 +38,7 @@ describe('virtual()', () => {
     let parentRenders = 0;
     const Parent = virtual(() => {
       parentRenders++;
-      
+
       return html`
         <section>${Child()}</section>
       `;
@@ -56,7 +56,7 @@ describe('virtual()', () => {
 
     assert.equal(parentRenders, 1);
     assert.equal(childRenders, 2);
-    
+
     let span = el.firstElementChild.firstElementChild;
     assert.equal(span.textContent, "1");
   });
@@ -129,6 +129,21 @@ describe('virtual()', () => {
 
     await cycle();
     assert.equal(effect, true, 'Effect ran within the virtual component');
+  });
+
+  it('Can use layout effects', async () => {
+    let effect = false;
+    const App = virtual(() => {
+      useLayoutEffect(() => {
+        effect = true;
+      });
+    });
+
+    let el = document.createElement('div');
+    render(App(), el);
+
+    await cycle();
+    assert.equal(effect, true, 'Layout effect ran within the virtual component');
   });
 
   it('Teardown is invoked', async () => {
