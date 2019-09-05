@@ -15,7 +15,8 @@
     "haunted.js",
     "web.js",
     "core.js",
-    "lib"
+    "lib",
+    "typings"
   ],
   "repository": {
     "type": "git",
