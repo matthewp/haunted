@@ -1,15 +1,22 @@
-import { hookSymbol, effectsSymbol } from './symbols.js';
-import { setCurrent, clear } from './interface.js';
+import { Hook } from './hook';
+import { setCurrent, clear } from './interface';
+import { hookSymbol, effectsSymbol } from './symbols';
 
-class State {
-  constructor(update, host) {
+class State<H = unknown> {
+  update: VoidFunction;
+  host: H;
+  virtual?: boolean;
+  [hookSymbol]: Map<number, Hook>;
+  [effectsSymbol]: { call: (state: State) => void }[];
+
+  constructor(update: VoidFunction, host: H) {
     this.update = update;
     this.host = host;
     this[hookSymbol] = new Map();
     this[effectsSymbol] = [];
   }
 
-  run(cb) {
+  run<T>(cb: () => T) {
     setCurrent(this);
     let res = cb();
     clear();
@@ -18,13 +25,11 @@ class State {
 
   runEffects() {
     let effects = this[effectsSymbol];
-    if(effects) {
-      setCurrent(this);
-      for(let effect of effects) {
-        effect.call(this);
-      }
-      clear();
+    setCurrent(this);
+    for(let effect of effects) {
+      effect.call(this);
     }
+    clear();
   }
 
   teardown() {

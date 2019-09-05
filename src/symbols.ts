@@ -1,10 +1,12 @@
-const symbolFor = typeof Symbol === 'function' ? Symbol.for : str => str;
+const phaseSymbol = Symbol.for('haunted.phase');
+const hookSymbol = Symbol.for('haunted.hook');
 
-export const phaseSymbol = symbolFor('haunted.phase');
-export const hookSymbol = symbolFor('haunted.hook');
+const updateSymbol = Symbol.for('haunted.update');
+const commitSymbol = Symbol.for('haunted.commit');
+const effectsSymbol = Symbol.for('haunted.effects');
 
-export const updateSymbol = symbolFor('haunted.update');
-export const commitSymbol = symbolFor('haunted.commit');
-export const effectsSymbol = symbolFor('haunted.effects');
+type Phase = typeof updateSymbol | typeof commitSymbol | typeof effectsSymbol;
 
-export const contextEvent = 'haunted.context'; 
+const contextEvent = 'haunted.context';
+
+export { phaseSymbol, hookSymbol, updateSymbol, commitSymbol, effectsSymbol, contextEvent, Phase };

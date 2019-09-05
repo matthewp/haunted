@@ -1,10 +1,10 @@
 import { html, render } from 'lit-html';
-import haunted from './core.js';
-import { makeVirtual } from './virtual.js';
+import haunted from './core';
+import { makeVirtual } from './virtual';
 
-const { Scheduler, component, createContext } = haunted({ render });
+const { component, createContext } = haunted({ render });
 
-const virtual = makeVirtual(Scheduler);
+const virtual = makeVirtual();
 
 export {
   component,
