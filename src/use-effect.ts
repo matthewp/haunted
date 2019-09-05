@@ -11,15 +11,15 @@ function setEffects(state: State, cb: { call: (state: State) => void }) {
 const useEffect = hook(class extends Hook {
   callback!: Effect;
   lastValues?: unknown[];
-  values!: unknown[];
+  values!: unknown[] | undefined;
   _teardown!: VoidFunction | void;
 
-  constructor(id: number, state: State, ignored1: Effect, ignored2: unknown[]) {
+  constructor(id: number, state: State, ignored1: Effect, ignored2?: unknown[]) {
     super(id, state);
     setEffects(state, this);
   }
 
-  update(callback: Effect, values: unknown[]) {
+  update(callback: Effect, values?: unknown[]) {
     this.callback = callback;
     this.lastValues = this.values;
     this.values = values;
@@ -43,7 +43,7 @@ const useEffect = hook(class extends Hook {
   }
 
   hasChanged() {
-    return !this.lastValues || this.values.some((value, i) => this.lastValues![i] !== value);
+    return !this.lastValues || this.values!.some((value, i) => this.lastValues![i] !== value);
   }
 });
 
