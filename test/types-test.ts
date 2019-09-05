@@ -5,21 +5,22 @@
  * postive tests have no errors and the negative tests have errors.
  */
 
-import { component, 
-         useCallback, 
-         useEffect, 
-         useState, 
-         useReducer, 
-         useMemo, 
-         useRef,
-         withHooks, 
-         virtual,
-         useContext, 
-         createContext, 
-         hook, 
-         Hook,
-         html, 
-         render } from '../index.js';
+import {
+  component,
+  useCallback,
+  useEffect,
+  useState,
+  useReducer,
+  useMemo,
+  useRef,
+  virtual,
+  useContext,
+  createContext,
+  hook,
+  Hook,
+  html,
+  render,
+} from '../';
 
 class MyElement extends HTMLElement {}
 
@@ -69,17 +70,18 @@ useEffectTest1 + 1;
 
 // useState tests
 // positive tests, should all pass
-useState();
+useState(undefined);
 useState('foo');
 const [state, setState] = useState('foo');
 setState('foo1');
 // negative tests, should all fail
 useState(1, 1);
-const [state2, setState2] = useState(); setState2 + 1;
+const [state2, setState2] = useState(undefined); setState2 + 1;
 
 // useReducer tests
 // positive tests, should all pass
-useReducer(() => {}, 1)
+useReducer(() => {}, undefined);
+useReducer((state: number) => state, 1)
 // negactive tests, should all fail
 useReducer();
 const useReducerTest1 = useReducer(() => {});
@@ -104,14 +106,11 @@ useRef();
 useRef(1, 1);
 useRef(1).foo;
 
-// withHooks tests
+// virtual tests
 // positive tests, should all pass
-const withHooksTest = withHooks(() => {})
-withHooksTest();
 const virtualTest = virtual(() => {});
 virtualTest();
 // negactive tests, should all fail
-withHooks();
 virtual();
 
 // createContext
@@ -124,7 +123,7 @@ useContext(ThemeContext);
 
 // hook
 // positive tests, should all pass
-const hookTest = hook(Hook);
+const hookTest = hook(class extends Hook { update() {} });
 hookTest();
 const hookTest1 = hook(class A extends Hook {
   constructor(id, el, fn, store = []) { super(id, el)}
