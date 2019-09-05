@@ -1,7 +1,13 @@
-import { hook, Hook } from './hook.js';
+import { hook, Hook } from './hook';
+import { State } from './state';
 
-const useState = hook(class extends Hook {
-  constructor(id, state, initialValue) {
+type NewState<T> = T | ((previousState?: T) => T);
+type StateUpdater<T> = (value: NewState<T>) => void;
+
+const useState = hook(class<T> extends Hook {
+  args!: readonly [T, StateUpdater<T>];
+
+  constructor(id: number, state: State, initialValue: T) {
     super(id, state);
     this.updater = this.updater.bind(this);
 
@@ -16,9 +22,9 @@ const useState = hook(class extends Hook {
     return this.args;
   }
 
-  updater(value) {
+  updater(value: NewState<T>) {
     if (typeof value === 'function') {
-      const updaterFn = value;
+      const updaterFn = value as (previousState?: T) => T;
       const [previousValue] = this.args;
       value = updaterFn(previousValue);
     }
@@ -27,8 +33,8 @@ const useState = hook(class extends Hook {
     this.state.update();
   }
 
-  makeArgs(value) {
-    this.args = Object.freeze([value, this.updater]);
+  makeArgs(value: T) {
+    this.args = Object.freeze([value, this.updater] as const);
   }
 });
 

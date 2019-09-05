@@ -1,5 +1,5 @@
-import { useMemo } from './use-memo.js';
+import { useMemo } from './use-memo';
 
-const useCallback = (fn, inputs) => useMemo(() => fn, inputs);
+const useCallback = <T extends Function>(fn: T, inputs: unknown[]) => useMemo(() => fn, inputs);
 
 export { useCallback };

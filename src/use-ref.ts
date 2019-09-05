@@ -1,6 +1,6 @@
-import { useMemo } from './use-memo.js';
+import { useMemo } from './use-memo';
 
-const useRef = (initialValue) => useMemo(() => ({
+const useRef = <T>(initialValue: T) => useMemo(() => ({
     current: initialValue
 }), []);
 

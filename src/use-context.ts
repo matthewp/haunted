@@ -1,9 +1,16 @@
-import { contextEvent } from './symbols.js';
-import { hook, Hook } from './hook.js';
-import { setEffects } from './use-effect.js';
+import { Context, ContextDetail } from './create-context';
+import { hook, Hook } from './hook';
+import { State } from './state';
+import { contextEvent } from './symbols';
+import { setEffects } from './use-effect';
 
-const useContext = hook(class extends Hook {
-  constructor(id, state) {
+const useContext = hook(class<T> extends Hook<[Context<T>], T, Element> {
+  Context!: Context<T>;
+  value!: T;
+  _ranEffect: boolean;
+  _unsubscribe: VoidFunction | null;
+
+  constructor(id: number, state: State<Element>, _: Context<T>) {
     super(id, state);
     this._updater = this._updater.bind(this);
     this._ranEffect = false;
@@ -11,7 +18,7 @@ const useContext = hook(class extends Hook {
     setEffects(state, this);
   }
 
-  update(Context) {
+  update(Context: Context<T>) {
     if (this.state.virtual) {
       throw new Error('can\'t be used with virtual components');
     }
@@ -33,12 +40,12 @@ const useContext = hook(class extends Hook {
     }
   }
 
-  _updater(value) {
+  _updater(value: T) {
     this.value = value;
     this.state.update();
   }
 
-  _subscribe(Context) {
+  _subscribe(Context: Context<T>) {
     const detail = { Context, callback: this._updater };
 
     this.state.host.dispatchEvent(new CustomEvent(contextEvent, {
@@ -48,7 +55,7 @@ const useContext = hook(class extends Hook {
       composed: true, // to pass ShadowDOM boundaries
     }));
 
-    const { unsubscribe, value } = detail;
+    const { unsubscribe, value } = detail as ContextDetail<T>;
 
     this.value = unsubscribe ? value : Context.defaultValue;
 

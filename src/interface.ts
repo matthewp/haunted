@@ -1,8 +1,10 @@
-let current;
+import { State } from './state';
+
+let current: State | null;
 let currentId = 0;
 
-function setCurrent(element) {
-  current = element;
+function setCurrent(state: State) {
+  current = state;
 }
 
 function clear() {

@@ -1,19 +1,25 @@
-import { hook, Hook } from './hook.js';
+import { hook, Hook } from './hook';
+import { State } from './state';
 
-const useReducer = hook(class extends Hook {
-  constructor(id, state, _, initialState) {
+type Reducer<S, A> = (state: S, action: A) => S;
+
+const useReducer = hook(class<S, A> extends Hook {
+  reducer!: Reducer<S, A>;
+  currentState: S;
+
+  constructor(id: number, state: State, _: Reducer<S, A>, initialState: S) {
     super(id, state);
     this.dispatch = this.dispatch.bind(this);
-    this.state = initialState;
+    this.currentState = initialState;
   }
 
-  update(reducer) {
+  update(reducer: Reducer<S, A>) {
     this.reducer = reducer;
     return [this.state, this.dispatch];
   }
 
-  dispatch(action) {
-    this.state = this.reducer(this.state, action);
+  dispatch(action: A) {
+    this.currentState = this.reducer(this.currentState, action);
     this.state.update();
   }
 });

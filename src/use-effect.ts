@@ -1,18 +1,25 @@
-import { effectsSymbol } from './symbols.js';
-import { hook, Hook } from './hook.js';
+import { hook, Hook } from './hook';
+import { State } from './state';
+import { effectsSymbol } from './symbols';
 
-function setEffects(state, cb) {
+type Effect = (this: State) => void | VoidFunction;
+
+function setEffects(state: State, cb: { call: (state: State) => void }) {
   state[effectsSymbol].push(cb);
 }
 
 const useEffect = hook(class extends Hook {
-  constructor(id, state) {
+  callback!: Effect;
+  lastValues?: unknown[];
+  values!: unknown[];
+  _teardown!: VoidFunction | void;
+
+  constructor(id: number, state: State, ignored1: Effect, ignored2: unknown[]) {
     super(id, state);
-    this.values = false;
     setEffects(state, this);
   }
 
-  update(callback, values) {
+  update(callback: Effect, values: unknown[]) {
     this.callback = callback;
     this.lastValues = this.values;
     this.values = values;
@@ -36,7 +43,7 @@ const useEffect = hook(class extends Hook {
   }
 
   hasChanged() {
-    return this.lastValues === false || this.values.some((value, i) => this.lastValues[i] !== value);
+    return !this.lastValues || this.values.some((value, i) => this.lastValues![i] !== value);
   }
 });
 

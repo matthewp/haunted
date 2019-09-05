@@ -1,3 +1,3 @@
-export { html, render, component, createContext, virtual } from './lit-haunted.js';
-export * from './core.js';
-export { default } from './core.js';
+export { html, render, component, createContext, virtual } from './lit-haunted';
+export * from './core';
+export { default } from './core';

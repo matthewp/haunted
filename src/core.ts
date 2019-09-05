@@ -1,22 +1,24 @@
-import { makeScheduler } from './scheduler.js';
-import { makeComponent } from './component.js';
-import { makeContext } from './create-context.js';
+import { makeComponent } from './component';
+import { makeContext } from './create-context';
 
-function haunted({ render }) {
-  const Scheduler = makeScheduler(render);
-  const component = makeComponent(Scheduler);
+type GenericRenderer = (this: unknown, ...args: any[]) => unknown | void;
+type RenderFunction = (result: unknown, container: DocumentFragment | Element) => void;
+
+function haunted({ render }: { render: RenderFunction }) {
+  const component = makeComponent(render);
   const createContext = makeContext(component);
 
-  return { Scheduler, component, createContext };
+  return { component, createContext };
 }
 
-export { haunted as default };
-export { useCallback } from './use-callback.js';
-export { useEffect } from './use-effect.js';
-export { useState } from './use-state.js';
-export { useReducer } from './use-reducer.js';
-export { useMemo } from './use-memo.js';
-export { useContext } from './use-context.js';
-export { useRef } from './use-ref.js';
-export { hook, Hook } from './hook.js';
-export { State } from './state.js';
+export { haunted as default, GenericRenderer, RenderFunction };
+export { useCallback } from './use-callback';
+export { useEffect } from './use-effect';
+export { useState } from './use-state';
+export { useReducer } from './use-reducer';
+export { useMemo } from './use-memo';
+export { useContext } from './use-context';
+export { useRef } from './use-ref';
+export { hook, Hook } from './hook';
+export { BaseScheduler } from './scheduler';
+export { State } from './state';

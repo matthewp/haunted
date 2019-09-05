@@ -1,37 +1,49 @@
-import { directive } from 'lit-html';
+import { directive, NodePart } from 'lit-html';
+import { GenericRenderer } from './core';
+import { BaseScheduler } from './scheduler';
 
 const includes = Array.prototype.includes;
 
-function makeVirtual(Scheduler) {
-  const partToContainer = new WeakMap();
-  const containerToPart = new WeakMap();
+interface Renderer extends GenericRenderer {
+  (this: NodePart, ...args: unknown[]): unknown | void;
+}
 
-  class DirectiveContainer extends Scheduler {
-    constructor(renderer, part) {
+function makeVirtual() {
+  const partToScheduler: WeakMap<NodePart, Scheduler> = new WeakMap();
+  const schedulerToPart: WeakMap<Scheduler, NodePart> = new WeakMap();
+
+  class Scheduler extends BaseScheduler<Renderer, NodePart> {
+    args!: unknown[];
+
+    constructor(renderer: Renderer, part: NodePart) {
       super(renderer, part);
-      this.virtual = true;
+      this.state.virtual = true;
     }
 
-    commit(result) {
+    render() {
+      return this.state.run(() => this.renderer.apply(this.host, this.args));
+    }
+
+    commit(result: unknown) {
       this.host.setValue(result);
       this.host.commit();
     }
 
     teardown() {
       super.teardown();
-      let part = containerToPart.get(this);
-      partToContainer.delete(part);
+      let part = schedulerToPart.get(this);
+      partToScheduler.delete(part!);
     }
   }
 
-  function virtual(renderer) {
-    function factory(...args) {
-      return part => {
-        let cont = partToContainer.get(part);
+  function virtual(renderer: Renderer) {
+    function factory(...args: unknown[]) {
+      return (part: NodePart) => {
+        let cont = partToScheduler.get(part);
         if(!cont) {
-          cont = new DirectiveContainer(renderer, part);
-          partToContainer.set(part, cont);
-          containerToPart.set(cont, part);
+          cont = new Scheduler(renderer, part);
+          partToScheduler.set(part, cont);
+          schedulerToPart.set(cont, part);
           teardownOnRemove(cont, part);
         }
         cont.args = args;
@@ -45,8 +57,8 @@ function makeVirtual(Scheduler) {
   return virtual;
 }
 
-function teardownOnRemove(cont, part, node = part.startNode) {
-  let frag = node.parentNode;
+function teardownOnRemove(cont: BaseScheduler<Renderer, NodePart>, part: NodePart, node = part.startNode) {
+  let frag = node.parentNode!;
   let mo = new MutationObserver(mutations => {
     for(let mutation of mutations) {
       if(includes.call(mutation.removedNodes, node)) {
@@ -60,7 +72,7 @@ function teardownOnRemove(cont, part, node = part.startNode) {
         break;
       } else if(includes.call(mutation.addedNodes, node.nextSibling)) {
         mo.disconnect();
-        teardownOnRemove(cont, part, node.nextSibling);
+        teardownOnRemove(cont, part, node.nextSibling || undefined);
         break;
       }
     }
@@ -68,4 +80,4 @@ function teardownOnRemove(cont, part, node = part.startNode) {
   mo.observe(frag, { childList: true });
 }
 
-export { makeVirtual };
+export { makeVirtual, Renderer as VirtualRenderer };
