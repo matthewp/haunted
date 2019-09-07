@@ -1,5 +1,5 @@
-import { makeComponent } from './component';
-import { makeContext } from './create-context';
+import { makeComponent, ComponentCreator } from './component';
+import { makeContext, ContextCreator } from './create-context';
 
 type GenericRenderer = (this: unknown, ...args: any[]) => unknown | void;
 type RenderFunction = (result: unknown, container: DocumentFragment | Element) => void;
@@ -8,7 +8,7 @@ interface Options {
   render: RenderFunction;
 }
 
-function haunted({ render }: Options) {
+function haunted({ render }: Options): { component: ComponentCreator, createContext: ContextCreator } {
   const component = makeComponent(render);
   const createContext = makeContext(component);
 

@@ -19,7 +19,7 @@ interface CustomHook<P extends unknown[] = unknown[], R = unknown, H = unknown> 
   new (id: number, state: State<H>, ...args: P): Hook<P, R, H>;
 }
 
-function use<P extends unknown[], R, H = unknown>(Hook: CustomHook<P, R, H>, ...args: P) {
+function use<P extends unknown[], R, H = unknown>(Hook: CustomHook<P, R, H>, ...args: P): R {
   let id = notify();
   let hooks = current![hookSymbol];
 
@@ -32,7 +32,7 @@ function use<P extends unknown[], R, H = unknown>(Hook: CustomHook<P, R, H>, ...
   return hook.update(...args);
 }
 
-function hook<P extends unknown[], R, H = unknown>(Hook: CustomHook<P, R, H>) {
+function hook<P extends unknown[], R, H = unknown>(Hook: CustomHook<P, R, H>): (...args: P) => R {
   return use.bind<null, CustomHook<P, R, H>, P, R>(null, Hook);
 }
 

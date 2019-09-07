@@ -1,12 +1,12 @@
 import { GenericRenderer, RenderFunction } from './core';
 import { BaseScheduler } from './scheduler';
 
-const toCamelCase = (val = '') =>
+const toCamelCase = (val = ''): string =>
   val.replace(/-+([a-z])?/g, (_, char) => char ? char.toUpperCase() : '');
 
 interface Renderer<P extends object> extends GenericRenderer {
   (this: Component<P>, host: Component<P>): unknown | void;
-  observedAttributes?: string[];
+  observedAttributes?: (keyof P)[];
 }
 
 type Component<P extends object> = Element & P;
@@ -37,7 +37,7 @@ function makeComponent(render: RenderFunction): Creator {
       this.frag = frag;
     }
 
-    commit(result: unknown) {
+    commit(result: unknown): void {
       render(result, this.frag);
     }
   }
@@ -52,7 +52,7 @@ function makeComponent(render: RenderFunction): Creator {
     class Element extends BaseElement {
       _scheduler: Scheduler<P>;
 
-      static get observedAttributes() {
+      static get observedAttributes(): (keyof P)[] {
         return renderer.observedAttributes || observedAttributes || [];
       }
 
@@ -66,29 +66,29 @@ function makeComponent(render: RenderFunction): Creator {
         }
       }
 
-      connectedCallback() {
+      connectedCallback(): void {
         this._scheduler.update();
       }
 
-      disconnectedCallback() {
+      disconnectedCallback(): void {
         this._scheduler.teardown();
       }
 
-      attributeChangedCallback(name: string, _: unknown, newValue: unknown) {
+      attributeChangedCallback(name: string, _: unknown, newValue: unknown): void {
         let val = newValue === '' ? true : newValue;
         Reflect.set(this, toCamelCase(name), val);
       }
     };
 
-    function reflectiveProp<T>(initialValue: T) {
+    function reflectiveProp<T>(initialValue: T): Readonly<PropertyDescriptor> {
       let value = initialValue;
       return Object.freeze({
         enumerable: true,
         configurable: true,
-        get() {
+        get(): T {
           return value;
         },
-        set(this: Element, newValue: T) {
+        set(this: Element, newValue: T): void {
           value = newValue;
           this._scheduler.update();
         }
@@ -100,7 +100,7 @@ function makeComponent(render: RenderFunction): Creator {
         return target;
       },
 
-      set(target, key: string, value, receiver) {
+      set(target, key: string, value, receiver): boolean {
         if(key in target) {
           Reflect.set(target, key, value);
         }

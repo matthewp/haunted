@@ -6,13 +6,17 @@ interface ConsumerProps<T> {
   render: (value: T) => unknown,
 }
 
-export interface Context<T> {
+interface Creator {
+  <T>(defaultValue: T): Context<T>;
+}
+
+interface Context<T> {
   Provider: ComponentConstructor<{}>;
   Consumer: ComponentConstructor<ConsumerProps<T>>;
   defaultValue: T;
 }
 
-export interface ContextDetail<T> {
+interface ContextDetail<T> {
   Context: Context<T>;
   callback: (value: T) => void;
 
@@ -20,8 +24,8 @@ export interface ContextDetail<T> {
   unsubscribe: (this: Context<T>) => void;
 }
 
-function makeContext(component: ComponentCreator) {
-  return <T>(defaultValue: T) => {
+function makeContext(component: ComponentCreator): Creator {
+  return <T>(defaultValue: T): Context<T> => {
     const Context: Context<T> = {
       Provider: class extends HTMLElement {
         listeners: Set<(value: T) => void>;
@@ -34,11 +38,11 @@ function makeContext(component: ComponentCreator) {
           this.addEventListener(contextEvent, this);
         }
 
-        disconnectedCallback() {
+        disconnectedCallback(): void {
           this.removeEventListener(contextEvent, this);
         }
 
-        handleEvent(event: CustomEvent<ContextDetail<T>>) {
+        handleEvent(event: CustomEvent<ContextDetail<T>>): void {
           const { detail } = event;
 
           if (detail.Context === Context) {
@@ -51,23 +55,23 @@ function makeContext(component: ComponentCreator) {
           }
         }
 
-        unsubscribe(callback: (value: T) => void) {
+        unsubscribe(callback: (value: T) => void): void {
           this.listeners.delete(callback);
         }
 
-        set value(value) {
+        set value(value: T) {
           this._value = value;
           for (let callback of this.listeners) {
             callback(value);
           }
         }
 
-        get value() {
+        get value(): T {
           return this._value;
         }
       },
 
-      Consumer: component<ConsumerProps<T>>(function({ render }: ConsumerProps<T>) {
+      Consumer: component<ConsumerProps<T>>(function({ render }: ConsumerProps<T>): unknown {
         const context = useContext(Context);
 
         return render(context);
@@ -80,4 +84,4 @@ function makeContext(component: ComponentCreator) {
   };
 }
 
-export { makeContext };
+export { makeContext, Creator as ContextCreator, Context, ContextDetail };
