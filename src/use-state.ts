@@ -18,11 +18,11 @@ const useState = hook(class<T> extends Hook {
     this.makeArgs(initialValue);
   }
 
-  update() {
+  update(): readonly [T, StateUpdater<T>] {
     return this.args;
   }
 
-  updater(value: NewState<T>) {
+  updater(value: NewState<T>): void {
     if (typeof value === 'function') {
       const updaterFn = value as (previousState?: T) => T;
       const [previousValue] = this.args;
@@ -33,7 +33,7 @@ const useState = hook(class<T> extends Hook {
     this.state.update();
   }
 
-  makeArgs(value: T) {
+  makeArgs(value: T): void {
     this.args = Object.freeze([value, this.updater] as const);
   }
 });

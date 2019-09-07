@@ -43,7 +43,7 @@ abstract class BaseScheduler<R extends GenericRenderer, H> {
     this._updateQueued = false;
   }
 
-  update() {
+  update(): void {
     if(this._updateQueued) return;
     read(() => {
       let result = this.handlePhase(updateSymbol);
@@ -72,17 +72,17 @@ abstract class BaseScheduler<R extends GenericRenderer, H> {
     this[phaseSymbol] = null;
   }
 
-  render() {
+  render(): unknown {
     return this.state.run(() => this.renderer.call(this.host, this.host))
   }
 
-  runEffects() {
+  runEffects(): void {
     this.state.runEffects();
   }
 
   abstract commit(result: unknown): void;
 
-  teardown() {
+  teardown(): void {
     this.state.teardown();
   }
 }

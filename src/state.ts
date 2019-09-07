@@ -16,14 +16,14 @@ class State<H = unknown> {
     this[effectsSymbol] = [];
   }
 
-  run<T>(cb: () => T) {
+  run<T>(cb: () => T): T {
     setCurrent(this);
     let res = cb();
     clear();
     return res;
   }
 
-  runEffects() {
+  runEffects(): void {
     let effects = this[effectsSymbol];
     setCurrent(this);
     for(let effect of effects) {
@@ -32,7 +32,7 @@ class State<H = unknown> {
     clear();
   }
 
-  teardown() {
+  teardown(): void {
     let hooks = this[hookSymbol];
     hooks.forEach(hook => {
       if (typeof hook.teardown === 'function') {

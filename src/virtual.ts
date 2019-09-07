@@ -20,16 +20,16 @@ function makeVirtual() {
       this.state.virtual = true;
     }
 
-    render() {
+    render(): unknown {
       return this.state.run(() => this.renderer.apply(this.host, this.args));
     }
 
-    commit(result: unknown) {
+    commit(result: unknown): void {
       this.host.setValue(result);
       this.host.commit();
     }
 
-    teardown() {
+    teardown(): void {
       super.teardown();
       let part = schedulerToPart.get(this);
       partToScheduler.delete(part!);
@@ -38,7 +38,7 @@ function makeVirtual() {
 
   function virtual(renderer: Renderer) {
     function factory(...args: unknown[]) {
-      return (part: NodePart) => {
+      return (part: NodePart): void => {
         let cont = partToScheduler.get(part);
         if(!cont) {
           cont = new Scheduler(renderer, part);
@@ -57,7 +57,7 @@ function makeVirtual() {
   return virtual;
 }
 
-function teardownOnRemove(cont: BaseScheduler<Renderer, NodePart>, part: NodePart, node = part.startNode) {
+function teardownOnRemove(cont: BaseScheduler<Renderer, NodePart>, part: NodePart, node = part.startNode): void {
   let frag = node.parentNode!;
   let mo = new MutationObserver(mutations => {
     for(let mutation of mutations) {

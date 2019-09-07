@@ -11,7 +11,7 @@ const useMemo = hook(class<T> extends Hook {
     this.values = values;
   }
 
-  update(fn: () => T, values: unknown[]) {
+  update(fn: () => T, values: unknown[]): T {
     if(this.hasChanged(values)) {
       this.values = values;
       this.value = fn();
@@ -19,7 +19,7 @@ const useMemo = hook(class<T> extends Hook {
     return this.value;
   }
 
-  hasChanged(values: unknown[]) {
+  hasChanged(values: unknown[]): boolean {
     return values.some((value, i) => this.values[i] !== value);
   }
 });

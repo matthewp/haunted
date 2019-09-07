@@ -18,7 +18,7 @@ const useContext = hook(class<T> extends Hook<[Context<T>], T, Element> {
     setEffects(state, this);
   }
 
-  update(Context: Context<T>) {
+  update(Context: Context<T>): T {
     if (this.state.virtual) {
       throw new Error('can\'t be used with virtual components');
     }
@@ -31,7 +31,7 @@ const useContext = hook(class<T> extends Hook<[Context<T>], T, Element> {
     return this.value;
   }
 
-  call() {
+  call(): void {
     if(!this._ranEffect) {
       this._ranEffect = true;
       if(this._unsubscribe) this._unsubscribe();
@@ -40,12 +40,12 @@ const useContext = hook(class<T> extends Hook<[Context<T>], T, Element> {
     }
   }
 
-  _updater(value: T) {
+  _updater(value: T): void {
     this.value = value;
     this.state.update();
   }
 
-  _subscribe(Context: Context<T>) {
+  _subscribe(Context: Context<T>): void {
     const detail = { Context, callback: this._updater };
 
     this.state.host.dispatchEvent(new CustomEvent(contextEvent, {
@@ -62,7 +62,7 @@ const useContext = hook(class<T> extends Hook<[Context<T>], T, Element> {
     this._unsubscribe = unsubscribe;
   }
 
-  teardown() {
+  teardown(): void {
     if (this._unsubscribe) {
       this._unsubscribe();
     }

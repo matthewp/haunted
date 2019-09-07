@@ -19,30 +19,30 @@ const useEffect = hook(class extends Hook {
     setEffects(state, this);
   }
 
-  update(callback: Effect, values?: unknown[]) {
+  update(callback: Effect, values?: unknown[]): void {
     this.callback = callback;
     this.lastValues = this.values;
     this.values = values;
   }
 
-  call() {
+  call(): void {
     if(!this.values || this.hasChanged()) {
       this.run();
     }
   }
 
-  run() {
+  run(): void {
     this.teardown();
     this._teardown = this.callback.call(this.state);
   }
 
-  teardown() {
+  teardown(): void {
     if(this._teardown) {
       this._teardown();
     }
   }
 
-  hasChanged() {
+  hasChanged(): boolean {
     return !this.lastValues || this.values!.some((value, i) => this.lastValues![i] !== value);
   }
 });

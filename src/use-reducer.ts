@@ -13,12 +13,12 @@ const useReducer = hook(class<S, A> extends Hook {
     this.currentState = initialState;
   }
 
-  update(reducer: Reducer<S, A>) {
+  update(reducer: Reducer<S, A>): readonly [S, (action: A) => void] {
     this.reducer = reducer;
-    return [this.state, this.dispatch];
+    return [this.currentState, this.dispatch];
   }
 
-  dispatch(action: A) {
+  dispatch(action: A): void {
     this.currentState = this.reducer(this.currentState, action);
     this.state.update();
   }
