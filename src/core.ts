@@ -4,14 +4,18 @@ import { makeContext } from './create-context';
 type GenericRenderer = (this: unknown, ...args: any[]) => unknown | void;
 type RenderFunction = (result: unknown, container: DocumentFragment | Element) => void;
 
-function haunted({ render }: { render: RenderFunction }) {
+interface Options {
+  render: RenderFunction;
+}
+
+function haunted({ render }: Options) {
   const component = makeComponent(render);
   const createContext = makeContext(component);
 
   return { component, createContext };
 }
 
-export { haunted as default, GenericRenderer, RenderFunction };
+export { haunted as default, Options, GenericRenderer, RenderFunction };
 export { useCallback } from './use-callback';
 export { useEffect } from './use-effect';
 export { useState } from './use-state';
