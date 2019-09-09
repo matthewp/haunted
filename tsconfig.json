@@ -2,7 +2,6 @@
   "compilerOptions": {
     "outDir": "lib",
     "declaration": true,
-    "declarationDir": "typings",
     "module": "esnext",
     "moduleResolution": "node",
     "strict": true,
