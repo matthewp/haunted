@@ -29,13 +29,21 @@ class State<H = unknown> {
     return res;
   }
 
-  runEffects(phase: EffectsSymbols): void {
+  _runEffects(phase: EffectsSymbols): void {
     let effects = this[phase];
     setCurrent(this);
     for(let effect of effects) {
       effect.call(this);
     }
     clear();
+  }
+
+  runEffects(): void {
+    this._runEffects(effectsSymbol);
+  }
+
+  runLayoutEffects(): void {
+    this._runEffects(layoutEffectsSymbol);
   }
 
   teardown(): void {

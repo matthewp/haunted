@@ -80,7 +80,7 @@ abstract class BaseScheduler<R extends GenericRenderer, H> {
   }
 
   runEffects(phase: EffectsSymbols): void {
-    this.state.runEffects(phase);
+    this.state._runEffects(phase);
   }
 
   abstract commit(result: unknown): void;
