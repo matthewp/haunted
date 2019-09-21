@@ -1,26 +1,25 @@
-import { contextSymbol, contextEvent } from './symbols.js';
-import { hook, Hook } from './hook.js';
-import { setEffects } from './use-effect.js';
+import { Context, ContextDetail } from './create-context';
+import { hook, Hook } from './hook';
+import { State } from './state';
+import { contextEvent } from './symbols';
+import { setEffects } from './use-effect';
 
-function setContexts(el, consumer) {
-  if(!(contextSymbol in el)) {
-    el[contextSymbol] = [];
-  }
-  el[contextSymbol].push(consumer);
-}
+const useContext = hook(class<T> extends Hook<[Context<T>], T, Element> {
+  Context!: Context<T>;
+  value!: T;
+  _ranEffect: boolean;
+  _unsubscribe: VoidFunction | null;
 
-const useContext = hook(class extends Hook {
-  constructor(id, el) {
-    super(id, el);
-    setContexts(el, this);
+  constructor(id: number, state: State<Element>, _: Context<T>) {
+    super(id, state);
     this._updater = this._updater.bind(this);
     this._ranEffect = false;
     this._unsubscribe = null;
-    setEffects(el, this);
+    setEffects(state, this);
   }
 
-  update(Context) {
-    if (this.el.virtual) {
+  update(Context: Context<T>): T {
+    if (this.state.virtual) {
       throw new Error('can\'t be used with virtual components');
     }
 
@@ -32,38 +31,38 @@ const useContext = hook(class extends Hook {
     return this.value;
   }
 
-  call() {
+  call(): void {
     if(!this._ranEffect) {
       this._ranEffect = true;
       if(this._unsubscribe) this._unsubscribe();
       this._subscribe(this.Context);
-      this.el.update();
+      this.state.update();
     }
   }
 
-  _updater(value) {
+  _updater(value: T): void {
     this.value = value;
-    this.el.update();
+    this.state.update();
   }
 
-  _subscribe(Context) {
+  _subscribe(Context: Context<T>): void {
     const detail = { Context, callback: this._updater };
 
-    this.el.host.dispatchEvent(new CustomEvent(contextEvent, {
+    this.state.host.dispatchEvent(new CustomEvent(contextEvent, {
       detail, // carrier
       bubbles: true, // to bubble up in tree
       cancelable: true, // to be able to cancel
       composed: true, // to pass ShadowDOM boundaries
     }));
 
-    const { unsubscribe, value } = detail;
+    const { unsubscribe, value } = detail as ContextDetail<T>;
 
     this.value = unsubscribe ? value : Context.defaultValue;
 
     this._unsubscribe = unsubscribe;
   }
 
-  teardown() {
+  teardown(): void {
     if (this._unsubscribe) {
       this._unsubscribe();
     }
