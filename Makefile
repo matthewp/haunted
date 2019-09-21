@@ -7,7 +7,7 @@ all: haunted.js web.js
 lib/*.js: src/*.ts
 	$(TRANSPILE)
 	# Add ".js" extension to module imports
-	sed -i -E "s/from '.\/(.*?)'/from '.\/\1.js'/" lib/*.js
+	gsed -i -E "s/from '.\/(.*?)'/from '.\/\1.js'/" lib/*.js
 
 haunted.js: lib/*.js
 	$(COMPILE) -f es -o $@ -e lit-html lib/haunted.js
