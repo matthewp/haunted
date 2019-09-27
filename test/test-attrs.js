@@ -26,6 +26,25 @@ describe('Observed attributes', () => {
     teardown();
   });
 
+  it('Can observe the "title" attribute', async () => {
+    const tag = 'attrs-test-title';
+
+    function app() {
+      this.setAttribute('title', 'bar');
+    }
+
+    app.observedAttributes = ['title'];
+
+    customElements.define(tag, component(app));
+
+    let teardown = attach(tag);
+    await cycle();
+
+    let inst = document.querySelector(tag);
+    assert.equal(inst.getAttribute('title'), 'bar', 'on the instance');
+    teardown();
+  });
+
   it('Trigger rerenders while declared as an option', async () => {
     const tag = 'attrs-options-test';
 
