@@ -74,7 +74,10 @@ function makeComponent(render: RenderFunction): Creator {
         this._scheduler.teardown();
       }
 
-      attributeChangedCallback(name: string, _: unknown, newValue: unknown): void {
+      attributeChangedCallback(name: string, oldValue: unknown, newValue: unknown): void {
+        if(oldValue === newValue) {
+          return;
+        }
         let val = newValue === '' ? true : newValue;
         Reflect.set(this, toCamelCase(name), val);
       }
@@ -101,10 +104,17 @@ function makeComponent(render: RenderFunction): Creator {
       },
 
       set(target, key: string, value, receiver): boolean {
+        let desc: PropertyDescriptor | undefined;
         if(key in target) {
+          desc = Object.getOwnPropertyDescriptor(target, key);
+          if(desc && desc.set) {
+            desc.set.call(receiver, value);
+            return true;
+          }
+
           Reflect.set(target, key, value);
         }
-        let desc: PropertyDescriptor;
+
         if(typeof key === 'symbol' || key[0] === '_') {
           desc = {
             enumerable: true,
