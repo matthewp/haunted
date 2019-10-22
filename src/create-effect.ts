@@ -33,7 +33,7 @@ function createEffect(setEffects: (state: State, cb: Callable) => void) {
     }
 
     teardown(): void {
-      if(this._teardown) {
+      if(typeof this._teardown === 'function') {
         this._teardown();
       }
     }
