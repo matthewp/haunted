@@ -111,4 +111,25 @@ describe('useEffect', () => {
     assert.equal(calls, 1, 'still called once');
     teardown();
   });
+
+  it('Can be async functions', async () => {
+    const tag = 'effect-async-fn';
+
+    function App() {
+      useEffect(async () => {
+
+      });
+    }
+
+    customElements.define(tag, component(App));
+    const teardown = attach(tag);
+
+    await cycle();
+    try {
+      teardown();
+      assert.ok(true, 'worked');
+    } catch(e) {
+      assert.ok(false, e);
+    }
+  });
 });
