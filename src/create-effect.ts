@@ -29,14 +29,11 @@ function createEffect(setEffects: (state: State, cb: Callable) => void) {
 
     run(): void {
       this.teardown();
-      let ret = this.callback.call(this.state);
-      if(typeof ret === 'function') {
-        this._teardown = ret;
-      }
+      this._teardown = this.callback.call(this.state);
     }
 
     teardown(): void {
-      if(this._teardown) {
+      if(typeof this._teardown === 'function') {
         this._teardown();
       }
     }
