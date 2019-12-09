@@ -67,6 +67,52 @@ describe('Observed attributes', () => {
     teardown();
   });
 
+  
+  it("Type convert before rerenders trigger", async () => {
+    const tag = "attr-type-converter";
+    function app({ name = "" }) {
+      return html`
+        <div>Hello ${name}</div>
+      `;
+    }
+    customElements.define(
+      tag,
+      component(app, {
+        observedAttributes: [
+          { name: "str", type: String },
+          { name: "num", type: Number },
+          { name: "arr", type: Array },
+          { name: "obj", type: Object },
+          { name: "bool", type: Boolean }
+        ]
+      })
+    );
+    let teardown = attach(tag);
+    await cycle();
+    let inst = document.querySelector(tag);
+    // Attribute set
+    inst.setAttribute("str", "foo");
+    inst.setAttribute("num", "100");
+    inst.setAttribute("arr", "[1,2,3]");
+    inst.setAttribute("obj", `{"a":2}`);
+    inst.setAttribute("bool", '');
+    await cycle();
+    // Assert type
+    assert.equal(typeof inst.str, "string");
+    assert.equal(typeof inst.num, "number");
+    assert.equal(Array.isArray(inst.arr), true);
+    assert.equal(typeof inst.obj, "object");
+    assert.equal(typeof inst.bool, "boolean");
+    // Assert value
+    assert.equal(inst.str, "foo");
+    assert.equal(inst.num, 100);
+    assert.equal(inst.arr[0], 1);
+    assert.equal(inst.obj.a, 2);
+    assert.equal(inst.bool, true)
+    teardown();
+  });
+
+
   it('Initial attributes are reflected', async () => {
     const tag = 'attrs-initial-test';
 
