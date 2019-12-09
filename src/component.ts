@@ -66,15 +66,16 @@ function makeComponent(render: RenderFunction): Creator {
     const _observedAttributes =
       renderer.observedAttributes || observedAttributes || [];
 
-    const props  = _observedAttributes.map( item => {
-      if(typeof item === 'string') return ({
-        type: "legacy",
-        name: item
-      })
-      return item;
-    })
-    const finalObservedAttribute = props.map( (prop:any) => prop.name);
-    
+    const props = _observedAttributes.map(item =>
+      typeof item === 'string'
+        ? {
+            type: 'legacy',
+            name: item
+          }
+        : item
+    );
+    const finalObservedAttribute = props.map((prop: any) => prop.name);
+ 
     class Element extends BaseElement {
       _scheduler: Scheduler<P>;
 
