@@ -164,7 +164,7 @@ Which allows you to author (in HTML):
 <hello-app name="world"></hello-app>
 ```
 
-##### Attributes type coercion
+##### Attributes type converter
 
 Default converter will handle `String`, `Number`, `Array`, `Object`, `Boolean` types, please speicify attribute `name` & `type` in `observedAttributes` of options like below.
 
