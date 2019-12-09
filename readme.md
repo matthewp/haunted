@@ -164,6 +164,23 @@ Which allows you to author (in HTML):
 <hello-app name="world"></hello-app>
 ```
 
+##### Attributes type coercion
+
+Default converter will handle `String`, `Number`, `Array`, `Object`, `Boolean` types, please speicify attribute `name` & `type` in `observedAttributes` of options like below.
+
+```js
+customElements.define('hello-app', component(App, {
+  observedAttributes: [{
+    name: "username",
+    type: String
+  }, {
+    name: "userage",
+    type: Number
+  }]
+}));
+```
+The value will be converted before component update.
+
 #### Virtual components
 
 Haunted also has the concept of *virtual components*. These are components that are not defined as a tag. Rather they are functions that can be called from within another template. They have their own state and will rerender when that state changes, *without* causing any parent components to rerender.
