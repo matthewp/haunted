@@ -26,6 +26,20 @@ interface Options<P> {
   shadowRootInit?: ShadowRootInit;
 }
 
+function converter(value: string | null, type?: unknown) {
+  switch (type) {
+    case "legacy":
+      return value === "" ? true : value;
+    case Boolean:
+      return value !== null;
+    case Number:
+      return value === null ? null : Number(value);
+    case Object:
+    case Array:
+      return JSON.parse(value!);
+  }
+  return value;
+}
 function makeComponent(render: RenderFunction): Creator {
   class Scheduler<P extends object> extends BaseScheduler<Renderer<P>, Element> {
     frag: DocumentFragment | Element;
@@ -49,11 +63,23 @@ function makeComponent(render: RenderFunction): Creator {
     const BaseElement = (options || baseElementOrOptions as Options<P> || {}).baseElement || HTMLElement;
     const {observedAttributes = [], useShadowDOM = true, shadowRootInit = {}} = options || baseElementOrOptions as Options<P> || {};
 
+    const _observedAttributes =
+      renderer.observedAttributes || observedAttributes || [];
+
+    const props  = _observedAttributes.map( item => {
+      if(typeof item === 'string') return ({
+        type: "legacy",
+        name: item
+      })
+      return item;
+    })
+    const finalObservedAttribute = props.map( (prop:any) => prop.name);
+    
     class Element extends BaseElement {
       _scheduler: Scheduler<P>;
 
       static get observedAttributes(): (keyof P)[] {
-        return renderer.observedAttributes || observedAttributes || [];
+        return finalObservedAttribute;
       }
 
       constructor() {
@@ -74,11 +100,12 @@ function makeComponent(render: RenderFunction): Creator {
         this._scheduler.teardown();
       }
 
-      attributeChangedCallback(name: string, oldValue: unknown, newValue: unknown): void {
+      attributeChangedCallback(name: string, oldValue: string|null, newValue: string|null): void {
         if(oldValue === newValue) {
           return;
         }
-        let val = newValue === '' ? true : newValue;
+        const prop = props.filter(prop => (prop as any).name === name)[0]
+        const val = converter(newValue, (prop as any).type);
         Reflect.set(this, toCamelCase(name), val);
       }
     };
