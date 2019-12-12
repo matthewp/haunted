@@ -7,10 +7,10 @@ const useReducer = hook(class<S, A> extends Hook {
   reducer!: Reducer<S, A>;
   currentState: S;
 
-  constructor(id: number, state: State, _: Reducer<S, A>, initialState: S) {
+  constructor(id: number, state: State, _: Reducer<S, A>, initialState: S, initializer?: (_: S) => S) {
     super(id, state);
     this.dispatch = this.dispatch.bind(this);
-    this.currentState = initialState;
+    this.currentState = initializer ? initializer(initialState) : initialState;
   }
 
   update(reducer: Reducer<S, A>): readonly [S, (action: A) => void] {
