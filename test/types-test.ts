@@ -81,10 +81,12 @@ const [state2, setState2] = useState(undefined); setState2 + 1;
 // useReducer tests
 // positive tests, should all pass
 useReducer(() => {}, undefined);
-useReducer((state: number) => state, 1)
+useReducer((state: number) => state, 1);
+useReducer((state: string) => state, 1, (value: number) => value.toString());
 // negactive tests, should all fail
 useReducer();
 const useReducerTest1 = useReducer(() => {});
+useReducer((state: string) => state, 1, (value: Date) => value.toString());
 useReducerTest1 + 1;
 
 // useMemo tests

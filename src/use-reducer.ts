@@ -3,14 +3,14 @@ import { State } from './state';
 
 type Reducer<S, A> = (state: S, action: A) => S;
 
-const useReducer = hook(class<S, A> extends Hook {
+const useReducer = hook(class<S, I, A> extends Hook {
   reducer!: Reducer<S, A>;
   currentState: S;
 
-  constructor(id: number, state: State, _: Reducer<S, A>, initialState: S, initializer?: (_: S) => S) {
+  constructor(id: number, state: State, _: Reducer<S, A>, initialState: I, init?: (_:I) => S) {
     super(id, state);
     this.dispatch = this.dispatch.bind(this);
-    this.currentState = initializer ? initializer(initialState) : initialState;
+    this.currentState = init !== undefined ? init(initialState) : <S><any>initialState;
   }
 
   update(reducer: Reducer<S, A>): readonly [S, (action: A) => void] {
