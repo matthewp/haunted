@@ -10,6 +10,12 @@ export default class LitHauntedElement extends LitElement {
 
   update(changedProperties) {
     this.haunted.run(() => super.update(changedProperties));
+    this.haunted.runEffects();
+  }
+
+  disconnectedCallback() {
+    super.disconnectedCallback();
+    this.haunted.teardown();
   }
 }
 
