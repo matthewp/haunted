@@ -83,9 +83,7 @@ const { component } = haunted({
 
 function App() {
   const [count, setCount] = useState(0);
-  return html`
-    Using lighterhtml! Count: ${count}
-  `;
+  return html`Using lighterhtml! Count: ${count}`;
 }
 
 customElements.define("my-app", component(App));
@@ -128,9 +126,7 @@ A Custom Element can be defined via haunted by passing your custom component you
 
 ```js
 function App({ name }) {
-  return html`
-    Hello ${name}
-  `;
+  return html`Hello ${name}`;
 }
 
 customElements.define("my-app", component(App));
@@ -147,9 +143,7 @@ There's no way to use the `this` keyword to refer to the instance of your web co
 ```js
 const App = ({ name }) => {
   console.log(this); // => "undefined"
-  return html`
-    Hello ${name}!
-  `;
+  return html`Hello ${name}!`;
 };
 ```
 
@@ -163,9 +157,7 @@ In this instance, we're using lit-html which comes with a `render` function. You
 import { render, html } from "lit-html";
 
 render(
-  html`
-    <my-app name="world"></my-app>
-  `,
+  html`<my-app name="world"></my-app>`,
   document.body
 );
 ```
@@ -445,9 +437,7 @@ Create and returns an object with one property "current" which can be assigned a
   function App() {
     const myRef = useRef(0);
 
-    return html`
-      ${myRef.current}
-    `;
+    return html`${myRef.current}`;
   }
 
   customElements.define("my-app", component(App));
@@ -501,9 +491,8 @@ Limited only to "real" components for now.
         <theme-provider .value=${theme === "dark" ? "light" : "dark"}>
           <theme-consumer
             .render=${value =>
-              html`
-                <h1>${value}</h1>
-              `}
+              html`<h1>${value}</h1>`
+            }
           ></theme-consumer>
         </theme-provider>
       </theme-provider>
