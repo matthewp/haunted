@@ -172,31 +172,28 @@ render(
 
 ##### Attributes
 
-In custom elements, attributes must be pre-defined. Properties, on the other hand, do not. To define what attributes your component supports, set the `observedAttributes` property on the functional component. For example:
+In custom elements, attributes must be pre-defined. To define what attributes your component supports, set the `observedAttributes` property on the function you defined.
 
 ```js
-const App = ({ name }) => {
+function App({ name }) {
   return `Hello ${name}!`;
-};
+}
 
 App.observedAttributes = ["name"];
 
-customElements.define("hello-app", component(App));
+customElements.define("my-app", component(App));
 ```
 
 Alternatively, you can pass `observedAttributes` as an option to `component()`:
 
 ```js
-customElements.define(
-  "hello-app",
-  component(App, { observedAttributes: ["name"] })
-);
+component(App, { observedAttributes: ["name"] });
 ```
 
-Which allows you to author (in HTML):
+Once your custom element is defined you can then pass in attributes as you would with any other HTML element.
 
 ```html
-<hello-app name="world"></hello-app>
+<my-app name="World"></my-app>
 ```
 
 #### Virtual components
