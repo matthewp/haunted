@@ -1,4 +1,4 @@
- 🦇 🎃
+🦇 🎃
 
 [![npm](https://img.shields.io/npm/dt/haunted)](https://npm.im/haunted)
 [![npm](https://img.shields.io/npm/v/haunted)](https://npm.im/haunted)
@@ -6,26 +6,28 @@
 React's Hooks API but for standard web components and [lit-html](https://lit-html.polymer-project.org/) or [hyperHTML](https://codepen.io/WebReflection/pen/pxXrdy?editors=0010).
 
 ```html
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
+  <my-counter></my-counter>
 
-<my-counter></my-counter>
+  <script type="module">
+    import { html } from "https://unpkg.com/lit-html/lit-html.js";
+    import { component, useState } from "https://unpkg.com/haunted/haunted.js";
 
-<script type="module">
-  import { html } from 'https://unpkg.com/lit-html/lit-html.js';
-  import { component, useState } from 'https://unpkg.com/haunted/haunted.js';
+    function Counter() {
+      const [count, setCount] = useState(0);
 
-  function Counter() {
-    const [count, setCount] = useState(0);
+      return html`
+        <div id="count">${count}</div>
+        <button type="button" @click=${() => setCount(count + 1)}>
+          Increment
+        </button>
+      `;
+    }
 
-    return html`
-      <div id="count">${count}</div>
-      <button type="button" @click=${() => setCount(count + 1)}>Increment</button>
-    `;
-  }
-
-  customElements.define('my-counter', component(Counter));
-</script>
+    customElements.define("my-counter", component(Counter));
+  </script>
+</html>
 ```
 
 ## Getting started
@@ -38,11 +40,12 @@ A starter app is available on [codesandbox](https://codesandbox.io/s/github/matt
 npm install haunted
 ```
 
-For Internet Explorer 11, you'll need to use a proxy polyfill, in addition to the usual webcomponentsjs polyfills. 
+For Internet Explorer 11, you'll need to use a proxy polyfill, in addition to the usual webcomponentsjs polyfills.
 
 eg.
+
 ```html
-<script src="https://cdn.jsdelivr.net/npm/proxy-polyfill@0.3.0/proxy.min.js"></script> 
+<script src="https://cdn.jsdelivr.net/npm/proxy-polyfill@0.3.0/proxy.min.js"></script>
 ```
 
 For a full example with Internet Explorer 11, see - https://github.com/crisward/haunted-ie11
@@ -56,10 +59,10 @@ component(MyComponent, { useShadowDOM: false }));
 
 ### Importing
 
-__Haunted__ can be imported just like any other library when using a bundler of your choice:
+**Haunted** can be imported just like any other library when using a bundler of your choice:
 
 ```js
-import { component, html, useState } from 'haunted';
+import { component, html, useState } from "haunted";
 ```
 
 The main entry point is intended for [lit-html](https://github.com/Polymer/lit-html) users.
@@ -69,8 +72,8 @@ The main entry point is intended for [lit-html](https://github.com/Polymer/lit-h
 If you are using [lighterhtml](https://github.com/WebReflection/lighterhtml) or [hyperHTML](https://github.com/WebReflection/hyperHTML) then instead import `haunted/core`. This export gives you a function that creates Hooks that work with any template library.
 
 ```js
-import haunted, { useState } from 'haunted/core';
-import { html, render } from 'lighterhtml';
+import haunted, { useState } from "haunted/core";
+import { html, render } from "lighterhtml";
 
 const { component } = haunted({
   render(what, where) {
@@ -80,64 +83,91 @@ const { component } = haunted({
 
 function App() {
   const [count, setCount] = useState(0);
-  return html`Using lighterhtml! Count: ${count}`;
+  return html`
+    Using lighterhtml! Count: ${count}
+  `;
 }
 
-customElements.define('my-app', component(App));
+customElements.define("my-app", component(App));
 ```
 
 #### Web modules
 
-__Haunted__ can work directly in the browser without using any build tools. Simply import the `haunted.js` bundle. You can use the [unpkg] or [pika](https://www.pika.dev/cdn) CDNs. This works great for demo pages and small apps. Here's an example with unpkg:
+**Haunted** can work directly in the browser without using any build tools. Simply import the `haunted.js` bundle. You can use the [unpkg] or [pika](https://www.pika.dev/cdn) CDNs. This works great for demo pages and small apps. Here's an example with unpkg:
 
 ```js
-import { html } from 'https://unpkg.com/lit-html/lit-html.js';
-import { component, useState, useEffect } from 'https://unpkg.com/haunted/haunted.js';
+import { html } from "https://unpkg.com/lit-html/lit-html.js";
+import {
+  component,
+  useState,
+  useEffect
+} from "https://unpkg.com/haunted/haunted.js";
 ```
 
 If using pika then use the `html` export from Haunted, as pika bundles everything together:
 
 ```js
-import { useState, component, html } from 'https://cdn.pika.dev/haunted';
+import { useState, component, html } from "https://cdn.pika.dev/haunted";
 ```
 
-If you install Haunted __locally__ this build is located at `node_modules/haunted/haunted.js`.
+If you install Haunted **locally** this build is located at `node_modules/haunted/haunted.js`.
 
 ## API
 
-Haunted is all about writing plain functions that can contain their own state. The follow docs is divided between creating *components* (the functions) and using *hooks* the state.
+Haunted is all about writing plain functions that can contain their own state. The follow docs is divided between creating _components_ (the functions) and using _hooks_ the state.
 
 ### Components
 
 Components are functions that contain state and return HTML via lit-html or hyperHTML. Through the `component()` and `virtual()` they become connected to a lifecycle that keeps the HTML up-to-date when state changes.
 
-Using Haunted you can create custom elements or *virtual* components (components that contain state but have no element tag).
+Using Haunted you can create custom elements or _virtual_ components (components that contain state but have no element tag).
 
 #### Custom elements
 
-The easiest way to create components is by importing `component` and creating a custom element like so:
+A Custom Element can be defined via haunted by passing your custom component you defined (e.g. `function App() {}`) to haunted's `component` function. You then take the result of your call to `component` and pass it to `customElements.define` like so:
 
 ```js
-import { component } from 'haunted';
-import { html } from 'lit-html';
+function App({ name }) {
+  return html`
+    Hello ${name}
+  `;
+}
 
-const App = ({ name }) => {
-  return html`Hello ${name}!`;
-};
-
-customElements.define('my-app', component(App));
+customElements.define("my-app", component(App));
 ```
 
-You can now use this anywhere you use HTML (directly in a `.html` file, in JSX, in lit-html templates, whereever).
+You can now use `<my-app></my-app>` anywhere you use HTML (directly in a `.html` file, in JSX, in lit-html templates, wherever).
 
-Here's an example of rendering with lit-html the above app:
+##### Brief Digression:
+
+Another way to write your component is with the arrow function syntax, or fat arrow. It offers a more concise and clean way to write your code, however, it does come with a one drawback:
+
+There's no way to use the `this` keyword to refer to the instance of your web component that is running.
 
 ```js
-import { render, html } from 'lit-html';
+const App = ({ name }) => {
+  console.log(this); // => "undefined"
+  return html`
+    Hello ${name}!
+  `;
+};
+```
 
-render(html`
-  <my-app name="world"></my-app>
-`, document.body);
+##### Rendering
+
+Now that we have access to `<my-app>` in all HTML, what if you want to render it from JavaScript?
+
+In this instance, we're using lit-html which comes with a `render` function. You can utilize it by passing in your HTML template and the element you wish to render the template into:
+
+```js
+import { render, html } from "lit-html";
+
+render(
+  html`
+    <my-app name="world"></my-app>
+  `,
+  document.body
+);
 ```
 
 ##### Attributes
@@ -145,19 +175,22 @@ render(html`
 In custom elements, attributes must be pre-defined. Properties, on the other hand, do not. To define what attributes your component supports, set the `observedAttributes` property on the functional component. For example:
 
 ```js
-const App = ({name}) => {
+const App = ({ name }) => {
   return `Hello ${name}!`;
 };
 
-App.observedAttributes = ['name'];
+App.observedAttributes = ["name"];
 
-customElements.define('hello-app', component(App));
+customElements.define("hello-app", component(App));
 ```
 
 Alternatively, you can pass `observedAttributes` as an option to `component()`:
 
 ```js
-customElements.define('hello-app', component(App, {observedAttributes: ['name']}));
+customElements.define(
+  "hello-app",
+  component(App, { observedAttributes: ["name"] })
+);
 ```
 
 Which allows you to author (in HTML):
@@ -168,20 +201,19 @@ Which allows you to author (in HTML):
 
 #### Virtual components
 
-Haunted also has the concept of *virtual components*. These are components that are not defined as a tag. Rather they are functions that can be called from within another template. They have their own state and will rerender when that state changes, *without* causing any parent components to rerender.
+Haunted also has the concept of _virtual components_. These are components that are not defined as a tag. Rather they are functions that can be called from within another template. They have their own state and will rerender when that state changes, _without_ causing any parent components to rerender.
 
 The following is an example of using virtual components:
 
 ```js
-import { useState, virtual, component } from 'haunted';
-import { html, render } from 'lit-html';
+import { useState, virtual, component } from "haunted";
+import { html, render } from "lit-html";
 
 const Counter = virtual(() => {
   const [count, setCount] = useState(0);
 
   return html`
-    <button type="button"
-      @click=${() => setCount(count + 1)}>${count}</button>
+    <button type="button" @click=${() => setCount(count + 1)}>${count}</button>
   `;
 });
 
@@ -195,7 +227,7 @@ const App = component(() => {
   `;
 });
 
-customElements.define('my-app', App);
+customElements.define("my-app", App);
 ```
 
 Notice that we have `Counter`, a virtual component, and `App`, a custom element. You can use virtual components within custom elements and custom elements within virtual components.
@@ -231,13 +263,17 @@ const [count, setCount] = useState(() => {
 Useful for side-effects that run after the render has been commited.
 
 ```html
-<!doctype html>
+<!DOCTYPE html>
 
 <my-counter></my-counter>
 
 <script type="module">
-  import { html } from 'https://unpkg.com/lit-html/lit-html.js';
-  import { component, useState, useEffect } from 'https://unpkg.com/haunted/haunted.js';
+  import { html } from "https://unpkg.com/lit-html/lit-html.js";
+  import {
+    component,
+    useState,
+    useEffect
+  } from "https://unpkg.com/haunted/haunted.js";
 
   function Counter() {
     const [count, setCount] = useState(0);
@@ -248,11 +284,13 @@ Useful for side-effects that run after the render has been commited.
 
     return html`
       <div id="count">${count}</div>
-      <button type="button" @click=${() => setCount(count + 1)}>Increment</button>
+      <button type="button" @click=${() => setCount(count + 1)}>
+        Increment
+      </button>
     `;
   }
 
-  customElements.define('my-counter', component(Counter));
+  customElements.define("my-counter", component(Counter));
 </script>
 ```
 
@@ -262,14 +300,16 @@ Like `useMemo`, `useEffect` can take a second argument that are values that are 
 
 ```js
 function App() {
-  let [name, setName] = useState('Dracula');
+  let [name, setName] = useState("Dracula");
 
   useEffect(() => {
     // This only occurs when name changes.
     document.title = `Hello ${name}`;
   }, [name]);
 
-  return html`...`;
+  return html`
+    ...
+  `;
 }
 ```
 
@@ -281,21 +321,23 @@ An example of when you might use this is if you are setting up an event listener
 
 ```js
 function App() {
-  let [name, setName] = useState('Wolf Man');
+  let [name, setName] = useState("Wolf Man");
 
   useEffect(() => {
     function updateNameFromWorker(ev) {
       setName(ev.data);
     }
 
-    worker.addEventListener('message', updateNameFromWorker);
+    worker.addEventListener("message", updateNameFromWorker);
 
     return () => {
-      worker.removeEventListener('message', updateNameFromWorker);
-    }
+      worker.removeEventListener("message", updateNameFromWorker);
+    };
   });
 
-  return html`...`;
+  return html`
+    ...
+  `;
 }
 ```
 
@@ -310,22 +352,24 @@ Most of time, it is preferable to use `useEffect` to avoid blocking visual updat
 Create state that updates after being ran through a reducer function.
 
 ```html
-<!doctype html>
+<!DOCTYPE html>
 
 <my-counter></my-counter>
 
-
 <script type="module">
-  import { html } from 'https://unpkg.com/lit-html/lit-html.js';
-  import { component, useReducer } from 'https://unpkg.com/haunted/haunted.js';
+  import { html } from "https://unpkg.com/lit-html/lit-html.js";
+  import { component, useReducer } from "https://unpkg.com/haunted/haunted.js";
 
-  const initialState = {count: 0};
+  const initialState = { count: 0 };
 
   function reducer(state, action) {
     switch (action.type) {
-      case 'reset': return initialState;
-      case 'increment': return {count: state.count + 1};
-      case 'decrement': return {count: state.count - 1};
+      case "reset":
+        return initialState;
+      case "increment":
+        return { count: state.count + 1 };
+      case "decrement":
+        return { count: state.count - 1 };
     }
   }
 
@@ -334,15 +378,15 @@ Create state that updates after being ran through a reducer function.
 
     return html`
       Count: ${state.count}
-      <button @click=${() => dispatch({type: 'reset'})}>
+      <button @click=${() => dispatch({ type: "reset" })}>
         Reset
       </button>
-      <button @click=${() => dispatch({type: 'increment'})}>+</button>
-      <button @click=${() => dispatch({type: 'decrement'})}>-</button>
+      <button @click=${() => dispatch({ type: "increment" })}>+</button>
+      <button @click=${() => dispatch({ type: "decrement" })}>-</button>
     `;
   }
 
-  customElements.define('my-counter', component(Counter));
+  customElements.define("my-counter", component(Counter));
 </script>
 ```
 
@@ -351,13 +395,17 @@ Create state that updates after being ran through a reducer function.
 Create a memoized state value. Only reruns the function when dependent values have changed.
 
 ```html
-<!doctype html>
+<!DOCTYPE html>
 
 <my-app></my-app>
 
 <script type="module">
-  import { html } from 'https://unpkg.com/lit-html/lit-html.js';
-  import { component, useMemo, useState } from 'https://unpkg.com/haunted/haunted.js';
+  import { html } from "https://unpkg.com/lit-html/lit-html.js";
+  import {
+    component,
+    useMemo,
+    useState
+  } from "https://unpkg.com/haunted/haunted.js";
 
   function fibonacci(num) {
     if (num <= 1) return 1;
@@ -371,12 +419,16 @@ Create a memoized state value. Only reruns the function when dependent values ha
 
     return html`
       <h1>Fibonacci</h1>
-      <input type="text" @change=${ev => setVal(Number(ev.target.value))} value="${value}">
+      <input
+        type="text"
+        @change=${ev => setVal(Number(ev.target.value))}
+        value="${value}"
+      />
       <div>Fibonacci <strong>${fib}</strong></div>
     `;
   }
 
-  customElements.define('my-app', component(App));
+  customElements.define("my-app", component(App));
 </script>
 ```
 
@@ -385,13 +437,13 @@ Create a memoized state value. Only reruns the function when dependent values ha
 Create and returns an object with one property "current" which can be assigned any value and is unaffected by multiple renders.
 
 ```html
-<!doctype html>
+<!DOCTYPE html>
 
 <my-app></my-app>
 
 <script type="module">
-  import { html } from 'https://unpkg.com/lit-html/lit-html.js';
-  import { component, useRef } from 'https://unpkg.com/haunted/haunted.js';
+  import { html } from "https://unpkg.com/lit-html/lit-html.js";
+  import { component, useRef } from "https://unpkg.com/haunted/haunted.js";
 
   function App() {
     const myRef = useRef(0);
@@ -401,7 +453,7 @@ Create and returns an object with one property "current" which can be assigned a
     `;
   }
 
-  customElements.define('my-app', component(App));
+  customElements.define("my-app", component(App));
 </script>
 ```
 
@@ -411,18 +463,22 @@ Grabs context value from the closest provider up in the tree and updates compone
 Limited only to "real" components for now.
 
 ```html
-<!doctype html>
+<!DOCTYPE html>
 
 <my-app></my-app>
 
 <script type="module">
-  import { html } from 'https://unpkg.com/lit-html/lit-html.js';
-  import { component, createContext, useContext } from 'https://unpkg.com/haunted/haunted.js';
+  import { html } from "https://unpkg.com/lit-html/lit-html.js";
+  import {
+    component,
+    createContext,
+    useContext
+  } from "https://unpkg.com/haunted/haunted.js";
 
-  const ThemeContext = createContext('dark');
+  const ThemeContext = createContext("dark");
 
-  customElements.define('theme-provider', ThemeContext.Provider);
-  customElements.define('theme-consumer', ThemeContext.Consumer);
+  customElements.define("theme-provider", ThemeContext.Provider);
+  customElements.define("theme-consumer", ThemeContext.Consumer);
 
   function Consumer() {
     const context = useContext(ThemeContext);
@@ -430,35 +486,34 @@ Limited only to "real" components for now.
     return context;
   }
 
-  customElements.define('my-consumer', component(Consumer));
+  customElements.define("my-consumer", component(Consumer));
 
   function App() {
-    const [theme, setTheme] = useState('light');
-    
+    const [theme, setTheme] = useState("light");
+
     return html`
-      <select value=${theme} @change=${(e) => setTheme(e.target.value)}>
+      <select value=${theme} @change=${e => setTheme(e.target.value)}>
         <option value="dark">Dark</option>
         <option value="light">Light</option>
       </select>
-      
+
       <theme-provider .value=${theme}>
-        
         <my-consumer></my-consumer>
 
         <!-- creates context with inverted theme -->
-        <theme-provider .value=${theme === 'dark' ? 'light' : 'dark'}> 
-          
+        <theme-provider .value=${theme === "dark" ? "light" : "dark"}>
           <theme-consumer
-            .render=${value => html`<h1>${value}</h1>`}
+            .render=${value =>
+              html`
+                <h1>${value}</h1>
+              `}
           ></theme-consumer>
-        
         </theme-provider>
-      
       </theme-provider>
     `;
   }
 
-  customElements.define('my-app', component(App));
+  customElements.define("my-app", component(App));
 </script>
 ```
 
@@ -495,7 +550,7 @@ It has a signature of: `new State(update, [ hostElement ])`.
 Here's an example how it can be used to run hooks code:
 
 ```js
-import { State, useState } from 'haunted';
+import { State, useState } from "haunted";
 
 let state = new State(() => {
   update();
@@ -505,7 +560,7 @@ function update() {
   state.run(() => {
     const [count, setCount] = useState(0);
 
-    console.log('count is', count);
+    console.log("count is", count);
 
     setTimeout(() => setCount(count + 1), 3000);
   });
@@ -519,8 +574,8 @@ The above will result in the count being incremented every 3 seconds and the cur
 A more practical example is integration with a custom element base class. Here's a simple integration with [LitElement](https://lit-element.polymer-project.org/):
 
 ```js
-import { LitElement } from 'lit-element';
-import { State } from 'haunted';
+import { LitElement } from "lit-element";
+import { State } from "haunted";
 
 export default class LitHauntedElement extends LitElement {
   constructor() {
@@ -547,14 +602,15 @@ More example integrations can be found in [this gist](https://gist.github.com/ma
 
 `component(renderer, options): Element`
 `component(renderer, BaseElement, options): Element`
-- renderer = ``` (element) => html`...` ```  
+
+- renderer = `` (element) => html`...` ``
 - BaseElement = `HTMLElement`
 - options = `{baseElement: HTMLElement, observedAttributes: [], useShadowDOM: true}`
 
 `virtual(renderer): directive`
-- renderer = ``` (element) => html`...` ```  
+
+- renderer = `` (element) => html`...` ``
 
 ## License
 
 BSD-2-Clause
-
