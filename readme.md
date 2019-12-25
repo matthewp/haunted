@@ -202,28 +202,33 @@ const Counter = virtual(() => {
   const [count, setCount] = useState(0);
 
   return html`
-    <button type="button" @click=${() => setCount(count + 1)}>${count}</button>
+    <button type="button" @click=${() => setCount(count + 1)}>
+      ${count}
+    </button>
   `;
 });
 
-const App = component(() => {
+function App() {
   return html`
     <main>
       <h1>My app</h1>
-
       ${Counter()}
     </main>
   `;
-});
+}
 
-customElements.define("my-app", App);
+customElements.define("my-app", component(App));
 ```
 
 Notice that we have `Counter`, a virtual component, and `App`, a custom element. You can use virtual components within custom elements and custom elements within virtual components.
 
-The only difference is that custom elements are used by using their `<my-app>` tag name and virtual components are called as functions.
+The only difference is that custom elements are used by using their tag name (e.g. `<my-app>`) and virtual components are called as functions.
 
 If you wanted you could create an entire app of virtual components.
+
+##### Virtual components and `this`
+
+You'll notice that in the above examples, we're using the fat arrow syntax. This is due to virtual components not being attached to any actual custom elements, therefore, `this` never points to anything negating the purpose of using the function syntax.
 
 ### Hooks
 
@@ -296,9 +301,7 @@ function App() {
     document.title = `Hello ${name}`;
   }, [name]);
 
-  return html`
-    ...
-  `;
+  return html`...`;
 }
 ```
 
@@ -324,9 +327,7 @@ function App() {
     };
   });
 
-  return html`
-    ...
-  `;
+  return html`...`;
 }
 ```
 
