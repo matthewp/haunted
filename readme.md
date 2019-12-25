@@ -1,4 +1,4 @@
-# Haunted 🦇 🎃
+ 🦇 🎃
 
 [![npm](https://img.shields.io/npm/dt/haunted)](https://npm.im/haunted)
 [![npm](https://img.shields.io/npm/v/haunted)](https://npm.im/haunted)
@@ -78,10 +78,12 @@ const { component } = haunted({
   }
 });
 
-const App = component(() => {
+function App() {
   const [count, setCount] = useState(0);
   return html`Using lighterhtml! Count: ${count}`;
-});
+}
+
+customElements.define('my-app', component(App));
 ```
 
 #### Web modules
@@ -555,3 +557,4 @@ More example integrations can be found in [this gist](https://gist.github.com/ma
 ## License
 
 BSD-2-Clause
+
