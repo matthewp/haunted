@@ -51,7 +51,7 @@ You can also use Custom Elements without Shadow DOM if you wish.
 eg.
 
 ```js
-component(() => html`...`, { useShadowDOM: false }));
+component(MyComponent, { useShadowDOM: false }));
 ```
 
 ### Importing
