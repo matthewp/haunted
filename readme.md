@@ -399,7 +399,6 @@ Create a memoized state value. Only reruns the function when dependent values ha
 
   function fibonacci(num) {
     if (num <= 1) return 1;
-
     return fibonacci(num - 1) + fibonacci(num - 2);
   }
 
@@ -439,7 +438,6 @@ This differs from `useState` in that state is immutable and can only be changed 
 
   function App() {
     const myRef = useRef(0);
-
     return html`${myRef.current}`;
   }
 
