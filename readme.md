@@ -6,7 +6,6 @@
 React's Hooks API but for standard web components and [lit-html](https://lit-html.polymer-project.org/) or [hyperHTML](https://codepen.io/WebReflection/pen/pxXrdy?editors=0010).
 
 ```html
-<!DOCTYPE html>
 <html lang="en">
   <my-counter></my-counter>
 
@@ -257,8 +256,6 @@ const [count, setCount] = useState(() => {
 Useful for side-effects that run after the render has been commited.
 
 ```html
-<!DOCTYPE html>
-
 <my-counter></my-counter>
 
 <script type="module">
@@ -342,8 +339,6 @@ Most of time, it is preferable to use `useEffect` to avoid blocking visual updat
 Create state that updates after being ran through a reducer function.
 
 ```html
-<!DOCTYPE html>
-
 <my-counter></my-counter>
 
 <script type="module">
@@ -385,8 +380,6 @@ Create state that updates after being ran through a reducer function.
 Create a memoized state value. Only reruns the function when dependent values have changed.
 
 ```html
-<!DOCTYPE html>
-
 <my-app></my-app>
 
 <script type="module">
@@ -428,8 +421,6 @@ Creates and returns a mutable object (a 'ref') whose `.current` property is init
 This differs from `useState` in that state is immutable and can only be changed via `setState` which **will** cause a rerender. That rerender will allow you to be able to see the updated `state` value. A ref, on the other hand, can only be changed via `.current` and since changes to it are mutations, no rerender is required to view the updated value in your component's code (e.g. listeners, callbacks, effects).
 
 ```html
-<!DOCTYPE html>
-
 <my-app></my-app>
 
 <script type="module">
@@ -447,12 +438,11 @@ This differs from `useState` in that state is immutable and can only be changed 
 
 #### useContext
 
-Grabs context value from the closest provider up in the tree and updates component when value of a provider changes.
-Limited only to "real" components for now.
+Grabs the context value from the closest provider above and updates your component, the consumer, whenever the provider changes the value.
+
+`useContext` currently only works with custom element components, [track the issue here](https://github.com/matthewp/haunted/issues/40).
 
 ```html
-<!DOCTYPE html>
-
 <my-app></my-app>
 
 <script type="module">
