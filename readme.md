@@ -237,17 +237,19 @@ Currently Haunted supports the following hooks:
 
 #### useState
 
-Create a tuple of state and a function to change that state.
+Returns a tuple of two values. The first value is the immutable state that is initialized to the argument you pass in. The second value is the function that is used to change the first value (the setter).
+
+When the setter is called, the element in which the state resides is rerendered.
 
 ```js
 const [count, setCount] = useState(0);
 ```
 
-Additionally you can provide a function as the argument to useState, in which case the function is called to initialize the first state, but never called again.
+Additionally if you provide a function as the argument to `useState`, the function is called to initialize the first state, but never called again.
 
 ```js
 const [count, setCount] = useState(() => {
-  return expensiveFunction();
+  return expensiveComputation(42);
 });
 ```
 
