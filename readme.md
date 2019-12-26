@@ -237,7 +237,7 @@ Currently Haunted supports the following hooks:
 
 #### useState
 
-Returns a tuple of two values. The first value is the immutable state that is initialized to the argument you pass in. The second value is the function that is used to change the first value (the setter).
+Returns an array of two values. The first value is the immutable state that is initialized to the argument you pass in. The second value is the function that is used to change the first value (the setter).
 
 When the setter is called, the element in which the state resides is rerendered.
 
@@ -255,7 +255,7 @@ const [count, setCount] = useState(() => {
 
 #### useEffect
 
-Useful for side-effects that run after the render has been commited.
+Used to run a side-effect when the component rerenders or when a dependency changes. To run your side-effect only when the component rerenders, only pass in your side-effect function and nothing else:
 
 ```html
 <my-counter></my-counter>
@@ -272,13 +272,14 @@ Useful for side-effects that run after the render has been commited.
     const [count, setCount] = useState(0);
 
     useEffect(() => {
-      document.title = `Clicked ${count} times`;
+      // on every rerender, a new number will be in the title
+      document.title = `A random number ${Math.random()}`;
     });
 
     return html`
       <div id="count">${count}</div>
       <button type="button" @click=${() => setCount(count + 1)}>
-        Increment
+        Cause rerender
       </button>
     `;
   }
@@ -287,21 +288,35 @@ Useful for side-effects that run after the render has been commited.
 </script>
 ```
 
-##### Memoization
+##### Dependencies
 
-Like `useMemo`, `useEffect` can take a second argument that are values that are memoized. The effect will only run when these values change.
+What happens when your code begins to rely on dependencies that can change (state, refs, props)? We no longer want it to rerun on every rerender so we need to ensure that the code we're running, or its result, doesn't become stale. To do this, you should always state all of the dependencies you're using in an array as the second argument to `useEffect`:
 
 ```js
 function App() {
-  let [name, setName] = useState("Dracula");
+  const [name, setName] = useState("Dracula");
 
   useEffect(() => {
-    // This only occurs when name changes.
+    // This only occurs when `name` changes and on the initial render.
     document.title = `Hello ${name}`;
   }, [name]);
 
   return html`...`;
 }
+```
+
+A dependency is anything that your side-effect relies on that can change between renders (e.g. state, refs, props). This does not include `setName` or other setters from `useState` because they will never change between renders.
+
+###### What if I want to run the side-effect on mount?
+
+Generally, you won't want to do this but rather make sure you're actually listing all of your dependencies in the dependency array. If you don't have any dependencies then your code will run on mount and clean up on unmount.
+
+Here is an example of only running an effect once as opposed to every rerender:
+
+```js
+useEffect(() => {
+  document.title = "I'll stay like this until someone changes me"
+}, []); // note that you must pass the empty array
 ```
 
 ##### Cleaning up side-effects
@@ -312,7 +327,7 @@ An example of when you might use this is if you are setting up an event listener
 
 ```js
 function App() {
-  let [name, setName] = useState("Wolf Man");
+  const [name, setName] = useState("Wolf Man");
 
   useEffect(() => {
     function updateNameFromWorker(event) {
@@ -324,7 +339,7 @@ function App() {
     return () => {
       worker.removeEventListener("message", updateNameFromWorker);
     };
-  });
+  }, []); // note that it is safe to exclude `setName` from the dependencies because it will never change
 
   return html`...`;
 }
