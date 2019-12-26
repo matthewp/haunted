@@ -480,7 +480,7 @@ Limited only to "real" components for now.
     const [theme, setTheme] = useState("light");
 
     return html`
-      <select value=${theme} @change=${e => setTheme(e.target.value)}>
+      <select value=${theme} @change=${event => setTheme(event.target.value)}>
         <option value="dark">Dark</option>
         <option value="light">Light</option>
       </select>
@@ -514,13 +514,11 @@ import { hook, Hook } from 'haunted';
 const useMyHook = hook(class extends Hook {
   constructor(id, state) {
     super(id, state);
-    ...
+    // ...
   }
 
   update() { ... }
-
   teardown() { ... }
-
 });
 ```
 
