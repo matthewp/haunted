@@ -470,7 +470,6 @@ Limited only to "real" components for now.
 
   function Consumer() {
     const context = useContext(ThemeContext);
-
     return context;
   }
 
@@ -517,8 +516,8 @@ const useMyHook = hook(class extends Hook {
     // ...
   }
 
-  update() { ... }
-  teardown() { ... }
+  update() { /* ... */ }
+  teardown() { /* ... */ }
 });
 ```
 
@@ -544,7 +543,6 @@ let state = new State(() => {
 function update() {
   state.run(() => {
     const [count, setCount] = useState(0);
-
     console.log("count is", count);
 
     setTimeout(() => setCount(count + 1), 3000);
@@ -565,7 +563,6 @@ import { State } from "haunted";
 export default class LitHauntedElement extends LitElement {
   constructor() {
     super();
-
     this.hauntedState = new State(() => this.requestUpdate(), this);
   }
 
