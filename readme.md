@@ -333,7 +333,7 @@ function App() {
 
 #### useLayoutEffect
 
-The function signature is the same as `useEffect`, but the callback is being called synchronously after rendering. Updates scheduled inside `useLayoutEffect` will therefore be flushed synchronously, before the browser has a chance to paint.
+The function signature is the same as `useEffect`, but the callback is being called synchronously after rendering. Therefore, updates scheduled inside `useLayoutEffect` will be flushed synchronously before the browser has a chance to paint.
 
 Most of time, it is preferable to use `useEffect` to avoid blocking visual updates.
 
