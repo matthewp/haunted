@@ -316,8 +316,8 @@ function App() {
   let [name, setName] = useState("Wolf Man");
 
   useEffect(() => {
-    function updateNameFromWorker(ev) {
-      setName(ev.data);
+    function updateNameFromWorker(event) {
+      setName(event.data);
     }
 
     worker.addEventListener("message", updateNameFromWorker);
@@ -411,7 +411,7 @@ Create a memoized state value. Only reruns the function when dependent values ha
       <h1>Fibonacci</h1>
       <input
         type="text"
-        @change=${ev => setVal(Number(ev.target.value))}
+        @change=${event => setVal(Number(event.target.value))}
         value="${value}"
       />
       <div>Fibonacci <strong>${fib}</strong></div>
