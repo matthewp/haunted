@@ -153,7 +153,7 @@ const App = ({ name }) => {
 
 ##### Rendering
 
-Now that we have access to `<my-app>` in all HTML, what if you want to render it from JavaScript?
+Now that we have access to `<my-app>` anywhere we can write HTML, what if you want to render it from JavaScript?
 
 In this instance, we're using lit-html which comes with a `render` function. You can utilize it by passing in your HTML template and the element you wish to render the template into:
 
