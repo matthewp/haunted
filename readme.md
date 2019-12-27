@@ -217,6 +217,8 @@ function App() {
     </main>
   `;
 }
+
+customElements.define('my-app', component(App));
 ```
 
 Notice that we have `Counter`, a virtual component, and `App`, a custom element. You can use virtual components within custom elements and custom elements within virtual components.
