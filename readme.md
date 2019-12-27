@@ -140,7 +140,7 @@ You can now use `<my-app></my-app>` anywhere you use HTML (directly in a `.html`
 
 ##### Brief Digression:
 
-Another way to write your component is with the arrow function syntax, or fat arrow. It offers a more concise and clean way to write your code, however, it does come with a one drawback:
+Another way to write your component is with the arrow function syntax, or fat arrow. It offers a more concise and clean way to write your code, however, it does come with one drawback:
 
 There's no way to use the `this` keyword to refer to the instance of your web component that is running.
 
