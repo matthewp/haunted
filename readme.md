@@ -300,7 +300,7 @@ Here is an example of only running an effect once as opposed to every rerender:
 
 ```js
 useEffect(() => {
-  document.title = 'I'll stay like this until someone changes me';
+  document.title = 'I will stay like this until someone changes me';
 }, []); // note that you must pass the empty array
 ```
 
