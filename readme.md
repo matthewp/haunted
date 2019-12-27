@@ -335,80 +335,58 @@ Most of time, it is preferable to use `useEffect` to avoid blocking visual updat
 
 Create state that updates after being ran through a reducer function.
 
-```html
-<my-counter></my-counter>
+```js
+const initialState = { count: 0 };
 
-<script type="module">
-  import { html } from 'https://unpkg.com/lit-html/lit-html.js';
-  import { component, useReducer } from 'https://unpkg.com/haunted/haunted.js';
-
-  const initialState = { count: 0 };
-
-  function reducer(state, action) {
-    switch (action.type) {
-      case 'reset':
-        return initialState;
-      case 'increment':
-        return { count: state.count + 1 };
-      case 'decrement':
-        return { count: state.count - 1 };
-    }
+function reducer(state, action) {
+  switch (action.type) {
+    case 'reset':
+      return initialState;
+    case 'increment':
+      return { count: state.count + 1 };
+    case 'decrement':
+      return { count: state.count - 1 };
   }
+}
 
-  function Counter() {
-    const [state, dispatch] = useReducer(reducer, initialState);
+function Counter() {
+  const [state, dispatch] = useReducer(reducer, initialState);
 
-    return html`
-      Count: ${state.count}
-      <button @click=${() => dispatch({ type: 'reset' })}>
-        Reset
-      </button>
-      <button @click=${() => dispatch({ type: 'increment' })}>+</button>
-      <button @click=${() => dispatch({ type: 'decrement' })}>-</button>
-    `;
-  }
-
-  customElements.define('my-counter', component(Counter));
-</script>
+  return html`
+    Count: ${state.count}
+    <button @click=${() => dispatch({ type: 'reset' })}>
+      Reset
+    </button>
+    <button @click=${() => dispatch({ type: 'increment' })}>+</button>
+    <button @click=${() => dispatch({ type: 'decrement' })}>-</button>
+  `;
+}
 ```
 
 #### useMemo
 
 Create a memoized state value. Only reruns the function when dependent values have changed.
 
-```html
-<my-app></my-app>
+```js
+function fibonacci(num) {
+  if (num <= 1) return 1;
+  return fibonacci(num - 1) + fibonacci(num - 2);
+}
 
-<script type="module">
-  import { html } from 'https://unpkg.com/lit-html/lit-html.js';
-  import {
-    component,
-    useMemo,
-    useState
-  } from 'https://unpkg.com/haunted/haunted.js';
+function App() {
+  const [value, setVal] = useState(12);
+  const fib = useMemo(() => fibonacci(value), [value]);
 
-  function fibonacci(num) {
-    if (num <= 1) return 1;
-    return fibonacci(num - 1) + fibonacci(num - 2);
-  }
-
-  function App() {
-    const [value, setVal] = useState(12);
-    const fib = useMemo(() => fibonacci(value), [value]);
-
-    return html`
-      <h1>Fibonacci</h1>
-      <input
-        type="text"
-        @change=${event => setVal(parseInt(event.target.value, 10))}
-        value=${value}
-      />
-      <div>Fibonacci <strong>${fib}</strong></div>
-    `;
-  }
-
-  customElements.define('my-app', component(App));
-</script>
+  return html`
+    <h1>Fibonacci</h1>
+    <input
+      type="text"
+      @change=${event => setVal(parseInt(event.target.value, 10))}
+      value=${value}
+    />
+    <div>Fibonacci <strong>${fib}</strong></div>
+  `;
+}
 ```
 
 #### useRef
@@ -417,20 +395,11 @@ Creates and returns a mutable object (a 'ref') whose `.current` property is init
 
 This differs from `useState` in that state is immutable and can only be changed via `setState` which **will** cause a rerender. That rerender will allow you to be able to see the updated `state` value. A ref, on the other hand, can only be changed via `.current` and since changes to it are mutations, no rerender is required to view the updated value in your component's code (e.g. listeners, callbacks, effects).
 
-```html
-<my-app></my-app>
-
-<script type="module">
-  import { html } from 'https://unpkg.com/lit-html/lit-html.js';
-  import { component, useRef } from 'https://unpkg.com/haunted/haunted.js';
-
-  function App() {
-    const myRef = useRef(0);
-    return html`${myRef.current}`;
-  }
-
-  customElements.define('my-app', component(App));
-</script>
+```js
+function App() {
+  const myRef = useRef(0);
+  return html`${myRef.current}`;
+}
 ```
 
 #### useContext
@@ -439,55 +408,42 @@ Grabs the context value from the closest provider above and updates your compone
 
 `useContext` currently only works with custom element components, [track the issue here](https://github.com/matthewp/haunted/issues/40).
 
-```html
-<my-app></my-app>
+```js
+const ThemeContext = createContext('dark');
 
-<script type="module">
-  import { html } from 'https://unpkg.com/lit-html/lit-html.js';
-  import {
-    component,
-    createContext,
-    useContext
-  } from 'https://unpkg.com/haunted/haunted.js';
+customElements.define('theme-provider', ThemeContext.Provider);
+customElements.define('theme-consumer', ThemeContext.Consumer);
 
-  const ThemeContext = createContext('dark');
+function Consumer() {
+  const context = useContext(ThemeContext);
+  return context;
+}
 
-  customElements.define('theme-provider', ThemeContext.Provider);
-  customElements.define('theme-consumer', ThemeContext.Consumer);
+customElements.define('my-consumer', component(Consumer));
 
-  function Consumer() {
-    const context = useContext(ThemeContext);
-    return context;
-  }
+function App() {
+  const [theme, setTheme] = useState("light");
 
-  customElements.define('my-consumer', component(Consumer));
+  return html`
+    <select value=${theme} @change=${event => setTheme(event.target.value)}>
+      <option value="dark">Dark</option>
+      <option value="light">Light</option>
+    </select>
 
-  function App() {
-    const [theme, setTheme] = useState("light");
+    <theme-provider .value=${theme}>
+      <my-consumer></my-consumer>
 
-    return html`
-      <select value=${theme} @change=${event => setTheme(event.target.value)}>
-        <option value="dark">Dark</option>
-        <option value="light">Light</option>
-      </select>
-
-      <theme-provider .value=${theme}>
-        <my-consumer></my-consumer>
-
-        <!-- creates context with inverted theme -->
-        <theme-provider .value=${theme === 'dark' ? 'light' : 'dark'}>
-          <theme-consumer
-            .render=${value =>
-              html`<h1>${value}</h1>`
-            }
-          ></theme-consumer>
-        </theme-provider>
+      <!-- creates context with inverted theme -->
+      <theme-provider .value=${theme === 'dark' ? 'light' : 'dark'}>
+        <theme-consumer
+          .render=${value =>
+            html`<h1>${value}</h1>`
+          }
+        ></theme-consumer>
       </theme-provider>
-    `;
-  }
-
-  customElements.define('my-app', component(App));
-</script>
+    </theme-provider>
+  `;
+}
 ```
 
 #### Write Your Own Hook
