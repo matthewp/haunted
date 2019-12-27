@@ -47,10 +47,9 @@ eg.
 <script src="https://cdn.jsdelivr.net/npm/proxy-polyfill@0.3.0/proxy.min.js"></script>
 ```
 
-For a full example with Internet Explorer 11, see - https://github.com/crisward/haunted-ie11
+Here is a full example of Haunted with Internet Explorer 11: https://github.com/crisward/haunted-ie11
 
-You can also use Custom Elements without Shadow DOM if you wish.
-eg.
+You can also use Custom Elements without the Shadow DOM if you need to:
 
 ```js
 component(MyComponent, { useShadowDOM: false }));
