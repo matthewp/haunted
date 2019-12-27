@@ -223,7 +223,7 @@ customElements.define('my-app', component(App));
 
 Notice that we have `Counter`, a virtual component, and `App`, a custom element. You can use virtual components within custom elements and custom elements within virtual components.
 
-The only difference is that custom elements are used by using their tag name (e.g. `<my-app>`) and virtual components are called as functions.
+The only difference is that custom elements are utilized via their tag name (e.g. `<my-app>`) and virtual components are called as functions (e.g. `${Counter()}`).
 
 If you wanted you could create an entire app of virtual components.
 
