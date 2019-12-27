@@ -308,7 +308,7 @@ useEffect(() => {
 
 Since effects are used for side-effectual things and might run many times in the lifecycle of a component, `useEffect` supports returning a teardown function.
 
-An example of when you might use this is if you are setting up an event listener.
+An example of when you might use this is if you are setting up an event listener:
 
 ```js
 const [name, setName] = useState('Wolf Man');
@@ -330,13 +330,16 @@ useEffect(() => {
 
 The function signature is the same as `useEffect`, but the callback is being called synchronously after rendering. Therefore, updates scheduled inside `useLayoutEffect` will be flushed synchronously before the browser has a chance to paint.
 
-Most of time, it is preferable to use `useEffect` to avoid blocking visual updates.
+Most of the time, it is preferable to use `useEffect` to avoid blocking visual updates.
 
 #### useReducer
 
-Create state that updates after being ran through a reducer function.
+Similarly to `useState`, `useReducer` will return an array of two values, the first one being the state. The second one, however, is `dispatch`. This is a function that takes an **action**. The action is then passed to your **reducer** (the first argument) and your reducer will determine the new state and return it.
+
+The following is an example of `useReducer` being used to handle incrementing and decrementing a count:
 
 ```js
+// doesn't have to be an object, could just be `initialState = 0`
 const initialState = { count: 0 };
 
 function reducer(state, action) {
@@ -363,6 +366,8 @@ function Counter() {
   `;
 }
 ```
+
+This might look familiar as [redux](https://redux.js.org/) uses a similar concept.
 
 #### useMemo
 
