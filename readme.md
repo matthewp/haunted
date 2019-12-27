@@ -100,7 +100,7 @@ customElements.define('my-app', component(App));
 
 #### Web modules
 
-**Haunted** can work directly in the browser without using any build tools. Simply import the `haunted.js` bundle. You can use the [unpkg] or [pika](https://www.pika.dev/cdn) CDNs. This works great for demo pages and small apps. Here's an example with unpkg:
+**Haunted** can work directly in the browser without using any build tools. Simply import the `haunted.js` bundle. You can use the [unpkg](https://unpkg.com/) or [pika](https://www.pika.dev/cdn) CDNs. This works great for demo pages and small apps. Here's an example with unpkg:
 
 ```js
 import { html } from 'https://unpkg.com/lit-html/lit-html.js';
