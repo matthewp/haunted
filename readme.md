@@ -194,7 +194,7 @@ Once your custom element is defined you can then pass in attributes as you would
 
 #### Virtual components
 
-Haunted also has the concept of _virtual components_. These are components that are not defined as a tag. Rather they are functions that can be called from within another template. They have their own state and will rerender when that state changes, _without_ causing any parent components to rerender.
+Haunted also has the concept of _virtual components_. These are components that are not defined as a tag. Instead they're defined as functions that can be called from within another template. They have their own state and will rerender when that state changes _without_ causing any parent components to rerender.
 
 The following is an example of using virtual components:
 
@@ -227,7 +227,7 @@ If you wanted you could create an entire app of virtual components.
 
 ##### Virtual components and `this`
 
-You'll notice that in the above examples, we're using the fat arrow syntax. This is due to virtual components not being attached to any actual custom elements, therefore, `this` never points to anything negating the purpose of using the function syntax.
+You'll notice that in the above examples, we're using the fat arrow syntax. This is due to virtual components not being attached to any actual custom elements, therefore, `this` never points to anything which negates the purpose of using the function syntax.
 
 ### Hooks
 
