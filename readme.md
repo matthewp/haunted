@@ -117,7 +117,7 @@ If you install Haunted **locally** this build is located at `node_modules/haunte
 
 ## API
 
-Haunted is all about writing plain functions that can contain their own state. The follow docs is divided between creating _components_ (the functions) and using _hooks_ the state.
+Haunted is all about writing plain functions that can contain their own state. The documentation below is separated into two sections: creating _components_ (the functions) and using _hooks_ to manage state.
 
 ### Components
 
@@ -127,7 +127,7 @@ Using Haunted you can create custom elements or _virtual_ components (components
 
 #### Custom elements
 
-A Custom Element can be defined via haunted by passing your custom component you defined (e.g. `function App() {}`) to haunted's `component` function. You then take the result of your call to `component` and pass it to `customElements.define` like so:
+A custom element can be defined via haunted by passing your component you defined (e.g. `function App() {}`) to haunted's `component` function. You then take the result of your call to `component` and pass it to `customElements.define` like so:
 
 ```js
 function App({ name }) {
