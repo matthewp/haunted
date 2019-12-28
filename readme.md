@@ -192,6 +192,92 @@ Once your custom element is defined you can then pass in attributes as you would
 <my-app name="World"></my-app>
 ```
 
+##### Dispatching Events
+
+There are a few steps you have to take in order to dispatch an event from your custom element:
+
+1. Use the function syntax to define your component. This will give you access to `this`, the instance of your custom element.
+2. When defining your callback that you wish to dispatch from, make sure it is bound to `this`. You can do this by either using the fat arrow syntax or by using the result of `.bind(this)` as your callback.
+3. Finally, you can create a `new CustomEvent` and pass that to `this.dispatchEvent`.
+
+Here are a couple of examples of dispatching events from a haunted custom element:
+
+```js
+function Product({ name, price, productId }) {
+  const buyProduct = () => {
+    const event = new CustomEvent('buy-product', {
+      bubbles: true, // this let's the event bubble up through the DOM
+      composed: true, // this let's the event cross the Shadow DOM boundary
+      detail: { productId } // all data you wish to pass must be in `detail`
+    });
+    this.dispatchEvent(event);
+  }
+
+  function reportProduct() {
+    const reason = window.prompt('Why are you reporting this product?');
+    const event = new CustomEvent('report-product', {
+      bubbles: true,
+      composed: true,
+      detail: { productId, reason }
+    });
+    this.dispatchEvent(event);
+  }
+
+  return html`
+    <article>
+      <h3>${name}</h3>
+      <p>Price: ${price} USD</p>
+
+      <button @click=${buyProduct}>Purchase</button>
+      <!-- `reportProduct` must be bound to `this` before use -->
+      <button @click=${reportProduct.bind(this)}>Report</button>
+    </article>
+  `;
+}
+
+Product.observedAttributes = ['name', 'price', 'product-id'];
+
+customElements.define('store-product', component(Product));
+```
+
+With this, you can now listen for these events either on an instance of `<store-product>` itself or higher up in the DOM. Here are examples of both of these instances:
+
+```js
+function App() {
+  useEffect(() => {
+    const handleReportProduct = event => {
+      console.log('Because the event bubbled all the way up here,');
+      console.log('we can listen directly on this web component itself! 🎉');
+    };
+    this.addEventListener('report-product', handleReportProduct);
+
+    return () => {
+      // very important to remove the event listener!
+      this.removeEventListener('report-product', handleReportProduct);
+    }
+  }, []); // make sure you list all dependencies
+
+  return html`
+    <store-product
+      name="T-Shirt"
+      price="10.00"
+      product-id="0001"
+      @buy-product=${event => {
+        console.log('We can also listen to the event on the custom element itself 🙂')
+      }}
+    ></store-product>
+  `;
+}
+```
+
+If you want to look more into firing events, here are some links:
+
+* [`CustomEvent`](https://developer.mozilla.org/en-US/docs/Web/API/CustomEvent) — MDN
+* [`Event`](https://developer.mozilla.org/en-US/docs/Web/API/Event) — MDN
+* [`dispatchEvent`](https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/dispatchEvent) — MDN
+* [Creating and triggering events](https://developer.mozilla.org/en-US/docs/Web/Guide/Events/Creating_and_triggering_events) — MDN
+* ["Shadow DOM and Events"](https://javascript.info/shadow-dom-events) — Ilya Kantor
+
 #### Virtual components
 
 Haunted also has the concept of _virtual components_. These are components that are not defined as a tag. Instead they're defined as functions that can be called from within another template. They have their own state and will rerender when that state changes _without_ causing any parent components to rerender.
