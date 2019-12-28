@@ -197,7 +197,7 @@ Once your custom element is defined you can then pass in attributes as you would
 There are a few steps you have to take in order to dispatch an event from your custom element:
 
 1. Use the function syntax to define your component. This will give you access to `this`, the instance of your custom element.
-2. When defining your callback that you wish to dispatch from, make sure it is bound to `this`. You can do this by either using the fat arrow syntax or by using the result of `.bind(this)` as your callback.
+2. When defining your callback that you wish to dispatch from, make sure it is bound to `this`. You can do this by using the fat arrow syntax.
 3. Finally, you can create a `new CustomEvent` and pass that to `this.dispatchEvent`.
 
 Here are a couple of examples of dispatching events from a haunted custom element:
@@ -213,24 +213,11 @@ function Product({ name, price, productId }) {
     this.dispatchEvent(event);
   }
 
-  function reportProduct() {
-    const reason = window.prompt('Why are you reporting this product?');
-    const event = new CustomEvent('report-product', {
-      bubbles: true,
-      composed: true,
-      detail: { productId, reason }
-    });
-    this.dispatchEvent(event);
-  }
-
   return html`
     <article>
       <h3>${name}</h3>
       <p>Price: ${price} USD</p>
-
       <button @click=${buyProduct}>Purchase</button>
-      <!-- `reportProduct` must be bound to `this` before use -->
-      <button @click=${reportProduct.bind(this)}>Report</button>
     </article>
   `;
 }
@@ -240,9 +227,10 @@ Product.observedAttributes = ['name', 'price', 'product-id'];
 customElements.define('store-product', component(Product));
 ```
 
-With this, you can now listen for these events either on an instance of `<store-product>` itself or higher up in the DOM. Here are examples of both of these instances:
+With this, you can now listen for the `buy-product` event either on an instance of `<store-product>` itself or higher up in the DOM. Here are examples of both of these instances:
 
 ```js
+/* Example of listening higher up in the DOM */
 function App() {
   useEffect(() => {
     const handleReportProduct = event => {
@@ -257,6 +245,11 @@ function App() {
     }
   }, []); // make sure you list all dependencies
 
+  return html`${Store()}`;
+}
+
+/* Example of listening on an element (can be <store-product> or anything above it) */
+const Store = virtual(() => {
   return html`
     <store-product
       name="T-Shirt"
@@ -267,7 +260,7 @@ function App() {
       }}
     ></store-product>
   `;
-}
+})
 ```
 
 If you want to look more into firing events, here are some links:
