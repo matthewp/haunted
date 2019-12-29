@@ -226,7 +226,7 @@ function App() {
 }
 ```
 
-Notice that it is encouraged to use camel case here instead of kebab case as these aren't attributes, they're properties that you'll most likely be using as variables at some point.
+Notice that it is encouraged to use camel case when writing your template instead of kebab case as these aren't attributes. They're properties so they won't be automatically rewritten in camel case for you.
 
 ##### Dispatching Events
 
