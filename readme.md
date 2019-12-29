@@ -265,7 +265,23 @@ customElements.define('store-product', component(Product));
 With this, you can now listen for the `buy-product` event either on an instance of `<store-product>` itself or higher up in the DOM. Here are examples of both of these instances:
 
 ```js
-/* Example of listening higher up in the DOM */
+/* Example of listening on an element (can be <store-product> or anything above it) */
+function Store() {
+  return html`
+    <store-product
+      name="T-Shirt"
+      price="10.00"
+      product-id="0001"
+      @buy-product=${event => {
+        console.log('We can listen to the event on <store-product> itself 🙂')
+      }}
+    ></store-product>
+  `;
+}
+
+customElements.define('my-store', component(Store));
+
+/* Example of listening higher up in the DOM on `this` */
 function App() {
   useEffect(() => {
     const handleReportProduct = event => {
@@ -280,22 +296,8 @@ function App() {
     }
   }, []); // make sure you list all dependencies
 
-  return html`${Store()}`;
+  return html`<my-store></my-store>`;
 }
-
-/* Example of listening on an element (can be <store-product> or anything above it) */
-const Store = virtual(() => {
-  return html`
-    <store-product
-      name="T-Shirt"
-      price="10.00"
-      product-id="0001"
-      @buy-product=${event => {
-        console.log('We can also listen to the event on the custom element itself 🙂')
-      }}
-    ></store-product>
-  `;
-})
 ```
 
 If you want to look more into firing events, here are some links:
