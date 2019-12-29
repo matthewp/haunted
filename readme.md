@@ -216,7 +216,6 @@ function Profile({ userData }) {
 
 customElements.define('my-profile', component(Profile));
 
-
 function App() {
   const userData = useFictitiousUser();
 
