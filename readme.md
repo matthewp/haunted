@@ -112,7 +112,7 @@ If using pika then use the `html` export from Haunted, as pika bundles everythin
 import { html, component, useState } from 'https://cdn.pika.dev/haunted';
 ```
 
-If you install Haunted **locally** this build is located at `node_modules/haunted/haunted.js`.
+If you install Haunted **locally** this build is located at `/node_modules/haunted/haunted.js`. And if you're using PikaPkg (@pika/web) then you'll import it from `/web_modules/haunted.js`.
 
 ## API
 
