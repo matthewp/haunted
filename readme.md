@@ -574,13 +574,16 @@ Most functionality can be achieved with the provided hooks above, but you can al
 import { hook, Hook } from 'haunted';
 
 const useMyHook = hook(class extends Hook {
-  constructor(id, state) {
+  // everything after `state` is an argument passed to your hook
+  constructor(id, state, your, hooks, args) {
     super(id, state);
-    // ...
+    // you can trigger an update by calling `this.state.update()`
   }
 
-  update() { /* ... */ }
-  teardown() { /* ... */ }
+  update(your, hooks, args) {
+    return ['the value returned from', your, 'hook'];
+  }
+  teardown() { /* called when the hook is to be torn down */ }
 });
 ```
 
