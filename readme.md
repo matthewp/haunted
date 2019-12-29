@@ -39,17 +39,13 @@ A starter app is available on [codesandbox](https://codesandbox.io/s/github/matt
 npm install haunted
 ```
 
-For Internet Explorer 11, you'll need to use a proxy polyfill, in addition to the usual webcomponentsjs polyfills.
-
-eg.
+For Internet Explorer 11, you'll need to use a proxy polyfill to use Haunted, in addition to the usual webcomponentsjs polyfills.
 
 ```html
 <script src="https://cdn.jsdelivr.net/npm/proxy-polyfill@0.3.0/proxy.min.js"></script>
 ```
 
-Here is a full example of Haunted with Internet Explorer 11: https://github.com/crisward/haunted-ie11
-
-You can also use Custom Elements without the Shadow DOM if you need to:
+Here is a [full example of a web app that uses Haunted built for Internet Explorer 11](https://github.com/crisward/haunted-ie11). You can also use Custom Elements without the Shadow DOM if you need to:
 
 ```js
 component(MyComponent, { useShadowDOM: false }));
