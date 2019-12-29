@@ -186,11 +186,47 @@ Alternatively, you can pass `observedAttributes` as an option to `component()`:
 component(App, { observedAttributes: ['name'] });
 ```
 
-Once your custom element is defined you can then pass in attributes as you would with any other HTML element.
+Once your custom element is defined you can then pass in attributes as you would with any other HTML element. Just like any other HTML attribute **only strings are accepted**, anything else will be converted into a string.
 
 ```html
 <my-app name="World"></my-app>
 ```
+
+##### Properties
+
+If you haven't used lit-html before you're probably wondering what the differences between properties and attributes are. As stated above, attributes can only have string values, this is because all attributes go through [`Element#setAttribute`](https://developer.mozilla.org/en-US/docs/Web/API/Element/setAttribute). Properties do not go through `setAttribute`, instead they are properties on the custom element itself. This allows you to pass in any value instead of just strings.
+
+To bind to a property in lit-html, you can use the `.` prefix before the property name:
+
+```js
+function Profile({ userData }) {
+  return html`
+    <section>
+      <h2>Profile</h2>
+      <article>
+        <figure>
+          <img src=${userData.portrait} alt="user portait" />
+          <figcaption>${userData.name}</figcaption>
+        </figure>
+        <p>${userData.bio}</p>
+      </article>
+    </section>
+  `;
+}
+
+customElements.define('my-profile', component(Profile));
+
+
+function App() {
+  const userData = useFictitiousUser();
+
+  return html`
+    <my-profile .userData=${userData}></my-profile>
+  `;
+}
+```
+
+Notice that it is encouraged to use camel case here instead of kebab case as these aren't attributes, they're properties that you'll most likely be using as variables at some point.
 
 ##### Dispatching Events
 
