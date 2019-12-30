@@ -1,4 +1,4 @@
-🦇 🎃
+# Haunted 🦇 🎃
 
 [![npm](https://img.shields.io/npm/dt/haunted)](https://npm.im/haunted)
 [![npm](https://img.shields.io/npm/v/haunted)](https://npm.im/haunted)
