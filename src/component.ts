@@ -112,7 +112,8 @@ function makeComponent(render: RenderFunction): Creator {
             return true;
           }
 
-          Reflect.set(target, key, value);
+          Reflect.set(target, key, value, receiver);
+          return true
         }
 
         if(typeof key === 'symbol' || key[0] === '_') {
