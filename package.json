@@ -33,7 +33,7 @@
     "@matthewp/compile": "^2.4.3",
     "http-server": "^0.12.0",
     "mocha-headless-chrome": "^2.0.3",
-    "typescript": "^3.6.2"
+    "typescript": "^4.0.2"
   },
   "dependencies": {
     "lit-html": "^1.0.0"
