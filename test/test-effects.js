@@ -24,7 +24,7 @@ describe('useEffect', () => {
 
     set(2);
     await cycle();
-    
+
     assert.equal(effects, 1, 'effects ran once');
     teardown();
   });
@@ -57,7 +57,7 @@ describe('useEffect', () => {
 
     set(2);
     await cycle();
-    
+
     assert.equal(subs.length, 1, 'Unsubscribed on re-renders');
     teardown();
   });
@@ -86,7 +86,7 @@ describe('useEffect', () => {
 
     teardown();
     await cycle();
-    
+
     assert.equal(subs.length, 0, 'Torn down on unmount');
   });
 
@@ -131,5 +131,50 @@ describe('useEffect', () => {
     } catch(e) {
       assert.ok(false, e);
     }
+  });
+
+  it('Does not skip effects when another update is queued during commit phase', async () => {
+    const parentTag = 'skipped-effect-test-parent';
+    const childTag = 'skipped-effect-test-child';
+    let parentEffects = 0;
+    let childEffects = 0;
+    let parentSet;
+    let childSet;
+
+    function parent() {
+      const [state, setState] = useState();
+      parentSet = setState;
+
+      useEffect(() => {
+        parentEffects++;
+      }, [state])
+
+      return html`<skipped-effect-test-child .prop=${state}></skipped-effect-test-child>`;
+    }
+
+    function child({ prop }) {
+      const [state, setState] = useState();
+      childSet = setState;
+
+      useEffect(() => {
+        childEffects++;
+      }, [state])
+
+      return html`${prop} + ${state}`;
+    }
+    customElements.define(parentTag, component(parent));
+    customElements.define(childTag, component(child));
+
+    const teardown = attach(parentTag);
+    await cycle();
+
+    parentSet(1)
+    childSet(1)
+    await cycle();
+
+    assert.equal(parentEffects, 2, 'parent effects ran twice');
+    assert.equal(childEffects, 2, 'child effects ran twice');
+
+    teardown();
   });
 });
