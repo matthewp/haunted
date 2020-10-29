@@ -19,7 +19,6 @@ function createEffect(setEffects: (state: State, cb: Callable) => void) {
       this.callback = callback;
       this.lastValues = this.values;
       this.values = values;
-      console.log(this.state.host, 'effect update', {lastValues: this.lastValues, values: this.values})
     }
 
     call(): void {
@@ -29,7 +28,6 @@ function createEffect(setEffects: (state: State, cb: Callable) => void) {
     }
 
     run(): void {
-      console.log(this.state.host, 'effect run')
       this.teardown();
       this._teardown = this.callback.call(this.state);
     }

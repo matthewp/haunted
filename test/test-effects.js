@@ -168,14 +168,9 @@ describe('useEffect', () => {
     const teardown = attach(parentTag);
     await cycle();
 
-    console.log('start test')
-    console.log('parentSet(1)')
     parentSet(1)
-    console.log('childSet(1)')
     childSet(1)
-    console.log('await cycle()')
     await cycle();
-    console.log('end test')
 
     assert.equal(parentEffects, 2, 'parent effects ran twice');
     assert.equal(childEffects, 2, 'child effects ran twice');

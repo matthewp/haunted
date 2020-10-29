@@ -46,23 +46,16 @@ abstract class BaseScheduler<R extends GenericRenderer, H> {
   update(): void {
     if(this._updateQueued) return;
     read(() => {
-      console.log(this.host, 'handle update')
       let result = this.handlePhase(updateSymbol);
       write(() => {
-        console.log(this.host, 'handle commit')
         this.handlePhase(commitSymbol, result);
 
         write(() => {
-          console.log(this.host, 'handle effects')
           this.handlePhase(effectsSymbol);
-          console.log(this.host, 'done')
         });
-        console.log(this.host, 'effects queued')
       });
-      console.log(this.host, 'commit queued')
       this._updateQueued = false;
     });
-    console.log(this.host, 'update queued')
     this._updateQueued = true;
   }
 
