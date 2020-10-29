@@ -17,7 +17,6 @@ function createEffect(setEffects: (state: State, cb: Callable) => void) {
 
     update(callback: Effect, values?: unknown[]): void {
       this.callback = callback;
-      this.lastValues = this.values;
       this.values = values;
     }
 
@@ -25,6 +24,7 @@ function createEffect(setEffects: (state: State, cb: Callable) => void) {
       if(!this.values || this.hasChanged()) {
         this.run();
       }
+      this.lastValues = this.values;
     }
 
     run(): void {
