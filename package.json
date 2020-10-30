@@ -8,7 +8,7 @@
   "scripts": {
     "build": "make",
     "preversion": "make",
-    "server": "http-server -p 1991",
+    "server": "sirv -p 1991",
     "test-ci": "mocha-headless-chrome -f http://localhost:1991/test/test.html"
   },
   "files": [
@@ -30,9 +30,9 @@
   "homepage": "https://github.com/matthewp/haunted#readme",
   "typings": "lib/haunted.d.ts",
   "devDependencies": {
-    "@matthewp/compile": "^2.4.3",
-    "http-server": "^0.12.0",
+    "@matthewp/compile": "^2.4.4",
     "mocha-headless-chrome": "^2.0.3",
+    "sirv-cli": "^1.0.8",
     "typescript": "^3.6.2"
   },
   "dependencies": {
