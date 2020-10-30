@@ -1,5 +1,4 @@
 node_modules/
-package-lock.json
 lib/
 haunted.js
 web.js
