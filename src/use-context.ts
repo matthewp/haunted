@@ -8,7 +8,7 @@ const useContext = hook(class<T> extends Hook<[Context<T>], T, Element> {
   Context!: Context<T>;
   value!: T;
   _ranEffect: boolean;
-  _unsubscribe: VoidFunction | null;
+  _unsubscribe?: VoidFunction | null;
 
   constructor(id: number, state: State<Element>, _: Context<T>) {
     super(id, state);

@@ -21,7 +21,7 @@ interface ContextDetail<T> {
   callback: (value: T) => void;
 
   value: T;
-  unsubscribe: (this: Context<T>) => void;
+  unsubscribe?: (this: Context<T>) => void;
 }
 
 function makeContext(component: ComponentCreator): Creator {
