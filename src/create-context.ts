@@ -20,8 +20,9 @@ interface ContextDetail<T> {
   Context: Context<T>;
   callback: (value: T) => void;
 
+  // These properties will not exist if a context consumer lacks a provider
   value: T;
-  unsubscribe: (this: Context<T>) => void;
+  unsubscribe?: (this: Context<T>) => void;
 }
 
 function makeContext(component: ComponentCreator): Creator {
