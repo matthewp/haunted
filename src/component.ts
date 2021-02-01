@@ -85,6 +85,7 @@ function makeComponent(render: RenderFunction): Creator {
 
     function reflectiveProp<T>(initialValue: T): Readonly<PropertyDescriptor> {
       let value = initialValue;
+      let isSetup = false;
       return Object.freeze({
         enumerable: true,
         configurable: true,
@@ -92,6 +93,9 @@ function makeComponent(render: RenderFunction): Creator {
           return value;
         },
         set(this: Element, newValue: T): void {
+          // Avoid scheduling update when prop value hasn't changed
+          if (isSetup && value === newValue) return;
+          isSetup = true;
           value = newValue;
           this._scheduler.update();
         }
