@@ -55,7 +55,7 @@ const useContext = hook(class<T> extends Hook<[Context<T>], T, Element> {
       composed: true, // to pass ShadowDOM boundaries
     }));
 
-    const { unsubscribe, value } = detail as ContextDetail<T>;
+    const { unsubscribe = null, value } = detail as ContextDetail<T>;
 
     this.value = unsubscribe ? value : Context.defaultValue;
 
