@@ -1,0 +1,26 @@
+<!doctype html>
+
+<mouse-tracker></mouse-tracker>
+
+<script type="module">
+  import { html } from 'https://unpkg.com/lit-html/lit-html.js';
+  import { component, useController } from '../haunted.js';
+
+  // imagine this was imported from npm
+  import { MouseController } from './controllers/mouse-controller.js';
+
+  const useMouseController = () => useController(host => new MouseController(host));
+
+  function MouseTracker() {
+    const { pos } = useMouseController();
+
+    return html`
+      <dl>
+        <dt>x</dt> <dd>${pos.x}</dd>
+        <dt>y</dt> <dd>${pos.y}</dd>
+      </dl>
+    `;
+  }
+
+  customElements.define('mouse-tracker', component(MouseTracker));
+</script>
