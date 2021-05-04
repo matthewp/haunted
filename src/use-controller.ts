@@ -1,3 +1,9 @@
+/**
+ * @license
+ * Portions Copyright 2021 Google LLC
+ * SPDX-License-Identifier: BSD-3-Clause
+ */
+
 import { ReactiveController, ReactiveControllerHost } from '@lit/reactive-element';
 
 import { useLayoutEffect } from './use-layout-effect';
