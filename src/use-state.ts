@@ -1,7 +1,7 @@
 import { hook, Hook } from './hook';
 import { State } from './state';
 
-type NewState<T> = T | ((previousState?: T) => T);
+type NewState<T> = T | ((previousState: T) => T);
 type StateUpdater<T> = (value: NewState<T>) => void;
 
 const useState = hook(class<T> extends Hook {
@@ -24,7 +24,7 @@ const useState = hook(class<T> extends Hook {
 
   updater(value: NewState<T>): void {
     if (typeof value === 'function') {
-      const updaterFn = value as (previousState?: T) => T;
+      const updaterFn = value as (previousState: T) => T;
       const [previousValue] = this.args;
       value = updaterFn(previousValue);
     }
