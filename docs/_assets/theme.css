@@ -195,3 +195,7 @@ docs-playground:defined pre {
 docs-playground::part(button) {
   bottom: -2px;
 }
+
+#footer-badges img {
+  width: 145px;
+}
