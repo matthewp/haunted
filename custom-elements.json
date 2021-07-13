@@ -1491,9 +1491,17 @@
           "name": "useRef",
           "parameters": [
             {
-              "name": "initialValue"
+              "name": "initialValue",
+              "type": {
+                "text": "T"
+              }
             }
-          ]
+          ],
+          "return": {
+            "type": {
+              "text": "{ current: T }"
+            }
+          }
         }
       ],
       "exports": [
