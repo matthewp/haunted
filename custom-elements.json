@@ -1224,8 +1224,21 @@
       "path": "lib/use-context.js",
       "declarations": [
         {
-          "kind": "variable",
-          "name": "useContext"
+          "kind": "function",
+          "name": "useContext",
+          "parameters": [
+            {
+              "name": "context",
+              "type": {
+                "text": "Context<T>"
+              }
+            }
+          ],
+          "return": {
+            "type": {
+              "text": "T"
+            }
+          }
         }
       ],
       "exports": [

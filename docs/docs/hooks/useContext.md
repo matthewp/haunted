@@ -10,7 +10,9 @@ Grabs the context value from the closest provider above and updates your compone
 
 `useContext` currently only works with custom element components, [track the issue here](https://github.com/matthewp/haunted/issues/40).
 
-```js
+```js playground use-context use-context.js
+import { html, component, useState, useContext, createContext } from 'haunted';
+
 const ThemeContext = createContext('dark');
 
 customElements.define('theme-provider', ThemeContext.Provider);
@@ -46,4 +48,16 @@ function App() {
     </theme-provider>
   `;
 }
+
+customElements.define('use-context', component(App));
 ```
+
+```html playground-file use-context index.html
+<script type="module" src="use-context.js"></script>
+<use-context></use-context>
+```
+
+```liquid playground-import-map use-context
+{{ importMap }}
+```
+## API

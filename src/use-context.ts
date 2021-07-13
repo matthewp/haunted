@@ -4,6 +4,12 @@ import { State } from './state';
 import { contextEvent } from './symbols';
 import { setEffects } from './use-effect';
 
+/**
+ * @function
+ * @template T
+ * @param    {Context<T>} context
+ * @return   {T}
+ */
 const useContext = hook(class<T> extends Hook<[Context<T>], T, Element> {
   Context!: Context<T>;
   value!: T;
