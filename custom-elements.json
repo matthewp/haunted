@@ -1437,8 +1437,38 @@
       "path": "lib/use-reducer.js",
       "declarations": [
         {
-          "kind": "variable",
-          "name": "useReducer"
+          "kind": "function",
+          "name": "useReducer",
+          "description": "Given a reducer function, initial state, and optional state initializer function, returns a tuple of state and dispatch function.",
+          "parameters": [
+            {
+              "description": "reducer function to compute the next state given the previous state and the action",
+              "name": "reducer",
+              "type": {
+                "text": "Reducer<S, A>"
+              }
+            },
+            {
+              "description": "the initial state of the reducer",
+              "name": "initialState",
+              "type": {
+                "text": "I"
+              }
+            },
+            {
+              "description": "Optional initializer function, called on initialState if provided",
+              "name": "init",
+              "optional": true,
+              "type": {
+                "text": "(init: I) => S"
+              }
+            }
+          ],
+          "return": {
+            "type": {
+              "text": "readonly [S, (action: A) => void]"
+            }
+          }
         }
       ],
       "exports": [

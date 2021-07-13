@@ -10,7 +10,9 @@ Similarly to `useState`, `useReducer` will return an array of two values, the fi
 
 The following is an example of `useReducer` being used to handle incrementing and decrementing a count:
 
-```js
+```js playground use-reducer use-reducer.js
+import { component, html, useReducer } from 'haunted';
+
 // doesn't have to be an object, could just be `initialState = 0`
 const initialState = { count: 0 };
 
@@ -37,6 +39,15 @@ function Counter() {
     <button @click=${() => dispatch({ type: 'decrement' })}>-</button>
   `;
 }
+
+customElements.define('use-reducer', component(Counter));
+```
+
+```html playground-file use-reducer index.html
+<script type="module" src="use-reducer.js"></script>
+<use-reducer></use-reducer>
 ```
 
 This might look familiar as [redux](https://redux.js.org/) uses a similar concept.
+
+# API
