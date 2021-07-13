@@ -1396,8 +1396,29 @@
       "path": "lib/use-memo.js",
       "declarations": [
         {
-          "kind": "variable",
-          "name": "useMemo"
+          "kind": "function",
+          "name": "useMemo",
+          "parameters": [
+            {
+              "description": "function to memoize",
+              "name": "fn",
+              "type": {
+                "text": "() => T"
+              }
+            },
+            {
+              "description": "dependencies to the memoized computation",
+              "name": "values",
+              "type": {
+                "text": "unknown[]"
+              }
+            }
+          ],
+          "return": {
+            "type": {
+              "text": "T"
+            }
+          }
         }
       ],
       "exports": [
