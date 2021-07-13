@@ -1262,10 +1262,18 @@
           "parameters": [
             {
               "name": "createController",
-              "description": "A function that creates a controller instance. This\nfunction is given a HauntedControllerHost to pass to the controller. The\ncreate function is only called once per component."
+              "description": "A function that creates a controller instance.\nThis function is given a HauntedControllerHost to pass to the controller. The\ncreate function is only called once per component.",
+              "type": {
+                "text": "<C extends ReactiveController>(host: ReactiveControllerHost) => C"
+              }
             }
           ],
-          "description": "Creates and stores a stateful ReactiveController instance and provides it\nwith a ReactiveControllerHost that drives the controller lifecycle.\n\nUse this hook to convert a ReactiveController into a Haunted hook."
+          "description": "Creates and stores a stateful ReactiveController instance and provides it\nwith a ReactiveControllerHost that drives the controller lifecycle.\n\nUse this hook to convert a ReactiveController into a Haunted hook.",
+          "return": {
+            "type": {
+              "text": "ReactiveController"
+            }
+          }
         }
       ],
       "exports": [
