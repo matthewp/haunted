@@ -52,7 +52,3 @@ customElements.define('store-product', component(Product));
 <script type="module" src="store-product.js"></script>
 <!-- playground-hide-end -->
 ```
-
-```handlebars playground-import-map events
-{{ importMap }}
-```

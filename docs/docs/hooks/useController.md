@@ -154,7 +154,4 @@ export class MouseController {
 </style>
 ```
 
-```liquid playground-import-map use-controller
-{{ importMap }}
-```
 ## API

@@ -57,8 +57,4 @@ customElements.define('use-context', component(App));
 <use-context></use-context>
 ```
 
-```liquid playground-import-map use-context
-{{ importMap }}
-```
-
 ## API

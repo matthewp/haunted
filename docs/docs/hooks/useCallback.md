@@ -68,8 +68,4 @@ customElements.define('use-callback', component(function Counter() {
 <!-- playground-hide-end -->
 ```
 
-```liquid playground-import-map use-callback
-{{ importMap }}
-```
-
 ## API

@@ -31,10 +31,6 @@ customElements.define('use-state', component(function Counter() {
 <use-state></use-state>
 ```
 
-```liquid playground-import-map use-state
-{{ importMap }}
-```
-
 Additionally if you provide a function as the argument to `useState`, the function is called to initialize the first state, but never called again.
 
 ```js
