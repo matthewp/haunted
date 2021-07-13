@@ -1,0 +1,29 @@
+[
+  {
+    "name": "Discover",
+    "children": [
+      {
+        "text": "Help and Feedback",
+        "href": "https://github.com/matthewp/haunted/issues"
+      }
+    ]
+  },
+  {
+    "name": "Follow",
+    "children": [
+      {
+        "text": "GitHub",
+        "href": "https://github.com/matthewp/haunted"
+      }
+    ]
+  },
+  {
+    "name": "Support",
+    "children": [
+      {
+        "text": "Contribute",
+        "href": "https://github.com/matthewp/haunted/blob/master/CONTRIBUTING.md"
+      }
+    ]
+  }
+]

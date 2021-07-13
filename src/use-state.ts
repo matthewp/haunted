@@ -4,6 +4,12 @@ import { State } from './state';
 type NewState<T> = T | ((previousState?: T) => T);
 type StateUpdater<T> = (value: NewState<T>) => void;
 
+/**
+ * @function
+ * @template {*} T
+ * @param {T} [initialState] - Optional initial state
+ * @return {readonly [state: T, updaterFn: StateUpdater<T>]} stateTuple - Tuple of current state and state updater function
+ */
 const useState = hook(class<T> extends Hook {
   args!: readonly [T, StateUpdater<T>];
 

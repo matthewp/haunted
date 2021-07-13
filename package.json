@@ -5,11 +5,15 @@
   "main": "lib/haunted.js",
   "module": "lib/haunted.js",
   "type": "module",
+  "customElements": "custom-elements.json",
   "scripts": {
     "build": "make",
+    "analyze": "make && cem analyze",
     "preversion": "make",
     "server": "http-server -p 1991",
-    "test-ci": "mocha-headless-chrome -f http://localhost:1991/test/test.html"
+    "test-ci": "mocha-headless-chrome -f http://localhost:1991/test/test.html",
+    "start": "rocket start",
+    "docs": "rocket build"
   },
   "files": [
     "haunted.js",
@@ -30,13 +34,23 @@
   "homepage": "https://github.com/matthewp/haunted#readme",
   "typings": "lib/haunted.d.ts",
   "devDependencies": {
+    "@custom-elements-manifest/analyzer": "^0.4.12",
+    "@lit/reactive-element": "^1.0.0-rc.1",
     "@matthewp/compile": "^2.4.3",
+    "@rocket/cli": "^0.9.8",
+    "@rocket/launch": "^0.5.4",
+    "@rocket/search": "^0.4.1",
+    "cem-plugin-jsdoc-function": "^0.0.2",
+    "eleventy-plugin-helmet": "^0.2.2",
     "http-server": "^0.12.0",
     "mocha-headless-chrome": "^2.0.3",
-    "typescript": "^3.6.2"
+    "rocket-preset-code-tabs": "^0.2.2",
+    "rocket-preset-custom-elements-manifest": "^0.1.4",
+    "rocket-preset-playground-elements": "^0.1.2",
+    "typescript": "^4.3.5"
   },
   "dependencies": {
-    "lit-html": "^1.0.0",
-    "@lit/reactive-element": "^1.0.0-rc.2"
+    "@lit/reactive-element": "^1.0.0-rc.2",
+    "lit-html": "^1.0.0"
   }
 }

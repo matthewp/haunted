@@ -2,3 +2,11 @@ node_modules/
 lib/
 haunted.js
 web.js
+node_modules
+
+## Rocket ignore files (need to be the full relative path to the folders)
+_site/
+_site-dev/
+docs/_merged_data/
+docs/_merged_assets/
+docs/_merged_includes/
