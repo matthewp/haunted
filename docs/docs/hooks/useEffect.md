@@ -40,10 +40,6 @@ customElements.define('use-effect', component(Counter));
 <use-effect></use-effect>
 ```
 
-```liquid playground-import-map use-effect
-{{ importMap }}
-```
-
 ### Dependencies
 
 What happens when your code begins to rely on dependencies that can change (state, refs, props)? We no longer want it to rerun on every rerender so we need to ensure that the code we're running, or its result, doesn't become stale. To do this, you should always state all of the dependencies you're using in an array as the second argument to `useEffect`:
@@ -71,7 +67,7 @@ useEffect(() => {
 }, []); // note that you must pass the empty array
 ```
 
-### Cleaning up side-effects
+## Cleaning up side-effects
 
 Since effects are used for side-effectual things and might run many times in the lifecycle of a component, `useEffect` supports returning a teardown function.
 

@@ -16,3 +16,5 @@ function App() {
   return html`${myRef.current}`;
 }
 ```
+
+## API

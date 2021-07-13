@@ -84,9 +84,10 @@ class HauntedControllerHost implements ReactiveControllerHost {
  *
  * Use this hook to convert a ReactiveController into a Haunted hook.
  *
- * @param createController A function that creates a controller instance. This
- * function is given a HauntedControllerHost to pass to the controller. The
+ * @param {<C extends ReactiveController>(host: ReactiveControllerHost) => C} createController A function that creates a controller instance.
+ * This function is given a HauntedControllerHost to pass to the controller. The
  * create function is only called once per component.
+ * @return {ReactiveController} the controller instance
  */
 export function useController <C extends ReactiveController>(
   createController: (host: ReactiveControllerHost) => C

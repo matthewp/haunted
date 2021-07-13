@@ -1,6 +1,13 @@
 import { hook, Hook } from './hook';
 import { State } from './state';
 
+/**
+ * @function
+ * @template T
+ * @param  {() => T} fn function to memoize
+ * @param  {unknown[]} values dependencies to the memoized computation
+ * @return {T} The next computed value
+ */
 const useMemo = hook(class<T> extends Hook {
   value: T;
   values: unknown[];

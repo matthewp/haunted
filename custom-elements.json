@@ -525,7 +525,7 @@
           "name": "useCallback",
           "declaration": {
             "name": "useCallback",
-            "module": "./use-callback"
+            "module": "./use-callback.js"
           }
         },
         {
@@ -533,7 +533,7 @@
           "name": "useController",
           "declaration": {
             "name": "useController",
-            "module": "./use-controller"
+            "module": "./use-controller.js"
           }
         },
         {
@@ -541,7 +541,7 @@
           "name": "useEffect",
           "declaration": {
             "name": "useEffect",
-            "module": "./use-effect"
+            "module": "./use-effect.js"
           }
         },
         {
@@ -549,7 +549,7 @@
           "name": "useLayoutEffect",
           "declaration": {
             "name": "useLayoutEffect",
-            "module": "./use-layout-effect"
+            "module": "./use-layout-effect.js"
           }
         },
         {
@@ -557,7 +557,7 @@
           "name": "useState",
           "declaration": {
             "name": "useState",
-            "module": "./use-state"
+            "module": "./use-state.js"
           }
         },
         {
@@ -565,7 +565,7 @@
           "name": "useReducer",
           "declaration": {
             "name": "useReducer",
-            "module": "./use-reducer"
+            "module": "./use-reducer.js"
           }
         },
         {
@@ -573,7 +573,7 @@
           "name": "useMemo",
           "declaration": {
             "name": "useMemo",
-            "module": "./use-memo"
+            "module": "./use-memo.js"
           }
         },
         {
@@ -581,7 +581,7 @@
           "name": "useContext",
           "declaration": {
             "name": "useContext",
-            "module": "./use-context"
+            "module": "./use-context.js"
           }
         },
         {
@@ -589,7 +589,7 @@
           "name": "useRef",
           "declaration": {
             "name": "useRef",
-            "module": "./use-ref"
+            "module": "./use-ref.js"
           }
         },
         {
@@ -597,7 +597,7 @@
           "name": "hook",
           "declaration": {
             "name": "hook",
-            "module": "./hook"
+            "module": "./hook.js"
           }
         },
         {
@@ -605,7 +605,7 @@
           "name": "Hook",
           "declaration": {
             "name": "Hook",
-            "module": "./hook"
+            "module": "./hook.js"
           }
         },
         {
@@ -613,7 +613,7 @@
           "name": "BaseScheduler",
           "declaration": {
             "name": "BaseScheduler",
-            "module": "./scheduler"
+            "module": "./scheduler.js"
           }
         },
         {
@@ -621,7 +621,7 @@
           "name": "State",
           "declaration": {
             "name": "State",
-            "module": "./state"
+            "module": "./state.js"
           }
         }
       ]
@@ -686,7 +686,7 @@
           "name": "html",
           "declaration": {
             "name": "html",
-            "module": "./lit-haunted"
+            "module": "./lit-haunted.js"
           }
         },
         {
@@ -694,7 +694,7 @@
           "name": "render",
           "declaration": {
             "name": "render",
-            "module": "./lit-haunted"
+            "module": "./lit-haunted.js"
           }
         },
         {
@@ -702,7 +702,7 @@
           "name": "component",
           "declaration": {
             "name": "component",
-            "module": "./lit-haunted"
+            "module": "./lit-haunted.js"
           }
         },
         {
@@ -710,7 +710,7 @@
           "name": "createContext",
           "declaration": {
             "name": "createContext",
-            "module": "./lit-haunted"
+            "module": "./lit-haunted.js"
           }
         },
         {
@@ -718,7 +718,7 @@
           "name": "virtual",
           "declaration": {
             "name": "virtual",
-            "module": "./lit-haunted"
+            "module": "./lit-haunted.js"
           }
         },
         {
@@ -726,7 +726,7 @@
           "name": "*",
           "declaration": {
             "name": "*",
-            "package": "./core"
+            "package": "./core.js"
           }
         },
         {
@@ -734,7 +734,7 @@
           "name": "default",
           "declaration": {
             "name": "default",
-            "module": "./core"
+            "module": "./core.js"
           }
         }
       ]
@@ -916,6 +916,33 @@
           "name": "BaseScheduler",
           "members": [
             {
+              "kind": "field",
+              "name": "renderer",
+              "default": "renderer"
+            },
+            {
+              "kind": "field",
+              "name": "host",
+              "default": "host"
+            },
+            {
+              "kind": "field",
+              "name": "state",
+              "default": "new State(this.update.bind(this), host)"
+            },
+            {
+              "kind": "field",
+              "name": "[phaseSymbol]"
+            },
+            {
+              "kind": "field",
+              "name": "_updateQueued",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false"
+            },
+            {
               "kind": "method",
               "name": "update"
             },
@@ -950,33 +977,10 @@
             },
             {
               "kind": "field",
-              "name": "renderer",
-              "default": "renderer"
-            },
-            {
-              "kind": "field",
-              "name": "host",
-              "default": "host"
-            },
-            {
-              "kind": "field",
-              "name": "state",
-              "default": "new State(this.update.bind(this), host)"
-            },
-            {
-              "kind": "field",
               "type": {
                 "text": "null"
               },
               "default": "null"
-            },
-            {
-              "kind": "field",
-              "name": "_updateQueued",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false"
             }
           ]
         }
@@ -1001,6 +1005,32 @@
           "description": "",
           "name": "State",
           "members": [
+            {
+              "kind": "field",
+              "name": "update",
+              "default": "update"
+            },
+            {
+              "kind": "field",
+              "name": "host",
+              "default": "host"
+            },
+            {
+              "kind": "field",
+              "name": "virtual"
+            },
+            {
+              "kind": "field",
+              "name": "[hookSymbol]"
+            },
+            {
+              "kind": "field",
+              "name": "[effectsSymbol]"
+            },
+            {
+              "kind": "field",
+              "name": "[layoutEffectsSymbol]"
+            },
             {
               "kind": "method",
               "name": "run",
@@ -1030,16 +1060,6 @@
             {
               "kind": "method",
               "name": "teardown"
-            },
-            {
-              "kind": "field",
-              "name": "update",
-              "default": "update"
-            },
-            {
-              "kind": "field",
-              "name": "host",
-              "default": "host"
             },
             {
               "kind": "field",
@@ -1167,12 +1187,25 @@
           "name": "useCallback",
           "parameters": [
             {
-              "name": "fn"
+              "name": "fn",
+              "description": "callback to memoize",
+              "type": {
+                "text": "T"
+              }
             },
             {
-              "name": "inputs"
+              "name": "inputs",
+              "description": "dependencies to callback memoization",
+              "type": {
+                "text": "unknown[]"
+              }
             }
-          ]
+          ],
+          "return": {
+            "type": {
+              "text": "T"
+            }
+          }
         }
       ],
       "exports": [
@@ -1191,8 +1224,21 @@
       "path": "lib/use-context.js",
       "declarations": [
         {
-          "kind": "variable",
-          "name": "useContext"
+          "kind": "function",
+          "name": "useContext",
+          "parameters": [
+            {
+              "name": "context",
+              "type": {
+                "text": "Context<T>"
+              }
+            }
+          ],
+          "return": {
+            "type": {
+              "text": "T"
+            }
+          }
         }
       ],
       "exports": [
@@ -1216,10 +1262,18 @@
           "parameters": [
             {
               "name": "createController",
-              "description": "A function that creates a controller instance. This\nfunction is given a HauntedControllerHost to pass to the controller. The\ncreate function is only called once per component."
+              "description": "A function that creates a controller instance.\nThis function is given a HauntedControllerHost to pass to the controller. The\ncreate function is only called once per component.",
+              "type": {
+                "text": "<C extends ReactiveController>(host: ReactiveControllerHost) => C"
+              }
             }
           ],
-          "description": "Creates and stores a stateful ReactiveController instance and provides it\nwith a ReactiveControllerHost that drives the controller lifecycle.\n\nUse this hook to convert a ReactiveController into a Haunted hook."
+          "description": "Creates and stores a stateful ReactiveController instance and provides it\nwith a ReactiveControllerHost that drives the controller lifecycle.\n\nUse this hook to convert a ReactiveController into a Haunted hook.",
+          "return": {
+            "type": {
+              "text": "ReactiveController"
+            }
+          }
         }
       ],
       "exports": [
@@ -1300,8 +1354,30 @@
       "path": "lib/use-layout-effect.js",
       "declarations": [
         {
-          "kind": "variable",
-          "name": "useLayoutEffect"
+          "kind": "function",
+          "name": "useLayoutEffect",
+          "parameters": [
+            {
+              "description": "effecting callback",
+              "name": "callback",
+              "type": {
+                "text": "Effect"
+              }
+            },
+            {
+              "description": "dependencies to the effect",
+              "name": "values",
+              "optional": true,
+              "type": {
+                "text": "unknown[]"
+              }
+            }
+          ],
+          "return": {
+            "type": {
+              "text": "void"
+            }
+          }
         }
       ],
       "exports": [
@@ -1320,8 +1396,29 @@
       "path": "lib/use-memo.js",
       "declarations": [
         {
-          "kind": "variable",
-          "name": "useMemo"
+          "kind": "function",
+          "name": "useMemo",
+          "parameters": [
+            {
+              "description": "function to memoize",
+              "name": "fn",
+              "type": {
+                "text": "() => T"
+              }
+            },
+            {
+              "description": "dependencies to the memoized computation",
+              "name": "values",
+              "type": {
+                "text": "unknown[]"
+              }
+            }
+          ],
+          "return": {
+            "type": {
+              "text": "T"
+            }
+          }
         }
       ],
       "exports": [
@@ -1340,8 +1437,38 @@
       "path": "lib/use-reducer.js",
       "declarations": [
         {
-          "kind": "variable",
-          "name": "useReducer"
+          "kind": "function",
+          "name": "useReducer",
+          "description": "Given a reducer function, initial state, and optional state initializer function, returns a tuple of state and dispatch function.",
+          "parameters": [
+            {
+              "description": "reducer function to compute the next state given the previous state and the action",
+              "name": "reducer",
+              "type": {
+                "text": "Reducer<S, A>"
+              }
+            },
+            {
+              "description": "the initial state of the reducer",
+              "name": "initialState",
+              "type": {
+                "text": "I"
+              }
+            },
+            {
+              "description": "Optional initializer function, called on initialState if provided",
+              "name": "init",
+              "optional": true,
+              "type": {
+                "text": "(init: I) => S"
+              }
+            }
+          ],
+          "return": {
+            "type": {
+              "text": "readonly [S, (action: A) => void]"
+            }
+          }
         }
       ],
       "exports": [
@@ -1364,9 +1491,17 @@
           "name": "useRef",
           "parameters": [
             {
-              "name": "initialValue"
+              "name": "initialValue",
+              "type": {
+                "text": "T"
+              }
             }
-          ]
+          ],
+          "return": {
+            "type": {
+              "text": "{ current: T }"
+            }
+          }
         }
       ],
       "exports": [

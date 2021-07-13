@@ -70,7 +70,3 @@ customElements.define('my-app', component(App));
   <my-app></my-app>
 </html>
 ```
-
-```handlebars playground-import-map lighterhtml
-{{ importMap }}
-```

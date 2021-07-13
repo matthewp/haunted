@@ -8,7 +8,7 @@
   "customElements": "custom-elements.json",
   "scripts": {
     "build": "make",
-    "analyze": "make && cem analyze",
+    "analyze": "make; cem analyze",
     "preversion": "make",
     "server": "http-server -p 1991",
     "test-ci": "mocha-headless-chrome -f http://localhost:1991/test/test.html",
@@ -45,7 +45,7 @@
     "http-server": "^0.12.0",
     "mocha-headless-chrome": "^2.0.3",
     "rocket-preset-code-tabs": "^0.2.2",
-    "rocket-preset-custom-elements-manifest": "^0.1.4",
+    "rocket-preset-custom-elements-manifest": "^0.1.5",
     "rocket-preset-playground-elements": "^0.1.2",
     "typescript": "^4.3.5"
   },

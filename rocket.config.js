@@ -24,7 +24,13 @@ export default ({
       },
     }),
 
-    playgroundElements(),
+    playgroundElements({
+      importMap: {
+        "haunted": "https://unpkg.com/haunted?module",
+        "haunted/core": "https://unpkg.com/haunted/core.js?module",
+        "lighterhtml": "https://unpkg.com/lighterhtml?module"
+      }
+    }),
     customElementsManifest({
       package: 'package.json'
     }),
