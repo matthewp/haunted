@@ -97,7 +97,9 @@ function makeComponent(render: RenderFunction): Creator {
           if (isSetup && value === newValue) return;
           isSetup = true;
           value = newValue;
-          this._scheduler.update();
+          if(this._scheduler) {
+            this._scheduler.update();
+          }
         }
       })
     }
