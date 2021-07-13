@@ -71,7 +71,7 @@ useEffect(() => {
 }, []); // note that you must pass the empty array
 ```
 
-### Cleaning up side-effects
+## Cleaning up side-effects
 
 Since effects are used for side-effectual things and might run many times in the lifecycle of a component, `useEffect` supports returning a teardown function.
 

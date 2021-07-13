@@ -1354,8 +1354,30 @@
       "path": "lib/use-layout-effect.js",
       "declarations": [
         {
-          "kind": "variable",
-          "name": "useLayoutEffect"
+          "kind": "function",
+          "name": "useLayoutEffect",
+          "parameters": [
+            {
+              "description": "effecting callback",
+              "name": "callback",
+              "type": {
+                "text": "Effect"
+              }
+            },
+            {
+              "description": "dependencies to the effect",
+              "name": "values",
+              "optional": true,
+              "type": {
+                "text": "unknown[]"
+              }
+            }
+          ],
+          "return": {
+            "type": {
+              "text": "void"
+            }
+          }
         }
       ],
       "exports": [
