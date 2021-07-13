@@ -1,0 +1,1439 @@
+{
+  "schemaVersion": "1.0.0",
+  "readme": "",
+  "modules": [
+    {
+      "kind": "javascript-module",
+      "path": "haunted.js",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "State",
+          "members": [
+            {
+              "kind": "method",
+              "name": "run",
+              "parameters": [
+                {
+                  "name": "cb"
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "_runEffects",
+              "parameters": [
+                {
+                  "name": "phase"
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "runEffects"
+            },
+            {
+              "kind": "method",
+              "name": "runLayoutEffects"
+            },
+            {
+              "kind": "method",
+              "name": "teardown"
+            },
+            {
+              "kind": "field",
+              "name": "update",
+              "default": "update"
+            },
+            {
+              "kind": "field",
+              "name": "host",
+              "default": "new HauntedControllerHost(count, kick)"
+            },
+            {
+              "kind": "field",
+              "default": "[]",
+              "type": {
+                "text": "array"
+              }
+            }
+          ]
+        },
+        {
+          "kind": "class",
+          "description": "",
+          "name": "BaseScheduler",
+          "members": [
+            {
+              "kind": "method",
+              "name": "update"
+            },
+            {
+              "kind": "method",
+              "name": "handlePhase",
+              "parameters": [
+                {
+                  "name": "phase"
+                },
+                {
+                  "name": "arg"
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            },
+            {
+              "kind": "method",
+              "name": "runEffects",
+              "parameters": [
+                {
+                  "name": "phase"
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "teardown"
+            },
+            {
+              "kind": "field",
+              "name": "renderer",
+              "default": "renderer"
+            },
+            {
+              "kind": "field",
+              "name": "host",
+              "default": "new HauntedControllerHost(count, kick)"
+            },
+            {
+              "kind": "field",
+              "name": "state",
+              "default": "new State(this.update.bind(this), host)"
+            },
+            {
+              "kind": "field",
+              "type": {
+                "text": "null"
+              },
+              "default": "null"
+            },
+            {
+              "kind": "field",
+              "name": "_updateQueued",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false"
+            }
+          ]
+        },
+        {
+          "kind": "mixin",
+          "description": "",
+          "name": "createContext",
+          "parameters": [
+            {
+              "name": "renderer"
+            },
+            {
+              "name": "baseElementOrOptions"
+            },
+            {
+              "name": "options"
+            }
+          ],
+          "mixins": [
+            {
+              "name": "makeContext",
+              "module": "haunted.js"
+            }
+          ]
+        },
+        {
+          "kind": "class",
+          "description": "",
+          "name": "Hook",
+          "members": [
+            {
+              "kind": "field",
+              "name": "id",
+              "default": "id"
+            },
+            {
+              "kind": "field",
+              "name": "state",
+              "default": "state"
+            }
+          ]
+        },
+        {
+          "kind": "variable",
+          "name": "hook"
+        },
+        {
+          "kind": "function",
+          "name": "hook",
+          "parameters": [
+            {
+              "name": "Hook"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "useEffect",
+          "parameters": [
+            {
+              "description": "callback function that runs each time dependencies change",
+              "name": "effect",
+              "type": {
+                "text": "() => void"
+              }
+            },
+            {
+              "description": "list of dependencies to the effect",
+              "name": "dependencies",
+              "optional": true,
+              "type": {
+                "text": "unknown[]"
+              }
+            }
+          ],
+          "return": {
+            "type": {
+              "text": "void"
+            }
+          }
+        },
+        {
+          "kind": "variable",
+          "name": "useContext"
+        },
+        {
+          "kind": "variable",
+          "name": "useMemo"
+        },
+        {
+          "kind": "function",
+          "name": "useCallback",
+          "parameters": [
+            {
+              "name": "fn"
+            },
+            {
+              "name": "inputs"
+            }
+          ]
+        },
+        {
+          "kind": "variable",
+          "name": "useLayoutEffect"
+        },
+        {
+          "kind": "function",
+          "name": "useState",
+          "parameters": [
+            {
+              "description": "Optional initial state",
+              "name": "initialState",
+              "optional": true,
+              "type": {
+                "text": "T"
+              }
+            }
+          ],
+          "return": {
+            "type": {
+              "text": "readonly [state: T, updaterFn: StateUpdater<T>]"
+            }
+          }
+        },
+        {
+          "kind": "function",
+          "name": "useController",
+          "parameters": [
+            {
+              "name": "createController",
+              "description": "A function that creates a controller instance. This\nfunction is given a HauntedControllerHost to pass to the controller. The\ncreate function is only called once per component."
+            }
+          ],
+          "description": "Creates and stores a stateful ReactiveController instance and provides it\nwith a ReactiveControllerHost that drives the controller lifecycle.\n\nUse this hook to convert a ReactiveController into a Haunted hook."
+        },
+        {
+          "kind": "variable",
+          "name": "useReducer"
+        },
+        {
+          "kind": "function",
+          "name": "useRef",
+          "parameters": [
+            {
+              "name": "initialValue"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "haunted",
+          "parameters": [
+            {
+              "name": "{ render }"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "virtual",
+          "parameters": [
+            {
+              "name": "renderer"
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "html",
+          "declaration": {
+            "name": "html",
+            "package": "https://unpkg.com/lit-html@^1.0.0/lit-html.js"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "render",
+          "declaration": {
+            "name": "render",
+            "package": "https://unpkg.com/lit-html@^1.0.0/lit-html.js"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "default",
+          "declaration": {
+            "name": "haunted",
+            "module": "haunted.js"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "BaseScheduler",
+          "declaration": {
+            "name": "BaseScheduler",
+            "module": "haunted.js"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "Hook",
+          "declaration": {
+            "name": "Hook",
+            "module": "haunted.js"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "State",
+          "declaration": {
+            "name": "State",
+            "module": "haunted.js"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "component",
+          "declaration": {
+            "name": "component",
+            "module": "haunted.js"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "createContext",
+          "declaration": {
+            "name": "createContext",
+            "module": "haunted.js"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "hook",
+          "declaration": {
+            "name": "hook",
+            "module": "haunted.js"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "useCallback",
+          "declaration": {
+            "name": "useCallback",
+            "module": "haunted.js"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "useContext",
+          "declaration": {
+            "name": "useContext",
+            "module": "haunted.js"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "useController",
+          "declaration": {
+            "name": "useController",
+            "module": "haunted.js"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "useEffect",
+          "declaration": {
+            "name": "useEffect",
+            "module": "haunted.js"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "useLayoutEffect",
+          "declaration": {
+            "name": "useLayoutEffect",
+            "module": "haunted.js"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "useMemo",
+          "declaration": {
+            "name": "useMemo",
+            "module": "haunted.js"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "useReducer",
+          "declaration": {
+            "name": "useReducer",
+            "module": "haunted.js"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "useRef",
+          "declaration": {
+            "name": "useRef",
+            "module": "haunted.js"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "useState",
+          "declaration": {
+            "name": "useState",
+            "module": "haunted.js"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "virtual",
+          "declaration": {
+            "name": "virtual",
+            "module": "haunted.js"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "core.js",
+      "declarations": [],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "*",
+          "declaration": {
+            "name": "*",
+            "package": "./lib/core.js"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "default",
+          "declaration": {
+            "name": "default",
+            "module": "./lib/core.js"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "lib/component.js",
+      "declarations": [
+        {
+          "kind": "function",
+          "name": "makeComponent",
+          "parameters": [
+            {
+              "name": "render"
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "makeComponent",
+          "declaration": {
+            "name": "makeComponent",
+            "module": "lib/component.js"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "lib/core.js",
+      "declarations": [
+        {
+          "kind": "function",
+          "name": "haunted",
+          "parameters": [
+            {
+              "name": "{ render }"
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "default",
+          "declaration": {
+            "name": "haunted",
+            "module": "lib/core.js"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "useCallback",
+          "declaration": {
+            "name": "useCallback",
+            "module": "./use-callback"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "useController",
+          "declaration": {
+            "name": "useController",
+            "module": "./use-controller"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "useEffect",
+          "declaration": {
+            "name": "useEffect",
+            "module": "./use-effect"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "useLayoutEffect",
+          "declaration": {
+            "name": "useLayoutEffect",
+            "module": "./use-layout-effect"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "useState",
+          "declaration": {
+            "name": "useState",
+            "module": "./use-state"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "useReducer",
+          "declaration": {
+            "name": "useReducer",
+            "module": "./use-reducer"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "useMemo",
+          "declaration": {
+            "name": "useMemo",
+            "module": "./use-memo"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "useContext",
+          "declaration": {
+            "name": "useContext",
+            "module": "./use-context"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "useRef",
+          "declaration": {
+            "name": "useRef",
+            "module": "./use-ref"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "hook",
+          "declaration": {
+            "name": "hook",
+            "module": "./hook"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "Hook",
+          "declaration": {
+            "name": "Hook",
+            "module": "./hook"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "BaseScheduler",
+          "declaration": {
+            "name": "BaseScheduler",
+            "module": "./scheduler"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "State",
+          "declaration": {
+            "name": "State",
+            "module": "./state"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "lib/create-context.js",
+      "declarations": [
+        {
+          "kind": "function",
+          "name": "makeContext",
+          "parameters": [
+            {
+              "name": "component"
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "makeContext",
+          "declaration": {
+            "name": "makeContext",
+            "module": "lib/create-context.js"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "lib/create-effect.js",
+      "declarations": [
+        {
+          "kind": "function",
+          "name": "createEffect",
+          "parameters": [
+            {
+              "name": "setEffects"
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "createEffect",
+          "declaration": {
+            "name": "createEffect",
+            "module": "lib/create-effect.js"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "lib/haunted.js",
+      "declarations": [],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "html",
+          "declaration": {
+            "name": "html",
+            "module": "./lit-haunted"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "render",
+          "declaration": {
+            "name": "render",
+            "module": "./lit-haunted"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "component",
+          "declaration": {
+            "name": "component",
+            "module": "./lit-haunted"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "createContext",
+          "declaration": {
+            "name": "createContext",
+            "module": "./lit-haunted"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "virtual",
+          "declaration": {
+            "name": "virtual",
+            "module": "./lit-haunted"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "*",
+          "declaration": {
+            "name": "*",
+            "package": "./core"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "default",
+          "declaration": {
+            "name": "default",
+            "module": "./core"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "lib/hook.js",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "Hook",
+          "members": [
+            {
+              "kind": "field",
+              "name": "id",
+              "default": "id"
+            },
+            {
+              "kind": "field",
+              "name": "state",
+              "default": "state"
+            }
+          ]
+        },
+        {
+          "kind": "variable",
+          "name": "hook"
+        },
+        {
+          "kind": "function",
+          "name": "hook",
+          "parameters": [
+            {
+              "name": "Hook"
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "hook",
+          "declaration": {
+            "name": "hook",
+            "module": "lib/hook.js"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "Hook",
+          "declaration": {
+            "name": "Hook",
+            "module": "lib/hook.js"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "lib/interface.js",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "current"
+        },
+        {
+          "kind": "function",
+          "name": "setCurrent",
+          "parameters": [
+            {
+              "name": "state"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "clear"
+        },
+        {
+          "kind": "function",
+          "name": "notify"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "clear",
+          "declaration": {
+            "name": "clear",
+            "module": "lib/interface.js"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "current",
+          "declaration": {
+            "name": "current",
+            "module": "lib/interface.js"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "setCurrent",
+          "declaration": {
+            "name": "setCurrent",
+            "module": "lib/interface.js"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "notify",
+          "declaration": {
+            "name": "notify",
+            "module": "lib/interface.js"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "lib/lit-haunted.js",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "virtual"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "component",
+          "declaration": {
+            "name": "component",
+            "module": "lib/lit-haunted.js"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "createContext",
+          "declaration": {
+            "name": "createContext",
+            "module": "lib/lit-haunted.js"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "virtual",
+          "declaration": {
+            "name": "virtual",
+            "module": "lib/lit-haunted.js"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "html",
+          "declaration": {
+            "name": "html",
+            "module": "lib/lit-haunted.js"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "render",
+          "declaration": {
+            "name": "render",
+            "module": "lib/lit-haunted.js"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "lib/scheduler.js",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "BaseScheduler",
+          "members": [
+            {
+              "kind": "method",
+              "name": "update"
+            },
+            {
+              "kind": "method",
+              "name": "handlePhase",
+              "parameters": [
+                {
+                  "name": "phase"
+                },
+                {
+                  "name": "arg"
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            },
+            {
+              "kind": "method",
+              "name": "runEffects",
+              "parameters": [
+                {
+                  "name": "phase"
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "teardown"
+            },
+            {
+              "kind": "field",
+              "name": "renderer",
+              "default": "renderer"
+            },
+            {
+              "kind": "field",
+              "name": "host",
+              "default": "host"
+            },
+            {
+              "kind": "field",
+              "name": "state",
+              "default": "new State(this.update.bind(this), host)"
+            },
+            {
+              "kind": "field",
+              "type": {
+                "text": "null"
+              },
+              "default": "null"
+            },
+            {
+              "kind": "field",
+              "name": "_updateQueued",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false"
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "BaseScheduler",
+          "declaration": {
+            "name": "BaseScheduler",
+            "module": "lib/scheduler.js"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "lib/state.js",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "State",
+          "members": [
+            {
+              "kind": "method",
+              "name": "run",
+              "parameters": [
+                {
+                  "name": "cb"
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "_runEffects",
+              "parameters": [
+                {
+                  "name": "phase"
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "runEffects"
+            },
+            {
+              "kind": "method",
+              "name": "runLayoutEffects"
+            },
+            {
+              "kind": "method",
+              "name": "teardown"
+            },
+            {
+              "kind": "field",
+              "name": "update",
+              "default": "update"
+            },
+            {
+              "kind": "field",
+              "name": "host",
+              "default": "host"
+            },
+            {
+              "kind": "field",
+              "default": "[]",
+              "type": {
+                "text": "array"
+              }
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "State",
+          "declaration": {
+            "name": "State",
+            "module": "lib/state.js"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "lib/symbols.js",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "phaseSymbol"
+        },
+        {
+          "kind": "variable",
+          "name": "hookSymbol"
+        },
+        {
+          "kind": "variable",
+          "name": "updateSymbol"
+        },
+        {
+          "kind": "variable",
+          "name": "commitSymbol"
+        },
+        {
+          "kind": "variable",
+          "name": "effectsSymbol"
+        },
+        {
+          "kind": "variable",
+          "name": "layoutEffectsSymbol"
+        },
+        {
+          "kind": "variable",
+          "name": "contextEvent",
+          "type": {
+            "text": "string"
+          },
+          "default": "'haunted.context'"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "phaseSymbol",
+          "declaration": {
+            "name": "phaseSymbol",
+            "module": "lib/symbols.js"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "hookSymbol",
+          "declaration": {
+            "name": "hookSymbol",
+            "module": "lib/symbols.js"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "updateSymbol",
+          "declaration": {
+            "name": "updateSymbol",
+            "module": "lib/symbols.js"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "commitSymbol",
+          "declaration": {
+            "name": "commitSymbol",
+            "module": "lib/symbols.js"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "effectsSymbol",
+          "declaration": {
+            "name": "effectsSymbol",
+            "module": "lib/symbols.js"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "layoutEffectsSymbol",
+          "declaration": {
+            "name": "layoutEffectsSymbol",
+            "module": "lib/symbols.js"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "contextEvent",
+          "declaration": {
+            "name": "contextEvent",
+            "module": "lib/symbols.js"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "lib/use-callback.js",
+      "declarations": [
+        {
+          "kind": "function",
+          "name": "useCallback",
+          "parameters": [
+            {
+              "name": "fn"
+            },
+            {
+              "name": "inputs"
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "useCallback",
+          "declaration": {
+            "name": "useCallback",
+            "module": "lib/use-callback.js"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "lib/use-context.js",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "useContext"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "useContext",
+          "declaration": {
+            "name": "useContext",
+            "module": "lib/use-context.js"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "lib/use-controller.js",
+      "declarations": [
+        {
+          "kind": "function",
+          "name": "useController",
+          "parameters": [
+            {
+              "name": "createController",
+              "description": "A function that creates a controller instance. This\nfunction is given a HauntedControllerHost to pass to the controller. The\ncreate function is only called once per component."
+            }
+          ],
+          "description": "Creates and stores a stateful ReactiveController instance and provides it\nwith a ReactiveControllerHost that drives the controller lifecycle.\n\nUse this hook to convert a ReactiveController into a Haunted hook."
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "useController",
+          "declaration": {
+            "name": "useController",
+            "module": "lib/use-controller.js"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "lib/use-effect.js",
+      "declarations": [
+        {
+          "kind": "function",
+          "name": "setEffects",
+          "parameters": [
+            {
+              "name": "state"
+            },
+            {
+              "name": "cb"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "useEffect",
+          "parameters": [
+            {
+              "description": "callback function that runs each time dependencies change",
+              "name": "effect",
+              "type": {
+                "text": "() => void"
+              }
+            },
+            {
+              "description": "list of dependencies to the effect",
+              "name": "dependencies",
+              "optional": true,
+              "type": {
+                "text": "unknown[]"
+              }
+            }
+          ],
+          "return": {
+            "type": {
+              "text": "void"
+            }
+          }
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "setEffects",
+          "declaration": {
+            "name": "setEffects",
+            "module": "lib/use-effect.js"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "useEffect",
+          "declaration": {
+            "name": "useEffect",
+            "module": "lib/use-effect.js"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "lib/use-layout-effect.js",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "useLayoutEffect"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "useLayoutEffect",
+          "declaration": {
+            "name": "useLayoutEffect",
+            "module": "lib/use-layout-effect.js"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "lib/use-memo.js",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "useMemo"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "useMemo",
+          "declaration": {
+            "name": "useMemo",
+            "module": "lib/use-memo.js"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "lib/use-reducer.js",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "useReducer"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "useReducer",
+          "declaration": {
+            "name": "useReducer",
+            "module": "lib/use-reducer.js"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "lib/use-ref.js",
+      "declarations": [
+        {
+          "kind": "function",
+          "name": "useRef",
+          "parameters": [
+            {
+              "name": "initialValue"
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "useRef",
+          "declaration": {
+            "name": "useRef",
+            "module": "lib/use-ref.js"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "lib/use-state.js",
+      "declarations": [
+        {
+          "kind": "function",
+          "name": "useState",
+          "parameters": [
+            {
+              "description": "Optional initial state",
+              "name": "initialState",
+              "optional": true,
+              "type": {
+                "text": "T"
+              }
+            }
+          ],
+          "return": {
+            "type": {
+              "text": "readonly [state: T, updaterFn: StateUpdater<T>]"
+            }
+          }
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "useState",
+          "declaration": {
+            "name": "useState",
+            "module": "lib/use-state.js"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "lib/virtual.js",
+      "declarations": [
+        {
+          "kind": "function",
+          "name": "makeVirtual"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "makeVirtual",
+          "declaration": {
+            "name": "makeVirtual",
+            "module": "lib/virtual.js"
+          }
+        }
+      ]
+    }
+  ]
+}

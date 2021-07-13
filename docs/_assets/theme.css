@@ -1,0 +1,197 @@
+:root {
+  /* colors */
+  --blue-100: #bbdefb;
+  --blue-900: #0d47a1;
+  --blue-grey-100: #cfd8dc;
+  --blue-grey-900: #263238;
+  --cyan-400: #26c6da;
+  --cyan-600: #00acc1;
+  --cyan-700: #0097a7;
+  --cyan-800: #00838f;
+  --cyan-900: #006064;
+  --deep-orange-50: #fbe9e7;
+  --deep-orange-200: #ffab91;
+  --deep-orange-600: #f4511e;
+  --deep-orange-700: #e64a19;
+  --deep-orange-900: #bf360c;
+  --deep-orange-a100: #ff9e80;
+  --deep-orange-a200: #ff6e40;
+  --deep-orange-a400: #ff3d00;
+  --deep-orange-a700: #dd2c00;
+  --grey-100: #f5f5f5;
+  --grey-200: #eee;
+  --grey-50: #fafafa;
+  --grey-900: #212121;
+  --light-blue-300: #4fc3f7;
+  --light-blue-400: #29b6f6;
+  --light-blue-500: #03a9f4;
+  --light-blue-600: #039be5;
+  --light-blue-700: #0288d1;
+  --light-blue-800: #0277bd;
+  --light-blue-900: #01579b;
+  --light-green-a400: #76ff03;
+  --near-black: #111;
+  --orange-a700: #ff6d00;
+  --pink-200: #f48fb1;
+  --pink-400: #ec407a;
+  --pink-900: #880e4f;
+  --pink-a200: #ff4081;
+  --pink-a400: #f50057;
+  --pink-a700: #c51162;
+  --purple-700: #7b1fa2;
+  --purple-a100: #ea80fc;
+  --purple-a200: #e040fb;
+  --purple-a400: #d500f9;
+  --purple-a700: #a0f;
+  --red-400: #ef5350;
+  --red-900: #b71c1c;
+  --teal-a200: #64ffda;
+  --teal-400: #26a69a;
+  --teal-700: #00796b;
+  --teal-900: #004d40;
+
+  /* theme */
+  --primary-color-accent: var(--deep-orange-50);
+  --primary-color-darker: var(--deep-orange-700);
+  --primary-color-lighter: var(--deep-orange-a400);
+  --primary-color: var(--deep-orange-a700);
+  --primary-lines-color: #ccc;
+  --primary-text-color: #2c3e50;
+
+  /* Contrast colors */
+  --contrast-color-light: #fff;
+  --contrast-color-dark: var(--page-background);
+
+  /* background-colors */
+  --page-background: white;
+  --footer-background: rgba(0, 0, 0, 0.1);
+  --text-color: black;
+  --text-contrast-color: var(--contrast-color-light);
+
+  /* code blocks */
+  --code-button-focus-background: var(--grey-200);
+  --code-button-focus-color: var(--text-color);
+  --code-button-background: var(--page-background);
+  --code-tabs-tabs-background: transparent;
+  --code-tabs-selected-highlight-color: var(--markdown-link-decoration);
+  --wcd-snippet-button-background: var(--code-button-background);
+  --wcd-snippet-button-focus-background: var(--code-button-focus-background);
+  --wcd-snippet-button-focus-color: var(--code-button-focus-color);
+  --wcd-snippet-outer-background-color: var(--page-background);
+  --wcd-snippet-focus-border-color: var(--primary-color);
+
+  /* playground */
+  --playground-code-attribute-color: var(--markdown-syntax-attr-name-color);
+  --playground-code-atom-color: var(--markdown-syntax-keyword-color);
+  --playground-code-default-color: var(--markdown-syntax-color);
+  --playground-code-punctuation-color: var(--markdown-syntax-punctuation-color);
+  --playground-code-property-color: var(--markdown-syntax-class-name-color);
+  --playground-code-string-color: var(--markdown-syntax-string-color);
+  --playground-code-function-color: var(--markdown-syntax-function-color);
+  --playground-code-operator-color: var(--markdown-syntax-operator-color);
+  --playground-code-comment-color: var(--markdown-syntax-comment-color);
+  --playground-code-number-color: var(--markdown-syntax-number-color);
+  --playground-code-boolean-color: var(--markdown-syntax-boolean-color);
+  --playground-code-tag-color: var(--markdown-syntax-tag-color);
+  --playground-code-variable-color: var(--markdown-syntax-variable-color);
+  --playground-code-def-color: var(--markdown-syntax-variable-color);
+  --playground-code-background-color: var(--markdown-syntax-background-color);
+  --playground-code-callee-color: var(--markdown-syntax-function-color);
+  --playground-code-keyword-color: var(--markdown-syntax-keyword-color);
+  --playground-code-variable-2-color: var(--markdown-syntax-attr-name-color);
+  --playground-code-selection-background: var(--markdown-table-row-odd-background-color, #f6f8fa);
+  --playground-code-cursor-color: var(--markdown-syntax-color);
+  --playground-code-background: var(--markdown-syntax-background-color);
+  --playground-tab-bar-background: var(--page-background);
+  --playground-tab-bar-foreground-color: var(--primary-text-color);
+  --playground-preview-toolbar-background: var(--page-background);
+  --playground-preview-toolbar-foreground-color: var(--primary-text-color);
+  --playground-highlight-color: var(--primary-color);
+  --playground-code-builtin-color: var(--markdown-blockquote-color);
+
+  /* typography */
+
+  /* --primary-font-family: 'Open Sans', sans-serif;
+  --secondary-font-family: 'Recursive', sans-serif;
+  --monospace-font-family: 'Recursive', 'SFMono-Regular', 'Consolas', 'Liberation Mono', 'Menlo', 'Courier', monospace;
+  --type-doc-header-font-family: 'Recursive'; */
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* theme */
+    --primary-color-accent: var(--deep-orange-50);
+    --primary-color-darker: var(--deep-orange-a700);
+    --primary-color-lighter: var(--deep-orange-a100);
+    --primary-color: var(--deep-orange-a200);
+    --primary-lines-color: #ccc;
+    --primary-text-color: var(--grey-200);
+
+    /* Text colors */
+    --sidebar-tag-background-color: var(--code-button-focus-background);
+    --text-color: white;
+    --text-contrast-color: var(--contrast-color-light);
+
+    /* background-colors */
+    --footer-background: #151515;
+    --page-background: var(--near-black);
+
+    /* code blocks */
+    --code-button-focus-background: #333;
+    --code-button-focus-color: white;
+    --code-button-background: var(--page-background);
+    --code-tabs-tabs-background: transparent;
+    --code-tabs-selected-highlight-color: transparent;
+
+    /* search */
+    --rocket-search-background-color: var(--code-button-focus-background);
+    --rocket-search-highlight-color: var(--primary-color-lighter);
+    --rocket-search-fill-color: var(--primary-lines-color);
+    --rocket-search-hover-background-color: var(--near-black);
+    --rocket-search-input-border-color: var(--page-background);
+    --rocket-search-input-overlay-border-color: var(--page-background);
+
+    /* widgets */
+    --inline-notification-danger-background-color: #b71c1c44; /* red 900 */
+    --inline-notification-danger-heading-color: var(--red-900);
+    --inline-notification-tip-background-color: #004d4044; /* teal 900 */
+
+    /* markdown */
+    --markdown-blockquote-color: var(--blue-100);
+    --markdown-link-color: var(--pink-a200);
+    --markdown-link-decoration: var(--pink-900);
+    --markdown-code-background-color: var(--grey-900);
+    --markdown-octicon-link: white;
+    --markdown-pre-background-color: var(--grey-900);
+    --markdown-syntax-attr-name-color: var(--orange-a700);
+    --markdown-syntax-background-color: var(--grey-900);
+    --markdown-syntax-boolean-color: var(--light-blue-300);
+    --markdown-syntax-class-name-color: var(--deep-orange-200);
+    --markdown-syntax-color: white;
+    --markdown-syntax-comment-color: var(--light-green-a400);
+    --markdown-syntax-function-color: var(--purple-a100);
+    --markdown-syntax-keyword-color: var(--orange-a700);
+    --markdown-syntax-number-color: var(--light-blue-300);
+    --markdown-syntax-operator-color: var(--light-blue-300);
+    --markdown-syntax-punctuation-color: var(--light-blue-500);
+    --markdown-syntax-string-color: var(--deep-orange-200);
+    --markdown-syntax-tag-color: var(--teal-a200);
+    --markdown-syntax-variable-color: var(--deep-orange-200);
+    --markdown-table-background-color: var(--grey-900);
+    --markdown-table-border-color: var(--markdown-table-background-color);
+    --markdown-table-row-odd-background-color: var(--blue-grey-900);
+  }
+}
+
+docs-playground {
+  margin-bottom: 1em;
+  height: var(--playground-ide-height);
+}
+
+docs-playground:defined pre {
+  height: 100%;
+}
+
+docs-playground::part(button) {
+  bottom: -2px;
+}
