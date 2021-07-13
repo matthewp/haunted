@@ -199,3 +199,7 @@ docs-playground::part(button) {
 #footer-badges img {
   width: 145px;
 }
+
+type-doc:not(:defined) {
+  opacity: 0;
+}
