@@ -14,6 +14,7 @@ export default ({
   presets: [
     rocketLaunch(),
     rocketSearch(),
+
     codeTabs({
       collections: {
         packageManagers: {
@@ -24,15 +25,16 @@ export default ({
       },
     }),
 
-    playgroundElements({
-      importMap: {
-        "haunted": "https://unpkg.com/haunted?module",
-        "haunted/core": "https://unpkg.com/haunted/core.js?module",
-        "lighterhtml": "https://unpkg.com/lighterhtml?module"
-      }
-    }),
     customElementsManifest({
       package: 'package.json'
+    }),
+
+    playgroundElements({
+      importMap: {
+        "haunted": "https://unpkg.com/haunted@4.8.1?module",
+        "haunted/core": "https://unpkg.com/haunted@4.8.1/core.js?module",
+        "lighterhtml": "https://unpkg.com/lighterhtml?module"
+      }
     }),
   ],
 
