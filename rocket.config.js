@@ -18,9 +18,9 @@ export default ({
     codeTabs({
       collections: {
         packageManagers: {
-          npm: { label: 'NPM', iconHref: '/_merged_assets/brand-logos/npm.svg' },
-          yarn: { label: 'Yarn', iconHref: '/_merged_assets/brand-logos/yarn.svg' },
-          pnpm: { label: 'PNPM', iconHref: '/_merged_assets/brand-logos/pnpm.svg' },
+          npm: { label: 'NPM', iconHref: '/_merged_assets/_static/logos/npm.svg' },
+          yarn: { label: 'Yarn', iconHref: '/_merged_assets/_static/logos/yarn.svg' },
+          pnpm: { label: 'PNPM', iconHref: '/_merged_assets/_static/logos/pnpm.svg' },
         },
       },
     }),
@@ -31,8 +31,8 @@ export default ({
 
     playgroundElements({
       importMap: {
-        "haunted": "https://unpkg.com/haunted@4.8.1?module",
-        "haunted/core": "https://unpkg.com/haunted@4.8.1/core.js?module",
+        "haunted": "https://cdn.pika.dev/haunted",
+        "haunted/core": "https://cdn.pika.dev/haunted",
         "lighterhtml": "https://unpkg.com/lighterhtml?module"
       }
     }),

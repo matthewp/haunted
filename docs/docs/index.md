@@ -2,10 +2,13 @@
 
 ## Examples
 
-- [Bring your Own Renderer](./examples/renderers/)
-- [Attributes](./examples/attributes/)
-- [Events](./examples/events/)
-- [Virtual Components](./examples/virtual/)
+- [Getting Started](./guides/getting-started/)
+- [Bring your Own Renderer](./guides/renderers/)
+- [Attributes](./guides/attributes/)
+- [Properties](./guides/properties/)
+- [API](./guides/api/)
+- [Dispatching Events](./guides/events/)
+- [Virtual Components](./guides/virtual/)
 
 ## Hooks
 

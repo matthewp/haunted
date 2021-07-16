@@ -1,4 +1,4 @@
-# Examples >> Attributes || 20
+# Guides >> Attributes || 20
 
 <style data-helmet>
   html { --playground-ide-height: 210px; }

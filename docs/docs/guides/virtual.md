@@ -1,4 +1,4 @@
-# Examples >> Virtual Components || 40
+# Guides >> Virtual Components || 40
 
 Haunted also has the concept of _virtual components_. These are components that are not defined as a tag. Instead they're defined as functions that can be called from within another template. They have their own state and will rerender when that state changes _without_ causing any parent components to rerender.
 
