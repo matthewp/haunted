@@ -68,46 +68,40 @@
   --text-color: black;
   --text-contrast-color: var(--contrast-color-light);
 
-  /* code blocks */
-  --code-button-focus-background: var(--grey-200);
-  --code-button-focus-color: var(--text-color);
-  --code-button-background: var(--page-background);
-  --code-tabs-tabs-background: transparent;
-  --code-tabs-selected-highlight-color: var(--markdown-link-decoration);
-  --wcd-snippet-button-background: var(--code-button-background);
-  --wcd-snippet-button-focus-background: var(--code-button-focus-background);
-  --wcd-snippet-button-focus-color: var(--code-button-focus-color);
-  --wcd-snippet-outer-background-color: var(--page-background);
-  --wcd-snippet-focus-border-color: var(--primary-color);
-
   /* playground */
-  --playground-code-attribute-color: var(--markdown-syntax-attr-name-color);
   --playground-code-atom-color: var(--markdown-syntax-keyword-color);
-  --playground-code-default-color: var(--markdown-syntax-color);
-  --playground-code-punctuation-color: var(--markdown-syntax-punctuation-color);
-  --playground-code-property-color: var(--markdown-syntax-class-name-color);
-  --playground-code-string-color: var(--markdown-syntax-string-color);
-  --playground-code-function-color: var(--markdown-syntax-function-color);
-  --playground-code-operator-color: var(--markdown-syntax-operator-color);
-  --playground-code-comment-color: var(--markdown-syntax-comment-color);
-  --playground-code-number-color: var(--markdown-syntax-number-color);
-  --playground-code-boolean-color: var(--markdown-syntax-boolean-color);
-  --playground-code-tag-color: var(--markdown-syntax-tag-color);
-  --playground-code-variable-color: var(--markdown-syntax-variable-color);
-  --playground-code-def-color: var(--markdown-syntax-variable-color);
+  --playground-code-attribute-color: var(--markdown-syntax-attr-name-color);
   --playground-code-background-color: var(--markdown-syntax-background-color);
-  --playground-code-callee-color: var(--markdown-syntax-function-color);
-  --playground-code-keyword-color: var(--markdown-syntax-keyword-color);
-  --playground-code-variable-2-color: var(--markdown-syntax-attr-name-color);
-  --playground-code-selection-background: var(--markdown-table-row-odd-background-color, #f6f8fa);
-  --playground-code-cursor-color: var(--markdown-syntax-color);
   --playground-code-background: var(--markdown-syntax-background-color);
-  --playground-tab-bar-background: var(--page-background);
-  --playground-tab-bar-foreground-color: var(--primary-text-color);
+  --playground-code-boolean-color: var(--markdown-syntax-boolean-color);
+  --playground-code-builtin-color: var(--markdown-blockquote-color);
+  --playground-code-callee-color: var(--markdown-syntax-function-color);
+  --playground-code-comment-color: var(--markdown-syntax-comment-color);
+  --playground-code-cursor-color: var(--markdown-syntax-color);
+  --playground-code-def-color: var(--markdown-syntax-variable-color);
+  --playground-code-default-color: var(--markdown-syntax-color);
+  --playground-code-function-color: var(--markdown-syntax-function-color);
+  --playground-code-keyword-color: var(--markdown-syntax-keyword-color);
+  --playground-code-number-color: var(--markdown-syntax-number-color);
+  --playground-code-operator-color: var(--markdown-syntax-operator-color);
+  --playground-code-property-color: var(--markdown-syntax-class-name-color);
+  --playground-code-punctuation-color: var(--markdown-syntax-punctuation-color);
+  --playground-code-selection-background: var(--markdown-table-row-odd-background-color, #f6f8fa);
+  --playground-code-string-color: var(--markdown-syntax-string-color);
+  --playground-code-tag-color: var(--markdown-syntax-tag-color);
+  --playground-code-variable-2-color: var(--markdown-syntax-attr-name-color);
+  --playground-code-variable-color: var(--markdown-syntax-variable-color);
+  --playground-highlight-color: var(--primary-color);
   --playground-preview-toolbar-background: var(--page-background);
   --playground-preview-toolbar-foreground-color: var(--primary-text-color);
-  --playground-highlight-color: var(--primary-color);
-  --playground-code-builtin-color: var(--markdown-blockquote-color);
+  --playground-snippet-button-background: var(--markdown-syntax-background-color);
+  --playground-snippet-button-focus-background: var(--page-background);
+  --playground-snippet-button-focus-color: var(--code-button-focus-color);
+  --playground-snippet-focus-border-color: var(--primary-color);
+  --playground-snippet-outer-background-color: var(--markdown-syntax-background-color);
+  --playground-snippet-border-color: var(--markdown-syntax-background-color);
+  --playground-tab-bar-background: var(--page-background);
+  --playground-tab-bar-foreground-color: var(--primary-text-color);
 
   /* typography */
 
@@ -124,7 +118,7 @@
     --primary-color-darker: var(--deep-orange-a700);
     --primary-color-lighter: var(--deep-orange-a100);
     --primary-color: var(--deep-orange-a200);
-    --primary-lines-color: #ccc;
+    --primary-lines-color: var(--grey-900);
     --primary-text-color: var(--grey-200);
 
     /* Text colors */
@@ -135,13 +129,6 @@
     /* background-colors */
     --footer-background: #151515;
     --page-background: var(--near-black);
-
-    /* code blocks */
-    --code-button-focus-background: #333;
-    --code-button-focus-color: white;
-    --code-button-background: var(--page-background);
-    --code-tabs-tabs-background: transparent;
-    --code-tabs-selected-highlight-color: transparent;
 
     /* search */
     --rocket-search-background-color: var(--code-button-focus-background);
@@ -192,14 +179,15 @@ docs-playground:defined pre {
   height: 100%;
 }
 
-docs-playground::part(button) {
-  bottom: -2px;
-}
-
 #footer-badges img {
   width: 145px;
 }
 
 type-doc:not(:defined) {
   opacity: 0;
+}
+
+code[class*="language-"],
+pre[class*="language-"] {
+  border-radius: 6px;
 }

@@ -13,25 +13,25 @@ import { component, html, useController, useEffect } from 'haunted'
 
 import { MouseController } from './mouse-controller.js';
 
-function TrackMouse() {
+function TrackMouse(element) {
   const { pos, down } = useController(host => new MouseController(host));
 
   useEffect(() => {
-    const x = pos.x - this.clientLeft;
-    const y = pos.y - this.clientTop;
-    if (x > this.clientWidth || y > this.clientHeight) return;
-    const hue = Math.floor((x / this.clientWidth) * 360);
-    const saturation = 100 - Math.floor((y / this.clientHeight) * 100);
-    this.style.setProperty('--x', `${x}px`);
-    this.style.setProperty('--y', `${y}px`);
-    this.style.setProperty('--hue', hue);
-    this.style.setProperty('--saturation', `${saturation}%`);
-    this.style.setProperty('--loupe-border-color', down ? 'white' : 'black');
+    const x = pos.x - element.clientLeft;
+    const y = pos.y - element.clientTop;
+    if (x > element.clientWidth || y > element.clientHeight) return;
+    const hue = Math.floor((x / element.clientWidth) * 360);
+    const saturation = 100 - Math.floor((y / element.clientHeight) * 100);
+    element.style.setProperty('--x', `${x}px`);
+    element.style.setProperty('--y', `${y}px`);
+    element.style.setProperty('--hue', hue);
+    element.style.setProperty('--saturation', `${saturation}%`);
+    element.style.setProperty('--loupe-border-color', down ? 'white' : 'black');
     if (down) {
-      this.color = getComputedStyle(this.shadowRoot.getElementById('loupe')).getPropertyValue('background-color');
-      this.shadowRoot.getElementById('alert').textContent = this.color;
-      this.shadowRoot.getElementById('alert').setAttribute("aria-hidden", "false");
-      this.dispatchEvent(new CustomEvent('pick'));
+      element.color = getComputedStyle(element.shadowRoot.getElementById('loupe')).getPropertyValue('background-color');
+      element.shadowRoot.getElementById('alert').textContent = element.color;
+      element.shadowRoot.getElementById('alert').setAttribute("aria-hidden", "false");
+      element.dispatchEvent(new CustomEvent('pick'));
     }
   }, [pos, down]);
 

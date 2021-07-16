@@ -6,6 +6,8 @@ slogan: Hooks for Web Components
 callToActionItems:
   - text: Docs
     href: /docs/
+  - text: Guides
+    href: /docs/guides/getting-started/
 ---
 
 <style data-helmet>
