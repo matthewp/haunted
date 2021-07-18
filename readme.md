@@ -75,7 +75,7 @@ The main entry point is intended for [lit-html](https://github.com/Polymer/lit-h
 
 #### lighterhtml, etc
 
-If you are using [lighterhtml](https://github.com/WebReflection/lighterhtml) or [hyperHTML](https://github.com/WebReflection/hyperHTML) then instead import `haunted/core`. This export gives you a function that creates Hooks that work with any template library.
+If you are using [lighterhtml](https://github.com/WebReflection/lighterhtml), [hyperHTML](https://github.com/WebReflection/hyperHTML) or [lit/lit-html 2.0](https://github.com/lit/lit) then instead import `haunted/core`. This export gives you a function that creates Hooks that work with any template library.
 
 ```js
 import haunted, { useState } from 'haunted/core';
@@ -90,6 +90,22 @@ const { component } = haunted({
 function App() {
   const [count, setCount] = useState(0);
   return html`Using lighterhtml! Count: ${count}`;
+}
+
+customElements.define('my-app', component(App));
+```
+
+Example using lit/lit-html 2.0:
+
+```js
+import { html, render } from 'https://unpkg.com/lit@2.0.0-rc.2/index.js?module';
+import haunted, { useState } from 'https://unpkg.com/haunted/core.js';
+
+const { component } = haunted({ render });
+
+function App() {
+  const [count, setCount] = useState(0);
+  return html`Using lit-html 2.0! Count: ${count}`;
 }
 
 customElements.define('my-app', component(App));
