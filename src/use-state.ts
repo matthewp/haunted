@@ -29,10 +29,14 @@ const useState = hook(class<T> extends Hook {
   }
 
   updater(value: NewState<T>): void {
+    const [previousValue] = this.args;
     if (typeof value === 'function') {
       const updaterFn = value as (previousState?: T) => T;
-      const [previousValue] = this.args;
       value = updaterFn(previousValue);
+    }
+
+    if (previousValue === value) {
+      return;
     }
 
     this.makeArgs(value);
