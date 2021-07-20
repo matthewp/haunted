@@ -13,7 +13,7 @@ import { component, html, useCallback, useState, useEffect } from 'haunted';
 
 const input = setter => e => setter(e.target.value);
 
-customElements.define('use-callback', component(function Counter() {
+customElements.define('use-callback', component(function Counter(element) {
   const [email, setEmail] = useState('');
   const [pword, setPword] = useState('');
   const [response, setResponse] = useState('');
@@ -26,8 +26,8 @@ customElements.define('use-callback', component(function Counter() {
   }, [email, pword]);
 
   useEffect(() => {
-    this.shadowRoot.addEventListener('submit', submit);
-    return () => this.shadowRoot.removeEventListener('submit', submit);
+    element.shadowRoot.addEventListener('submit', submit);
+    return () => element.shadowRoot.removeEventListener('submit', submit);
   }, [submit]);
 
   return html`

@@ -1,4 +1,4 @@
-# Examples >> Bring your Own Renderer || 10
+# Guides >> Bring your Own Renderer || 10
 
 <style data-helmet>
   html { --playground-ide-height: 420px; } /* lol you said 420 */

@@ -44,9 +44,9 @@
     "eleventy-plugin-helmet": "^0.2.2",
     "http-server": "^0.12.0",
     "mocha-headless-chrome": "^2.0.3",
-    "rocket-preset-code-tabs": "^0.2.2",
-    "rocket-preset-custom-elements-manifest": "^0.1.5",
-    "rocket-preset-playground-elements": "^0.1.2",
+    "rocket-preset-code-tabs": "^0.2.4",
+    "rocket-preset-custom-elements-manifest": "^0.1.7",
+    "rocket-preset-playground-elements": "^0.1.4",
     "typescript": "^4.3.5"
   },
   "dependencies": {

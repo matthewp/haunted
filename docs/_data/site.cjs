@@ -9,11 +9,6 @@ module.exports = function () {
         name: 'GitHub',
         url: 'https://github.com/matthewp/haunted',
       },
-      {
-        name: 'Slack',
-        url:
-          'https://join.slack.com/t/lit-and-friends/shared_invite/zt-llwznvsy-LZwT13R66gOgnrg12PUGqw',
-      },
     ],
     gitSiteUrl: 'https://github.com/matthewp/haunted',
     gitBranch: 'master',
