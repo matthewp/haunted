@@ -1,4 +1,4 @@
-import { directive, NodePart } from 'lit-html';
+import { Directive, directive, DirectiveParameters, NodePart, Part } from 'lit/directive.js';
 import { GenericRenderer } from './core';
 import { BaseScheduler } from './scheduler';
 
@@ -37,21 +37,25 @@ function makeVirtual() {
   }
 
   function virtual(renderer: Renderer) {
-    function factory(...args: unknown[]) {
-      return (part: NodePart): void => {
-        let cont = partToScheduler.get(part);
-        if(!cont) {
-          cont = new Scheduler(renderer, part);
-          partToScheduler.set(part, cont);
-          schedulerToPart.set(cont, part);
-          teardownOnRemove(cont, part);
-        }
-        cont.args = args;
-        cont.update();
-      };
+    class VirtualDirective extends Directive {
+
+      update(part: Part, args: DirectiveParameters<this>) {
+          let cont = partToScheduler.get(part);
+          if(!cont) {
+            cont = new Scheduler(renderer, part);
+            partToScheduler.set(part, cont);
+            schedulerToPart.set(cont, part);
+            teardownOnRemove(cont, part);
+          }
+          cont.args = args;
+          cont.update();
+          this.render(...args);
+      }
+      render(...args: unknown[]) {
+      }
     }
 
-    return directive(factory);
+    return directive(VirtualDirective);
   }
 
   return virtual;

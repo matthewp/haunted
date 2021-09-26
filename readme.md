@@ -12,7 +12,7 @@ React's Hooks API but for standard web components and [lit-html](https://lit-htm
   <my-counter></my-counter>
 
   <script type="module">
-    import { html } from 'https://unpkg.com/lit-html/lit-html.js';
+    import { html } from 'https://unpkg.com/lit?module';
     import { component, useState } from 'https://unpkg.com/haunted/haunted.js';
 
     function Counter() {
