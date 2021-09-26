@@ -1,4 +1,4 @@
-import { html } from 'https://unpkg.com/lit-element@2.2.0/lit-element.js?module';
+import { html } from 'https://unpkg.com/lit?module';
 import { useState } from '../../haunted.js';
 import LitHauntedElement, { litHaunted } from './lit-haunted-element.js';
 
@@ -32,7 +32,7 @@ function App() {
   return html`
     <p>A paragraph</p>
     <click-element @increment=${() => setCount(count + 1)}></click-element>
-    
+
     <p><strong>Count:</strong> ${count}</p>
   `;
 }

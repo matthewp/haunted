@@ -300,7 +300,7 @@
           "name": "html",
           "declaration": {
             "name": "html",
-            "package": "https://unpkg.com/lit-html@^1.0.0/lit-html.js"
+            "package": "https://unpkg.com/lit?module"
           }
         },
         {
@@ -308,7 +308,7 @@
           "name": "render",
           "declaration": {
             "name": "render",
-            "package": "https://unpkg.com/lit-html@^1.0.0/lit-html.js"
+            "package": "https://unpkg.com/lit?module"
           }
         },
         {

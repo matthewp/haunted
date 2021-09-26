@@ -1,4 +1,4 @@
-import { LitElement } from 'https://unpkg.com/lit-element@2.2.0/lit-element.js?module';
+import { LitElement } from 'https://unpkg.com/lit?module';
 import { State } from '../../haunted.js';
 
 export default function(renderer) {

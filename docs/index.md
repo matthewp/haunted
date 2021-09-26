@@ -16,7 +16,7 @@ callToActionItems:
 </style>
 
 ```js playground example my-counter.js
-import { html } from 'https://unpkg.com/lit-html/lit-html.js';
+import { html } from 'https://unpkg.com/lit?module';
 import { component, useState } from 'https://unpkg.com/haunted/haunted.js';
 
 function Counter() {
