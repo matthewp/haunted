@@ -9,6 +9,7 @@
 - [API](./guides/api/)
 - [Dispatching Events](./guides/events/)
 - [Virtual Components](./guides/virtual/)
+- [TypeScript](./guides/typescript)
 
 ## Hooks
 
