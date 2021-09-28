@@ -20,12 +20,30 @@ interface FigureProps {
 function Figure({ userData }: FigureProps) {
   return html`
     <img src=${userData.portrait} alt="user portait" />
-    <figcaption>${userData.name}</figcaption>
+    <fig-caption>${userData.name}</fig-caption>
   `;
 }
 
-customElements.define('my-profile', component<HTMLElement & FigureProps>(Figure));
+customElements.define('my-figure', component<HTMLElement & FigureProps>(Figure));
 ```
+
+Alternatively, you can extend your Props from HTMLElement:
+
+```js
+interface FigurePlusProps extends HTMLElement {
+  userData: UserData;
+}
+
+function Figure({ userData }: FigurePlusProps) {
+  return html`
+    <img src=${userData.portrait} alt="user portait" />
+    <fig-caption>${userData.name}</fig-caption>
+  `;
+}
+
+customElements.define('my-figure', component<FigurePlusProps>(Figure));
+```
+
 
 Finally, when using component attributes, TypeScript will complain when attempting to add `observedAttributes` using dot or bracket notation value assignments. Instead, pass them into the `component` function as a second argument:
 
