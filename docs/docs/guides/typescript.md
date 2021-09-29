@@ -78,14 +78,14 @@ const profile = document.createElement('my-app');
 profile.firstName = 'Mortimer';
 ```
 
-If `my-profile` is not defined on the `HTMLElementTagNameMap`, TypeScript will rightly complain that `firstName` is not a valid property of `HTMLElement`.
+If `my-app` is not defined on the `HTMLElementTagNameMap`, TypeScript will rightly complain that `firstName` is not a valid property of `HTMLElement`.
 
 You will need to add the type of your component to the [Document Interface](https://www.typescriptlang.org/docs/handbook/dom-manipulation.html#the-document-interface) to fix this.
 
 ```js
 declare global {
   interface HTMLElementTagNameMap {
-    'my-profile': HTMLElement & MyAppProps,
+    'my-app': HTMLElement & MyAppProps,
   }
 }
 ```
