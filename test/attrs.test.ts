@@ -1,165 +1,217 @@
-import { component, html } from '../haunted.js';
-import { attach, mount, cycle } from './helpers.js';
+import { component, html } from '../src/haunted';
+import { fixture, expect, nextFrame } from '@open-wc/testing';
+
 
 describe('Observed attributes', () => {
   it('Trigger rerenders', async () => {
     const tag = 'attrs-test';
 
-    function app({ name = '' }) {
+    interface Props {
+      name: string;
+    }
+
+    function App({ name = '' }) {
       return html`<div>Hello ${name}</div>`;
     }
 
-    app.observedAttributes = ['name'];
+    customElements.define(
+      tag,
+      component<HTMLElement & Props>(App, {observedAttributes: ['name']})
+    );
 
-    customElements.define(tag, component(app));
-
-    let teardown = attach(tag);
-    await cycle();
-
-    let inst = document.querySelector(tag);
+    const el = await fixture(html`<attrs-test></attrs-test>`);
+    const inst = document.querySelector(tag);
     inst.setAttribute('name', 'world');
 
-    await cycle();
+    await nextFrame();
 
-    let div = host.firstChild.shadowRoot.firstElementChild;
-    assert.equal(div.textContent, 'Hello world');
-    teardown();
+    expect(el.shadowRoot.firstElementChild.textContent).to.equal('Hello world');
   });
 
   it('Can observe the "title" attribute', async () => {
     const tag = 'attrs-test-title';
 
-    function app() {
-      this.setAttribute('title', 'bar');
+    interface Props {
+      title: string;
     }
 
-    app.observedAttributes = ['title'];
+    function App(this: unknown) {
+      (this as HTMLElement).setAttribute('title', 'bar');
+    }
 
-    customElements.define(tag, component(app));
+    customElements.define(
+      tag,
+      component<HTMLElement & Props>(App, {observedAttributes: ['title']})
+    );
 
-    let teardown = attach(tag);
-    await cycle();
+    const el = await fixture(html`<attrs-test-title></attrs-test-title>`);
 
-    let inst = document.querySelector(tag);
-    assert.equal(inst.getAttribute('title'), 'bar', 'on the instance');
-    teardown();
+    expect(el.getAttribute('title')).to.equal('bar');
   });
 
   it('Trigger rerenders while declared as an option', async () => {
     const tag = 'attrs-options-test';
 
-    function app({ name = '' }) {
+    interface Props {
+      name: string;
+    }
+
+    function App({ name = '' }) {
       return html`<div>Hello ${name}</div>`;
     }
 
-    customElements.define(tag, component(app, {observedAttributes: ['name']}));
+    customElements.define(
+      tag,
+      component<HTMLElement & Props>(App, {observedAttributes: ['name']})
+    );
 
-    let teardown = attach(tag);
-    await cycle();
+    const el = await fixture(html`<attrs-options-test></attrs-options-test>`);
 
-    let inst = document.querySelector(tag);
-    inst.setAttribute('name', 'world');
+    el.setAttribute('name', 'world');
 
-    await cycle();
+    await nextFrame();
 
-    let div = host.firstChild.shadowRoot.firstElementChild;
-    assert.equal(div.textContent, 'Hello world');
-    teardown();
+    expect(el.shadowRoot.textContent).to.equal('Hello world');
   });
 
   it('Initial attributes are reflected', async () => {
     const tag = 'attrs-initial-test';
 
-    function app({ name = '' }) {
+    interface Props {
+      name: string;
+    }
+
+    function App({ name = '' }) {
       return html`<div>Hello ${name}</div>`;
     }
 
-    app.observedAttributes = ['name'];
+    customElements.define(
+      tag,
+      component<HTMLElement & Props>(App, {observedAttributes: ['name']})
+    );
 
-    customElements.define(tag, component(app));
+    const el = await fixture
+      (html`<attrs-initial-test name="world"></attrs-initial-test>`);
 
-    let template = document.createElement('template');
-    template.innerHTML = `
-      <attrs-initial-test name="world"></attrs-initial-test>
-    `;
-    let frag = template.content.cloneNode(true);
-    host.appendChild(frag);
-    await cycle();
+    await nextFrame();
 
-    let div = host.firstElementChild.shadowRoot.firstElementChild;
-    assert.equal(div.textContent, 'Hello world');
-    host.innerHTML =  '';
+    expect(el.shadowRoot.textContent).to.equal('Hello world');
   });
 
   it('Boolean attributes are turned into booleans', async () => {
     const tag = 'attrs-boolean-test';
-    let val;
+    let val: boolean;
+
+    interface Props {
+      open: boolean;
+    }
 
     function Drawer({ open }) {
       val = open;
       return html`Test`;
     }
 
-    Drawer.observedAttributes = ['open'];
+    customElements.define(
+      tag,
+      component<HTMLElement & Props>(Drawer, {observedAttributes: ['open']})
+    );
 
-    customElements.define(tag, component(Drawer));
-    let teardown = mount(`
-      <attrs-boolean-test open></attrs-boolean-test>
-    `);
+    const el = await fixture
+      (html`<attrs-boolean-test open></attrs-boolean-test>`) as HTMLElement & Props;
 
-    await cycle();
-    teardown();
+    expect(typeof el.open).to.equal('boolean');
+    expect(typeof val).to.equal('boolean');
+    expect(el.open ).to.be.true;
+    expect(val).to.be.true;
+  });
 
-    assert.equal(typeof val, 'boolean');
-    assert.equal(val, true, 'is a boolean');
+  it('Boolean attributes are undefined when not present', async () => {
+    const tag = 'attrs-boolean-false-test';
+    let val: boolean;
+
+    interface Props {
+      open: boolean;
+    }
+
+    function Drawer({ open }) {
+      val = open;
+      return html`Test`;
+    }
+
+    customElements.define(
+      tag,
+      component<HTMLElement & Props>(Drawer, {observedAttributes: ['open']})
+    );
+
+    const el = await fixture
+      (html`<attrs-boolean-false-test></attrs-boolean-false-test>`) as HTMLElement & Props;
+
+    expect(el.open).to.be.undefined;
+    expect(val).to.be.undefined;
   });
 
   it('renderer receives component as this context', async () => {
     const tag = 'attrs-test-2';
 
-    function app({ name = '' }) {
+    interface Props {
+      name: string;
+    }
+
+    function App({ name = '' }) {
       return html`<div>${name} ${this.name}</div>`;
     }
 
-    app.observedAttributes = ['name'];
+    customElements.define(
+      tag,
+      component<HTMLElement & Props>(App, {observedAttributes: ['name']})
+    );
 
-    customElements.define(tag, component(app));
+    const el = await fixture
+      (html`<attrs-test-2></attrs-test-2>`);
 
-    let teardown = attach(tag);
-    await cycle();
+    el.setAttribute('name', 'test');
 
-    let inst = document.querySelector(tag);
-    inst.setAttribute('name', 'test');
+    await nextFrame();
 
-    await cycle();
-
-    let div = host.firstChild.shadowRoot.firstElementChild;
-    assert.equal(div.textContent, 'test test');
-    teardown();
+    let div = el.shadowRoot.firstElementChild;
+    expect(div.textContent).to.equal('test test');
   });
 
   it('observed attribute names turn into camelCase props', async () => {
     const tag = 'attrs-camelcase-test';
     let el;
 
+    interface Props {
+      'open': boolean;
+      'open-a': boolean;
+      'open-b-b': boolean;
+      'openc-': boolean;
+      'open-d': boolean;
+      'open-ee': boolean;
+      'open--fff': boolean;
+    }
+
     function Drawer(element) {
       el = element;
       return html`Test`;
     }
 
-    Drawer.observedAttributes = [
-      'open',
-      'open-a',
-      'open-b-b',
-      'openc-',
-      'open-d',
-      'open-ee',
-      'open--fff'
-    ];
+    customElements.define(
+      tag,
+      component<HTMLElement & Props>(Drawer, {observedAttributes: [
+        'open',
+        'open-a',
+        'open-b-b',
+        'openc-',
+        'open-d',
+        'open-ee',
+        'open--fff'
+      ]})
+    );
 
-    customElements.define(tag, component(Drawer));
-    let teardown = mount(`
-      <attrs-camelcase-test 
+    await fixture
+    (html`
+      <attrs-camelcase-test
         open
         open-a
         open-b-b
@@ -167,18 +219,18 @@ describe('Observed attributes', () => {
         open-d
         open-ee
         open--fff
-        ></attrs-camelcase-test>
-    `);
+      ></attrs-camelcase-test>`) as HTMLElement & Props;
 
-    await cycle();
-    teardown();
-    assert.equal(el.open, true, 'is defined');
-    assert.equal(el.openA, true, 'is defined');
-    assert.equal(el.openBB, true, 'is defined');
-    assert.equal(el.openc, true, 'is defined');
-    assert.equal(el.openD, true, 'is defined');
-    assert.equal(el.openEe, true, 'is defined');
-    assert.equal(el.openFff, true, 'is defined');
+
+    await nextFrame();
+
+    expect(el.open).to.be.true;
+    expect(el.openA).to.be.true;
+    expect(el.openBB).to.be.true;
+    expect(el.openc).to.be.true;
+    expect(el.openD).to.be.true;
+    expect(el.openEe).to.be.true;
+    expect(el.openFff).to.be.true;
   });
 
 })
