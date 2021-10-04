@@ -5,7 +5,11 @@
     "module": "esnext",
     "moduleResolution": "node",
     "strict": true,
-    "target": "esnext"
+    "target": "esnext",
+    "types": ["mocha"]
   },
-  "include": ["src"]
+  "include": [
+    "src",
+    "./global.d.ts",
+  ]
 }
