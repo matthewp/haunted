@@ -11,8 +11,8 @@
     "analyze": "make; cem analyze",
     "preversion": "make",
     "server": "http-server -p 1991",
-    "test": "web-test-runner \"test/**/attrs.test.ts\" --node-resolve",
-    "test:watch": "web-test-runner test/**/attrs.test.ts --node-resolve --watch",
+    "test": "web-test-runner \"test/**/*.test.ts\" --node-resolve",
+    "test:watch": "web-test-runner test/**/*.test.ts --node-resolve --watch",
     "start": "rocket start",
     "docs": "rocket build"
   },
