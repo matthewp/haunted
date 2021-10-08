@@ -27,10 +27,15 @@ class MyElement extends HTMLElement {}
 // component() tests
 // positive tests, should all pass
 component(() => html``)
+component(() => html``, MyElement as {}) // Not ideal (also see failure below)
+const componentTest1Fix = component<HTMLElement>(() => html``, HTMLElement, { useShadowDOM: true});
+customElements.define('test-element', componentTest1Fix);
+
+// negative tests, should all fail
 component(() => html``, MyElement)
 const componentTest1 = component(() => html``, HTMLElement, { useShadowDOM: true});
 customElements.define('test-element', componentTest1);
-// negative tests, should all fail
+
 component();
 component('foo');
 component(()=>html``, 'foo');
