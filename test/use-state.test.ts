@@ -1,5 +1,5 @@
-import { component, html, useState } from '../haunted.js';
-import { attach, cycle } from './helpers.js';
+import { component, html, useState } from '../src/haunted.js';
+import { fixture, expect, nextFrame } from '@open-wc/testing';
 
 describe('useState', () => {
   it('Lazy callback', async () => {
@@ -14,17 +14,14 @@ describe('useState', () => {
 
     customElements.define(tag, component(App));
 
-    const teardown = attach(tag);
+    const el = await fixture<HTMLElement>(html`<use-state-callback></use-state-callback>`);
 
-    await cycle();
-    let span = host.firstChild.shadowRoot.firstElementChild;
-    assert.equal(span.textContent, '8', 'initial value');
+    let span = el.shadowRoot.firstElementChild;
+    expect(span.textContent).to.equal('8');
 
     setter(33);
 
-    await cycle();
-    assert.equal(span.textContent, '33', 'updated value');
-
-    teardown();
+    await nextFrame();
+    expect(span.textContent).to.equal('33');
   });
 });
