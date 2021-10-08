@@ -1,11 +1,11 @@
-import { component, html, createContext, useContext, useState } from '../haunted.js';
-import { attach, cycle } from './helpers.js';
+import { component, html, createContext, useContext, useState } from '../src/haunted.js';
+import { fixture, expect, nextFrame } from '@open-wc/testing';
 
 describe('context', function() {
   const defaultValue = 'halloween';
   const Context = createContext(defaultValue);
 
-  let contexts = new WeakMap();
+  const contexts = new WeakMap();
   function Consumer(element) {
     const context = useContext(Context);
 
@@ -16,9 +16,11 @@ describe('context', function() {
 
   customElements.define('context-consumer', component(Consumer));
 
-  customElements.define('context-provider', Context.Provider);
+  customElements.define('context-provider', Context.Provider as CustomElementConstructor);
 
-  customElements.define('generic-consumer', Context.Consumer);
+  // Cast to unknown frst to deal with issue of Type 'Element &
+  // ConsumerProps<string>' is missing properties from type 'HTMLElement'
+  customElements.define('generic-consumer', Context.Consumer as unknown as CustomElementConstructor);
 
   function ProviderWithSlots() {
     const [slotProviderValue] = useState('slotted');
@@ -86,52 +88,43 @@ describe('context', function() {
 
   customElements.define(testTag, component(Tests));
 
-  function getResults(selector) {
-    return [...host.querySelector('context-tests').shadowRoot.querySelectorAll(selector)].map(consumer => contexts.get(consumer));
+  function getResults(selector: string) {
+    return [...document.querySelector('context-tests').shadowRoot.querySelectorAll(selector)].map(consumer => contexts.get(consumer));
   }
 
-  function getContentResults(selector) {
-    return [...host.querySelector('context-tests').shadowRoot.querySelectorAll(selector)].map(consumer => consumer.shadowRoot.textContent);
+  function getContentResults(selector: string) {
+    return [...document.querySelector('context-tests').shadowRoot.querySelectorAll(selector)].map((consumer) => (consumer).shadowRoot.textContent);
   }
 
-  let teardown;
   beforeEach(async () => {
-    teardown = attach(testTag);
-    await cycle();
-  });
-
-  afterEach(() => {
-    teardown();
+    await fixture(html`<context-tests></context-tests>`);
   });
 
   it('uses defaultValue when provider is not found', () => {
-    assert.equal(getResults('#without-provider context-consumer')[0], defaultValue);
+    expect(getResults('#without-provider context-consumer')[0]).to.equal(defaultValue);
   });
 
   it('uses providers value when provider is found', async () => {
     withProviderUpdate('spooky');
-    await cycle();
-    assert.equal(getResults('#with-provider context-consumer')[0], 'spooky');
+    await nextFrame();
+    expect(getResults('#with-provider context-consumer')[0]).to.equal('spooky');
   });
 
   it('uses providers value when provider is found even if it is undefined', () => {
-    assert.equal(getResults('#with-provider context-consumer')[0], undefined);
+    expect(getResults('#with-provider context-consumer')[0]).to.be.undefined;
   });
 
   it('uses closest provider ancestor\'s value', () => {
-    assert.deepEqual(getResults('#nested-providers context-consumer'), ['root', 'nested']);
+    expect(getResults('#nested-providers context-consumer')).to.deep.equal(['root', 'nested']);
   });
 
   it('uses slotted value when slotted provider is found', async () => {
-    await cycle();
-
-    assert.equal(getResults('#with-slotted-provider slotted-context-provider context-consumer')[0], 'slotted');
+    expect(getResults('#with-slotted-provider slotted-context-provider context-consumer')[0]).to.equal('slotted');
   });
 
   describe('with generic consumer component', function () {
     it('should render template with context value', async () => {
-      await cycle();
-      assert.deepEqual(getContentResults('#generic-consumer generic-consumer'), ['generic-value']);
+      expect(getContentResults('#generic-consumer generic-consumer')).to.deep.equal(['generic-value']);
     });
   });
 });
