@@ -1,5 +1,5 @@
-import { component, html } from '../haunted.js';
-import { attach, cycle } from './helpers.js';
+import { component, html } from '../src/haunted.js';
+import { fixture, expect } from '@open-wc/testing';
 
 describe('Shadow DOM', () => {
   it('works', async () => {
@@ -7,11 +7,9 @@ describe('Shadow DOM', () => {
       return html`using ShadowDOM`;
     }));
 
-    let teardown = attach('shadow-test');
-    await cycle();
+    const el = await fixture(html`<shadow-test></shadow-test>`);
 
-    assert.equal(host.firstChild.shadowRoot.firstChild.nextSibling.nodeValue, 'using ShadowDOM', 'Rendered with Shadow DOM');
-    teardown();
+    expect(el.shadowRoot.firstChild.nextSibling.nodeValue).to.equal('using ShadowDOM');
   });
 
   it('is optional', async () => {
@@ -19,11 +17,9 @@ describe('Shadow DOM', () => {
       return html`not using ShadowDOM`;
     }, HTMLElement, {useShadowDOM: false}));
 
-    let teardown = attach('no-shadow-test');
-    await cycle();
+    const el = await fixture<HTMLElement>(html`<no-shadow-test></no-shadow-test>`);
 
-    assert.equal(host.innerText, 'not using ShadowDOM', 'Rendered without Shadow DOM');
-    teardown();
+    expect(el.innerText).to.equal('not using ShadowDOM');
   });
 
   it('defaults to not delegating focus from the Shadow DOM', async () => {
@@ -31,23 +27,22 @@ describe('Shadow DOM', () => {
       return html`does not delegate focus`;
     }));
 
-    let teardown = attach('default-delegates-focus');
-    await cycle();
+    const el = await fixture<HTMLElement>(html`<default-delegates-focus></default-delegates-focus>`);
 
-    assert.equal(host.firstChild.shadowRoot.delegatesFocus, false, 'Does not delegate focus from the Shadow DOM');
-    teardown();
+    expect(el.shadowRoot.delegatesFocus).to.be.false;
   })
 
   it('allows delegating focus from the Shadow DOM', async () => {
     customElements.define('delegates-focus', component(() => {
       return html`delegates focus`;
-    }, HTMLElement, { shadowRootInit: { delegatesFocus: true } }));
+    }, HTMLElement, { shadowRootInit: {
+        delegatesFocus: true,
+        mode: 'open',
+      } }));
 
-    let teardown = attach('delegates-focus');
-    await cycle();
+    const el = await fixture<HTMLElement>(html`<delegates-focus></delegates-focus>`);
 
-    assert.equal(host.firstChild.shadowRoot.delegatesFocus, true, 'Delegates focus from the Shadow DOM');
-    teardown();
+    expect(el.shadowRoot.delegatesFocus).to.be.true;
   })
 
 })
