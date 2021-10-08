@@ -1,4 +1,4 @@
-import { component, html } from '../src/haunted';
+import { component, html } from '../src/haunted.js';
 import { fixture, expect, nextFrame } from '@open-wc/testing';
 
 
