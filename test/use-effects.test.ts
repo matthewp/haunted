@@ -1,5 +1,5 @@
-import { component, html, useEffect, useState } from '../haunted.js';
-import { attach, cycle } from './helpers.js';
+import { component, html, useEffect, useState } from '../src/haunted.js';
+import { fixture, fixtureCleanup, expect, nextFrame } from '@open-wc/testing';
 
 describe('useEffect', () => {
   it('Memoizes values', async () => {
@@ -7,7 +7,7 @@ describe('useEffect', () => {
     let effects = 0;
     let set;
 
-    function app() {
+    function App() {
       let [,setVal] = useState(0);
       set = setVal;
 
@@ -17,16 +17,14 @@ describe('useEffect', () => {
 
       return html`Test`;
     }
-    customElements.define(tag, component(app));
+    customElements.define(tag, component(App));
 
-    const teardown = attach(tag);
-    await cycle();
+    await fixture(html`<memo-effect-test></memo-effect-test>`);
 
     set(2);
-    await cycle();
+    await nextFrame();
 
-    assert.equal(effects, 1, 'effects ran once');
-    teardown();
+    expect(effects).to.equal(1);
   });
 
   it('Can teardown subscriptions', async () => {
@@ -49,17 +47,16 @@ describe('useEffect', () => {
     }
     customElements.define(tag, component(app));
 
-    const teardown = attach(tag);
-    await cycle();
+    await fixture(html`<teardown-effect-test></teardown-effect-test>`);
+    await nextFrame();
 
     set(1);
-    await cycle();
+    await nextFrame();
 
     set(2);
-    await cycle();
+    await nextFrame();
 
-    assert.equal(subs.length, 1, 'Unsubscribed on re-renders');
-    teardown();
+    expect(subs.length).to.equal(1);
   });
 
   it('Tears-down on unmount', async () => {
@@ -81,13 +78,10 @@ describe('useEffect', () => {
 
     customElements.define(tag, component(app));
 
-    const teardown = attach(tag);
-    await cycle();
+    await fixture(html`<teardown-effect-unmount-test></teardown-effect-unmount-test>`);
+    fixtureCleanup();
 
-    teardown();
-    await cycle();
-
-    assert.equal(subs.length, 0, 'Torn down on unmount');
+    expect(subs.length).to.equal(0);
   });
 
   it('useEffect(fn, []) runs the effect only once', async () => {
@@ -101,15 +95,14 @@ describe('useEffect', () => {
     }
 
     customElements.define(tag, component(App));
-    const teardown = attach(tag);
+    await fixture(html`<empty-array-effect-test></empty-array-effect-test>`);
 
-    await cycle();
-    assert.equal(calls, 1, 'called once');
+    await nextFrame();
+    expect(calls).to.equal(1);
 
-    document.querySelector(tag).prop = 'foo';
-    await cycle();
-    assert.equal(calls, 1, 'still called once');
-    teardown();
+    (document.querySelector(tag) as any).prop = 'foo';
+    await nextFrame();
+    expect(calls).to.equal(1);
   });
 
   it('Can be async functions', async () => {
@@ -122,14 +115,19 @@ describe('useEffect', () => {
     }
 
     customElements.define(tag, component(App));
-    const teardown = attach(tag);
 
-    await cycle();
+
     try {
-      teardown();
-      assert.ok(true, 'worked');
-    } catch(e) {
-      assert.ok(false, e);
+      const el = await fixture(html`<effect-async-fn></effect-async-fn>`);
+      expect(el).to.be.ok;
+      fixtureCleanup();
+      expect(true).to.be.ok;
+    } catch (error) {
+      // This does not catch errors the way we want it to. We will get a false
+      // positive with a warning that an error happened in a Promise outside the
+      // test. Throwing an error in the places that test this, however, causes
+      // other tests to fail.
+      expect(error).to.be.null;
     }
   });
 
@@ -141,7 +139,7 @@ describe('useEffect', () => {
     let parentSet;
     let childSet;
 
-    function parent() {
+    function Parent() {
       const [state, setState] = useState();
       parentSet = setState;
 
@@ -152,7 +150,11 @@ describe('useEffect', () => {
       return html`<skipped-effect-test-child .prop=${state}></skipped-effect-test-child>`;
     }
 
-    function child({ prop }) {
+    interface ChildProps {
+      prop: unknown;
+    }
+
+    function Child({ prop }) {
       const [state, setState] = useState();
       childSet = setState;
 
@@ -162,19 +164,16 @@ describe('useEffect', () => {
 
       return html`${prop} + ${state}`;
     }
-    customElements.define(parentTag, component(parent));
-    customElements.define(childTag, component(child));
+    customElements.define(parentTag, component(Parent));
+    customElements.define(childTag, component<HTMLElement & ChildProps>(Child));
 
-    const teardown = attach(parentTag);
-    await cycle();
+    await fixture(html`<skipped-effect-test-parent></skipped-effect-test-parent>`)
 
     parentSet(1)
     childSet(1)
-    await cycle();
+    await nextFrame();
 
-    assert.equal(parentEffects, 2, 'parent effects ran twice');
-    assert.equal(childEffects, 2, 'child effects ran twice');
-
-    teardown();
+    expect(parentEffects).to.equal(2);
+    expect(childEffects).to.equal(2);
   });
 });
