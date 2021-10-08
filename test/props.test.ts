@@ -1,48 +1,53 @@
-import { component, html } from '../haunted.js';
-import { attach, later, cycle } from './helpers.js';
+import { component, html } from '../src/haunted.js';
+import { later } from './helpers.js';
+import { fixture, expect, nextFrame } from '@open-wc/testing';
+
+interface TestProps {
+  prop: unknown;
+}
 
 describe('Passing props', () => {
   it('Are passed in the initial render', async () => {
     const tag = 'props-first-run-test';
     let runs = 0;
 
-    function child({ prop }) {
-      assert.equal(prop.id, 1);
+    function Child({ prop }) {
+      expect(prop.id).to.equal(1);
       runs++;
       return html`testing ${prop.id}`;
     }
 
-    customElements.define(tag + '-child', component(child));
+    customElements.define(tag + '-child',
+        component<HTMLElement & TestProps>(Child));
 
-    function app() {
+    function App() {
       return html`
         <props-first-run-test-child .prop=${{ id: 1 }}>
         </props-first-run-test-child>
       `;
     }
-    customElements.define(tag, component(app));
+    customElements.define(tag, component(App));
 
-    const teardown = attach(tag);
+    await fixture(html`<props-first-run-test></props-first-run-test>`);
     await later();
 
-    assert.equal(runs, 1, 'child only ran once');
-    teardown();
+    expect(runs).to.equal(1);
   });
 
   it('Only update if prop value changed', async () => {
     const tag = 'only-update-if-prop-value-changed';
     let runs = 0;
 
-    function app({ prop }) {
-      assert.equal(prop, 1);
+    function App({ prop }) {
+      expect(prop).to.equal(1);
       runs++;
       return html`testing ${prop}`;
     }
 
-    customElements.define(tag, component(app));
+    customElements.define(tag, component<HTMLElement & TestProps>(App));
 
     const { el, teardown } = attachAndSetProp(tag, 1);
-    await cycle();
+    await nextFrame();
 
     // Set prop to the exact same value. It shouldn't call app() again
     // b/c there's no need to re-generate the template
@@ -50,15 +55,15 @@ describe('Passing props', () => {
 
     await later();
 
-    assert.equal(runs, 1, 'ran only once b/c prop did not change');
+    expect(runs).to.equal(1);
     teardown();
 
-    function attachAndSetProp(element, propValue) {
-      let el = document.createElement(element);
+    function attachAndSetProp(element: string, propValue: unknown) {
+      let el = document.createElement(element) as HTMLElement & TestProps;
       el.prop = propValue;
-      host.appendChild(el);
+      document.body.appendChild(el);
       return {
-        teardown: () => host.removeChild(el),
+        teardown: () => document.body.removeChild(el),
         el,
       };
     }
