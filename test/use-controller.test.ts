@@ -1,57 +1,57 @@
-// @ts-check
-import { component, html, useController } from '../haunted.js';
-import { attach, cycle } from './helpers.js';
-
-import {initialState, StatusRenderer, Task} from '@lit-labs/task';
+import { component, html, useController } from '../src/haunted.js';
+import { fixture, expect } from '@open-wc/testing';
 
 describe('useController', () => {
 
-  it('with simple controller', async () => {
+  describe('with simple controller', async () => {
     class SimpleController {
-      host;
-      x = 'x';
-      z = 'z';
+      text = 'x';
 
-      constructor(host, z) {
-        this.host = host;
-        this.z = z;
+      constructor(public host, public laterText: string) {
         host.addController(this);
       }
 
       hostConnected() {
         setTimeout(() => {
-          this.x = 'y'
+          this.text = 'y'
           this.host.requestUpdate()
           setTimeout(() => {
-            this.x = this.z;
-          })
-        }, 50);
+            this.text = this.laterText;
+            this.host.requestUpdate()
+          }, 10);
+        }, 10);
       }
     }
 
-    const useSimple = z => useController(host => new SimpleController(host, z))
+    const useSimple = (text: string) => useController(
+        host => new SimpleController(host, text));
 
     const tag = 'use-controller-callback';
 
     function App() {
-      let { z } = useSimple('a');
-      return html`<span>${z}</span>`;
+      let { text } = useSimple('a');
+      return html`<span>${text}</span>`;
     }
 
     customElements.define(tag, component(App));
 
-    const teardown = attach(tag);
+    const el = await fixture<HTMLElement>(
+        html`<use-controller-callback></use-controller-callback>`);
+    const span = el.shadowRoot.firstElementChild;
 
-    await cycle();
-    let span = host.firstChild.shadowRoot.firstElementChild;
-    assert.equal(span.textContent, 'x', 'initial value');
 
-    await new Promise(r => setTimeout(r, 20))
-    assert.equal(span.textContent, 'y', 'updated value');
+    it('shows first controller value immediately', ()=> {
+      expect(span.textContent).to.equal('x');
+    });
 
-    await new Promise(r => setTimeout(r, 20))
-    assert.equal(span.textContent, 'a', 'user value');
+    it('updates to 2nd controller value after 10ms', async ()=> {
+      await new Promise(r => setTimeout(r, 10));
+      expect(span.textContent).to.equal('y');
+    });
 
-    teardown();
+    it('shows user-provided value after 20ms', async ()=> {
+      await new Promise(r => setTimeout(r, 20));
+      expect(span.textContent).to.equal('a');
+    });
   });
 });
