@@ -1,5 +1,5 @@
-import { component, html, useRef, useState } from '../haunted.js';
-import { attach, cycle } from './helpers.js';
+import { component, html, useRef, useState } from '../src/haunted.js';
+import { fixture, expect, nextFrame } from '@open-wc/testing';
 
 describe('useRef', () => {
   it('always returns the same object', async () => {
@@ -16,15 +16,14 @@ describe('useRef', () => {
     }
     customElements.define(tag, component(app));
 
-    const teardown = attach(tag);
-    await cycle();
-    assert.equal(countRef.current, 0, 'countRef.current == 0');
+    await fixture<HTMLElement>(html`<use-ref-test></use-ref-test>`);
+
+    expect(countRef.current).to.equal(0);
     countRef.current++;
     requestRender();
-    await cycle();
-    assert.equal(timesRendered, 2, 'timesRendered == 2');
-    assert.equal(countRef.current, 1, 'countRef.current == 1');    
-    teardown();
+    await nextFrame();
+    expect(timesRendered).to.equal(2);
+    expect(countRef.current).to.equal(1);
   });
 
 });
