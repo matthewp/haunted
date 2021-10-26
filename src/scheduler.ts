@@ -1,6 +1,7 @@
 import { State } from './state';
 import { commitSymbol, phaseSymbol, updateSymbol, effectsSymbol, Phase, layoutEffectsSymbol, EffectsSymbols } from './symbols';
-import { GenericRenderer } from './core';
+import { GenericRenderer, ComponentOrVirtualComponent } from './core';
+import { NodePart } from 'lit-html';
 
 const defer = Promise.resolve().then.bind(Promise.resolve());
 
@@ -28,7 +29,7 @@ function runner() {
 const read = runner();
 const write = runner();
 
-abstract class BaseScheduler<R extends GenericRenderer, H> {
+abstract class BaseScheduler<P extends object, T extends HTMLElement|NodePart, R extends GenericRenderer<T, P>, H extends ComponentOrVirtualComponent<T, P>> {
   renderer: R;
   host: H;
   state: State<H>;

@@ -4,12 +4,12 @@ import { BaseScheduler } from './scheduler';
 const toCamelCase = (val = ''): string =>
   val.replace(/-+([a-z])?/g, (_, char) => char ? char.toUpperCase() : '');
 
-interface Renderer<P extends object> extends GenericRenderer {
+interface Renderer<P extends object> extends GenericRenderer<HTMLElement, P> {
   (this: Component<P>, host: Component<P>): unknown | void;
   observedAttributes?: (keyof P)[];
 }
 
-type Component<P extends object> = Element & P;
+type Component<P extends object> = HTMLElement & P;
 
 type Constructor<P extends object> = new (...args: unknown[]) => Component<P>;
 
@@ -27,13 +27,13 @@ interface Options<P> {
 }
 
 function makeComponent(render: RenderFunction): Creator {
-  class Scheduler<P extends object> extends BaseScheduler<Renderer<P>, Element> {
-    frag: DocumentFragment | Element;
+  class Scheduler<P extends object> extends BaseScheduler<P, HTMLElement, Renderer<P>, Component<P>> {
+    frag: DocumentFragment | HTMLElement;
 
-    constructor(renderer: Renderer<P>, frag: DocumentFragment, host: Element);
-    constructor(renderer: Renderer<P>, host: Element);
-    constructor(renderer: Renderer<P>, frag: DocumentFragment | Element, host?: Element) {
-      super(renderer, host || frag as Element);
+    constructor(renderer: Renderer<P>, frag: DocumentFragment, host: HTMLElement);
+    constructor(renderer: Renderer<P>, host: HTMLElement);
+    constructor(renderer: Renderer<P>, frag: DocumentFragment | HTMLElement, host?: HTMLElement) {
+      super(renderer, (host || frag) as Component<P>);
       this.frag = frag;
     }
 

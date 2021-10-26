@@ -4,7 +4,7 @@ import { BaseScheduler } from './scheduler';
 
 const includes = Array.prototype.includes;
 
-interface Renderer extends GenericRenderer {
+interface Renderer extends GenericRenderer<NodePart> {
   (this: NodePart, ...args: unknown[]): unknown | void;
 }
 
@@ -12,7 +12,7 @@ function makeVirtual() {
   const partToScheduler: WeakMap<NodePart, Scheduler> = new WeakMap();
   const schedulerToPart: WeakMap<Scheduler, NodePart> = new WeakMap();
 
-  class Scheduler extends BaseScheduler<Renderer, NodePart> {
+  class Scheduler extends BaseScheduler<object, NodePart, Renderer, NodePart> {
     args!: unknown[];
 
     constructor(renderer: Renderer, part: NodePart) {
@@ -57,7 +57,7 @@ function makeVirtual() {
   return virtual;
 }
 
-function teardownOnRemove(cont: BaseScheduler<Renderer, NodePart>, part: NodePart, node = part.startNode): void {
+function teardownOnRemove(cont: BaseScheduler<object, NodePart, Renderer, NodePart>, part: NodePart, node = part.startNode): void {
   let frag = node.parentNode!;
   let mo = new MutationObserver(mutations => {
     for(let mutation of mutations) {
