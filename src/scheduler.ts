@@ -73,7 +73,6 @@ abstract class BaseScheduler<P extends object, T extends HTMLElement|NodePart, R
       case updateSymbol: return this.render();
       case effectsSymbol: return this.runEffects(effectsSymbol);
     }
-    this[phaseSymbol] = null;
   }
 
   render(): unknown {
