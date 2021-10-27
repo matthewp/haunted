@@ -1,5 +1,5 @@
-import { component, html } from '../haunted.js';
-import { attach, cycle } from './helpers.js';
+import { component, html } from '../src/haunted.js';
+import { fixture, expect } from '@open-wc/testing';
 
 describe('component()', () => {
   it('works', async () => {
@@ -7,11 +7,9 @@ describe('component()', () => {
       return html`Test`;
     }));
 
-    let teardown = attach('exports-test');
-    await cycle();
+    const el = await fixture(html`<exports-test></exports-test>`)
 
-    assert.equal(host.firstChild.shadowRoot.firstChild.nextSibling.nodeValue, 'Test', 'Rendered');
-    teardown();
+    expect(el.shadowRoot.firstChild.nextSibling.nodeValue).to.equal('Test');
   });
 
   it('Is an instance of HTMLElement', () => {
@@ -21,6 +19,6 @@ describe('component()', () => {
     }));
 
     const el = document.createElement(tag);
-    assert.ok(el instanceof HTMLElement, 'Is an HTMLElement');
+    expect(el instanceof HTMLElement).to.be.true;
   });
 });

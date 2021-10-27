@@ -1,12 +1,13 @@
-import { component, html, hook, Hook } from '../haunted.js';
-import { attach, cycle } from './helpers.js';
+import { component, html, hook, Hook } from '../src/haunted.js';
+import { State } from '../src/state.js';
+import { fixture, fixtureCleanup, expect } from '@open-wc/testing';
 
 let constructorRan = false;
 let updateRan = false;
 let teardownRan = false;
 
 const useCustomHook = hook(class extends Hook {
-  constructor(id, el) {
+  constructor(id: number, el: State) {
     super(id, el);
     constructorRan = true;
   }
@@ -25,20 +26,18 @@ const useCustomHook = hook(class extends Hook {
 describe('custom hook', () => {
   it('can use all hook lifecycle methods', async () => {
     const tag = 'custom-hook-test';
-    let cnt;
 
-    function app() {
+    function App() {
       const val = useCustomHook();
       return html`${val}`;
     }
-    customElements.define(tag, component(app));
+    customElements.define(tag, component(App));
 
-    const teardown = attach(tag);
-    await cycle();
-    teardown();
+    await fixture(html`<custom-hook-test></custom-hook-test>`);
 
-    assert.equal(constructorRan, true, 'constructor ran');
-    assert.equal(updateRan, true, 'update ran');
-    assert.equal(teardownRan, true, 'teardown ran');
+    fixtureCleanup();
+    expect(constructorRan).to.be.true;
+    expect(updateRan).to.be.true;
+    expect(teardownRan).to.be.true;
   });
 });

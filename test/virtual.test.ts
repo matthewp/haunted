@@ -1,5 +1,5 @@
-import { component, html, render, useState, useEffect, useLayoutEffect, virtual } from '../haunted.js';
-import { attach, cycle } from './helpers.js';
+import { component, html, render, useState, useEffect, useLayoutEffect, virtual } from '../src/haunted.js';
+import { fixture, expect, nextFrame } from '@open-wc/testing';
 
 describe('virtual()', () => {
   it('Creates virtual components', async () => {
@@ -15,12 +15,12 @@ describe('virtual()', () => {
 
     render(App(), el);
 
-    await cycle();
-    assert.equal(el.firstElementChild.textContent, '0');
+    await nextFrame();
+    expect(el.firstElementChild.textContent).to.equal('0');
 
     set(1);
-    await cycle();
-    assert.equal(el.firstElementChild.textContent, '1');
+    await nextFrame();
+    expect(el.firstElementChild.textContent).to.equal('1');
   });
 
   it('Rendering children doesn\'t rerender the parent', async () => {
@@ -46,19 +46,19 @@ describe('virtual()', () => {
 
     render(Parent(), el);
 
-    await cycle();
+    await nextFrame();
 
-    assert.equal(parentRenders, 1);
-    assert.equal(childRenders, 1);
+    expect(parentRenders).to.equal(1);
+    expect(childRenders).to.equal(1);
 
     set(1);
-    await cycle();
+    await nextFrame();
 
-    assert.equal(parentRenders, 1);
-    assert.equal(childRenders, 2);
+    expect(parentRenders).to.equal(1);
+    expect(childRenders).to.equal(2);
 
     let span = el.firstElementChild.firstElementChild;
-    assert.equal(span.textContent, "1");
+    expect(span.textContent).to.equal("1");
   });
 
   it('Parent can pass args to the child', async () => {
@@ -76,10 +76,9 @@ describe('virtual()', () => {
 
     render(Parent(), el);
 
-    await cycle();
-    await cycle();
+    await nextFrame();
     let span = el.firstElementChild.firstElementChild;
-    assert.equal(span.textContent, 'bar-qux');
+    expect(span.textContent).to.equal('bar-qux');
   });
 
   it('Rerender parent doesn\'t create a new child', async () => {
@@ -101,19 +100,18 @@ describe('virtual()', () => {
 
     render(Parent(), el);
 
-    await cycle();
+    await nextFrame();
 
     // Change the child's state.
     setChild(1);
 
-    await cycle();
+    await nextFrame();
     setParent('foo');
 
-    await cycle();
-    await cycle();
+    await nextFrame();
 
     let span = el.firstElementChild.firstElementChild;
-    assert.equal(span.textContent, '1');
+    expect(span.textContent).to.equal('1');
   });
 
   it('Can use effects', async () => {
@@ -127,8 +125,8 @@ describe('virtual()', () => {
     let el = document.createElement('div');
     render(App(), el);
 
-    await cycle();
-    assert.equal(effect, true, 'Effect ran within the virtual component');
+    await nextFrame();
+    expect(effect).to.equal(true);
   });
 
   it('Can use layout effects', async () => {
@@ -142,8 +140,8 @@ describe('virtual()', () => {
     let el = document.createElement('div');
     render(App(), el);
 
-    await cycle();
-    assert.equal(effect, true, 'Layout effect ran within the virtual component');
+    await nextFrame();
+    expect(effect).to.equal(true);
   });
 
   it('Teardown is invoked', async () => {
@@ -171,13 +169,11 @@ describe('virtual()', () => {
 
     customElements.define(tag, component(Main));
 
-    let teardown = attach(tag);
-    await cycle();
+    await fixture<HTMLElement>(html`<app-with-virtual-teardown></app-with-virtual-teardown>`);
 
     set(false);
-    await cycle();
-    teardown();
+    await nextFrame();
 
-    assert.equal(teardownCalled, 1, 'Use effect teardown called');
+    expect(teardownCalled).to.equal(1);
   });
 });

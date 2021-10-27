@@ -1,8 +1,8 @@
-import haunted, { useState } from '../core.js';
-import { attach, cycle } from './helpers.js';
+import haunted, { useState } from '../src/core.js';
+import { fixture, expect } from '@open-wc/testing';
 
 // This is just to get the lit-html export for testing.
-import { html, render } from '../haunted.js';
+import { html, render } from '../src/haunted';
 
 describe('haunted/core', () => {
   describe('Building', () => {
@@ -16,18 +16,14 @@ describe('haunted/core', () => {
       });
 
       function App() {
-        let [name] = useState('Matthew');
+        const [name] = useState('Matthew');
         return html`<span>Test-${name}</span>`;
       }
 
       customElements.define(tag, component(App));
-  
-      let teardown = attach(tag);
-      await cycle();
-  
-      let span = host.firstChild.shadowRoot.firstElementChild;
-      assert.equal(span.textContent, 'Test-Matthew', 'Rendered');
-      teardown();
+      const el = await fixture(html`<custom-haunted-test></custom-haunted-test>`);
+
+      expect(el.shadowRoot.textContent).to.equal('Test-Matthew');
     });
   })
 });
