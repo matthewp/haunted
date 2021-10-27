@@ -22,19 +22,11 @@ interface AppProps {
 function App({ userData }: AppProps) {
   return html`
     <img src=${userData.portrait} alt="user portait" />
-<<<<<<< HEAD
-    <fig-caption>${userData.name}</fig-caption>
-  `;
-}
-
-customElements.define('my-figure', component<HTMLElement & FigureProps>(Figure));
-=======
     <p>${userData.name}</p>
   `;
 }
 
 customElements.define('my-app', component<HTMLElement & AppProps>(App));
->>>>>>> 9f94a15 (docs: add HTMLElementTagNameMap & this examples)
 ```
 
 Alternatively, you can extend your Props from HTMLElement:
@@ -47,7 +39,7 @@ interface FigurePlusProps extends HTMLElement {
 function Figure({ userData }: FigurePlusProps) {
   return html`
     <img src=${userData.portrait} alt="user portait" />
-    <fig-caption>${userData.name}</fig-caption>
+    <p>${userData.name}</p>
   `;
 }
 
@@ -92,12 +84,13 @@ declare global {
 
 ## Using `this` in component definition functions
 
-If you need to use `this` in your custom element, pass it into your function with the type `unknown`. Then cast it to `HTMLElement` in the places you need it.
+If you need to use `this` in your custom element, you can describe it as an
+HTMLElement or a shape that extends an HTMLElement.
 
 ```js
-function List(this: unknown, { items }: { items: { id: string, name: string }[] }) {
+function List(this: HTMLElement, { items }: { items: { id: string, name: string }[] }) {
   const handleListItemSelect = (id: string) => () => {
-    (this as HTMLElement).dispatchEvent(
+    this.dispatchEvent(
       new CustomEvent("item-change", {
         bubbles: true,
         composed: true,
