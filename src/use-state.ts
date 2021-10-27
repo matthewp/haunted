@@ -42,7 +42,7 @@ const useState = hook(class<T> extends Hook {
   makeArgs(value: T): void {
     this.args = Object.freeze([value, this.updater] as const);
   }
-}) as <T>(initialValue: T) => readonly [
+}) as <T>(initialValue?: T) => readonly [
   T extends ((...args:any[]) => infer R) ? R : T,
   StateUpdater<T extends ((...args:any[]) => infer S) ? S : T>
 ];;

@@ -1,5 +1,5 @@
-import { component, html, useLayoutEffect, useEffect, useState } from '../haunted.js';
-import { attach, cycle } from './helpers.js';
+import { component, html, useLayoutEffect, useEffect, useState } from '../src/haunted.js';
+import { fixture, fixtureCleanup, expect, nextFrame } from '@open-wc/testing';
 
 describe('useLayoutEffect', () => {
   it('Is called', async () => {
@@ -15,12 +15,9 @@ describe('useLayoutEffect', () => {
     }
     customElements.define(tag, component(app));
 
-    const teardown = attach(tag);
-    await cycle();
+    await fixture(html`<call-layout-effect-test></call-layout-effect-test>`);
 
-    assert.equal(ran, true, 'Was called');
-
-    teardown();
+    expect(ran).to.be.true;
   });
 
   it('Is called before useEffect', async () => {
@@ -40,12 +37,10 @@ describe('useLayoutEffect', () => {
     }
     customElements.define(tag, component(app));
 
-    const teardown = attach(tag);
-    await cycle();
+    await fixture(html`<order-effects-test></order-effects-test>`);
 
-    assert.equal(effects, true, 'Was called before useEffect');
+    expect(effects).to.be.true;
 
-    teardown();
   });
 
   it('Memoizes values', async () => {
@@ -65,14 +60,12 @@ describe('useLayoutEffect', () => {
     }
     customElements.define(tag, component(app));
 
-    const teardown = attach(tag);
-    await cycle();
+    await fixture(html`<memo-layout-effect-test></memo-layout-effect-test>`);
 
     set(2);
-    await cycle();
+    await nextFrame();
 
-    assert.equal(effects, 1, 'effects ran once');
-    teardown();
+    expect(effects).to.equal(1);
   });
 
   it('Can teardown subscriptions', async () => {
@@ -95,17 +88,15 @@ describe('useLayoutEffect', () => {
     }
     customElements.define(tag, component(app));
 
-    const teardown = attach(tag);
-    await cycle();
+    await fixture(html`<teardown-layout-effect-test></teardown-layout-effect-test>`);
 
     set(1);
-    await cycle();
+    await nextFrame();
 
     set(2);
-    await cycle();
+    await nextFrame();
 
-    assert.equal(subs.length, 1, 'Unsubscribed on re-renders');
-    teardown();
+    expect(subs.length).to.equal(1);
   });
 
   it('Tears-down on unmount', async () => {
@@ -127,13 +118,10 @@ describe('useLayoutEffect', () => {
 
     customElements.define(tag, component(app));
 
-    const teardown = attach(tag);
-    await cycle();
+    await fixture(html`<teardown-layout-effect-unmount-test></teardown-layout-effect-unmount-test>`);
+    fixtureCleanup();
 
-    teardown();
-    await cycle();
-
-    assert.equal(subs.length, 0, 'Torn down on unmount');
+    expect(subs.length).to.equal(0);
   });
 
   it('useLayoutEffect(fn) runs the effect after each render', async () => {
@@ -147,16 +135,13 @@ describe('useLayoutEffect', () => {
     }
 
     customElements.define(tag, component(App));
-    const teardown = attach(tag);
+    await fixture(html`<no-values-layout-effect-test></no-values-layout-effect-test>`);
 
-    await cycle();
-    assert.equal(calls, 1, 'called once');
+    expect(calls).to.equal(1);
 
-    document.querySelector(tag).prop = 'foo';
-    await cycle();
-    assert.equal(calls, 2, 'called twice');
-
-    teardown();
+    (document.querySelector(tag) as any).prop = 'foo';
+    await nextFrame();
+    expect(calls).to.equal(2);
   });
 
   it('useLayoutEffect(fn, []) runs the effect only once', async () => {
@@ -170,14 +155,12 @@ describe('useLayoutEffect', () => {
     }
 
     customElements.define(tag, component(App));
-    const teardown = attach(tag);
+    await fixture(html`<empty-array-layout-effect-test></empty-array-layout-effect-test>`);
 
-    await cycle();
-    assert.equal(calls, 1, 'called once');
+    expect(calls).to.equal(1);
 
-    document.querySelector(tag).prop = 'foo';
-    await cycle();
-    assert.equal(calls, 1, 'still called once');
-    teardown();
+    (document.querySelector(tag) as any).prop = 'foo';
+    await nextFrame();
+    expect(calls).to.equal(1);
   });
 });
