@@ -37,7 +37,7 @@
     "@custom-elements-manifest/analyzer": "^0.4.12",
     "@lit/reactive-element": "^1.0.0-rc.1",
     "@matthewp/compile": "^3.0.0",
-    "@rocket/cli": "^0.9.8",
+    "@rocket/cli": "^0.10.1",
     "@rocket/launch": "^0.5.4",
     "@rocket/search": "^0.4.1",
     "cem-plugin-jsdoc-function": "^0.0.2",
