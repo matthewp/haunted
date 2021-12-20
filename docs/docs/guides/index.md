@@ -5,3 +5,4 @@
 - [Attributes](./attributes/)
 - [Events](./events/)
 - [Virtual Components](./virtual/)
+- [TypeScript](./typescript/)

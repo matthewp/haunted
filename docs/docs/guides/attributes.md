@@ -25,8 +25,6 @@ function App({ firstName }) {
   return `Hello ${firstName}!`;
 }
 
-App.observedAttributes = ['first-name'];
-
 customElements.define('my-alt', component(App, { observedAttributes: ['first-name'] }));
 ```
 
