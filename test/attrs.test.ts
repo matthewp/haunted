@@ -157,7 +157,7 @@ describe('Observed attributes', () => {
       name: string;
     }
 
-    function App({ name = '' }) {
+    function App(this: HTMLElement & Props, { name = '' }) {
       return html`<div>${name} ${this.name}</div>`;
     }
 

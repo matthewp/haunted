@@ -1,8 +1,17 @@
 import { makeComponent, ComponentCreator } from './component';
 import { makeContext, ContextCreator } from './create-context';
+import { NodePart } from 'lit-html';
 
-type GenericRenderer = (this: unknown, ...args: any[]) => unknown | void;
-type RenderFunction = (result: unknown, container: DocumentFragment | Element) => void;
+type Component<P> = HTMLElement & P;
+
+type ComponentOrVirtualComponent<
+    T extends HTMLElement|NodePart,
+    P extends object
+  > = T extends HTMLElement ? Component<P> : NodePart;
+
+type GenericRenderer<T extends HTMLElement|NodePart, P extends object = {}> =
+  (this: ComponentOrVirtualComponent<T, P>, ...args: any[]) => unknown | void;
+type RenderFunction = (result: unknown, container: DocumentFragment | HTMLElement) => void;
 
 interface Options {
   render: RenderFunction;
@@ -15,7 +24,7 @@ function haunted({ render }: Options): { component: ComponentCreator, createCont
   return { component, createContext };
 }
 
-export { haunted as default, Options, GenericRenderer, RenderFunction };
+export { haunted as default, Options, GenericRenderer, RenderFunction, ComponentOrVirtualComponent };
 export { useCallback } from './use-callback';
 export { useController } from './use-controller';
 export { useEffect } from './use-effect';

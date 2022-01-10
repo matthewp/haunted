@@ -68,4 +68,36 @@ describe('Passing props', () => {
       };
     }
   });
+
+  it('"this" can be HTMLElement with Props intersection', async () => {
+    function App(this: HTMLElement, { prop }) {
+      expect(this instanceof HTMLElement).to.be.true;
+      return html`testing this`;
+    }
+    customElements.define('this-intersection-element', component<HTMLElement & TestProps>(App));
+    await fixture(html`<this-intersection-element></this-intersection-element>`);
+  });
+
+  it('"this" can be interface that extends HTMLElement', async () => {
+    interface AppNProps extends HTMLElement {
+      prop: number;
+    }
+
+    function App(this: AppNProps, { prop = 1 }) {
+      expect(prop).to.equal(1);
+      expect(this instanceof HTMLElement).to.be.true;
+      return html`testing this`;
+    }
+    customElements.define('this-extends-element', component<AppNProps>(App));
+    await fixture(html`<this-extends-element></this-extends-element>`);
+  });
 });
+
+// check that Typescript correctly infers class instance type from this type of renderer
+export function TypeChecking() {
+  const Class = component(function App(this: HTMLElement & { prop: number }, { prop = 1 }) {
+    return html`prop is ${prop}`;
+  });
+
+  new Class().prop = 2;
+}
