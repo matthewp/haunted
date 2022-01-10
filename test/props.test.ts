@@ -92,3 +92,12 @@ describe('Passing props', () => {
     await fixture(html`<this-extends-element></this-extends-element>`);
   });
 });
+
+// check that Typescript correctly infers class instance type from this type of renderer
+export function TypeChecking() {
+  const Class = component(function App(this: HTMLElement & { prop: number }, { prop = 1 }) {
+    return html`prop is ${prop}`;
+  });
+
+  new Class().prop = 2;
+}
