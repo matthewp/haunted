@@ -1,6 +1,6 @@
 {
   "name": "haunted",
-  "version": "4.8.2",
+  "version": "4.8.3",
   "description": "Hooks for web components",
   "main": "lib/haunted.js",
   "module": "lib/haunted.js",
