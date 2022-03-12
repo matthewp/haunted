@@ -1,15 +1,15 @@
 import { makeComponent, ComponentCreator } from './component';
 import { makeContext, ContextCreator } from './create-context';
-import { NodePart } from 'lit-html';
+import { ChildPart } from 'lit/html';
 
 type Component<P> = HTMLElement & P;
 
 type ComponentOrVirtualComponent<
-    T extends HTMLElement|NodePart,
+    T extends HTMLElement|ChildPart,
     P extends object
-  > = T extends HTMLElement ? Component<P> : NodePart;
+  > = T extends HTMLElement ? Component<P> : ChildPart;
 
-type GenericRenderer<T extends HTMLElement|NodePart, P extends object = {}> =
+type GenericRenderer<T extends HTMLElement|ChildPart, P extends object = {}> =
   (this: ComponentOrVirtualComponent<T, P>, ...args: any[]) => unknown | void;
 type RenderFunction = (result: unknown, container: DocumentFragment | HTMLElement) => void;
 

@@ -1,21 +1,22 @@
-import { Directive, directive, DirectiveParameters, NodePart, Part } from 'lit/directive.js';
+import { Directive, directive, DirectiveParameters, ChildPart, Part } from 'lit/directive.js';
+import { AsyncDirective } from 'lit/async-directive.js';
 import { GenericRenderer } from './core';
 import { BaseScheduler } from './scheduler';
 
 const includes = Array.prototype.includes;
 
-interface Renderer extends GenericRenderer<NodePart> {
-  (this: NodePart, ...args: unknown[]): unknown | void;
+interface Renderer extends GenericRenderer<ChildPart> {
+  (this: ChildPart, ...args: unknown[]): unknown | void;
 }
 
-function makeVirtual() {
-  const partToScheduler: WeakMap<NodePart, Scheduler> = new WeakMap();
-  const schedulerToPart: WeakMap<Scheduler, NodePart> = new WeakMap();
+function makeVirtual() : any {
+  const partToScheduler: WeakMap<ChildPart, Scheduler> = new WeakMap();
+  const schedulerToPart: WeakMap<Scheduler, ChildPart> = new WeakMap();
 
-  class Scheduler extends BaseScheduler<object, NodePart, Renderer, NodePart> {
+  class Scheduler extends BaseScheduler<object, ChildPart, Renderer, ChildPart> {
     args!: unknown[];
 
-    constructor(renderer: Renderer, part: NodePart) {
+    constructor(renderer: Renderer, part: ChildPart) {
       super(renderer, part);
       this.state.virtual = true;
     }
@@ -25,8 +26,8 @@ function makeVirtual() {
     }
 
     commit(result: unknown): void {
-      this.host.setValue(result);
-      this.host.commit();
+      // this.host.setValue(result);
+      // this.host.commit();
     }
 
     teardown(): void {
@@ -39,7 +40,7 @@ function makeVirtual() {
   function virtual(renderer: Renderer) {
     class VirtualDirective extends Directive {
 
-      update(part: Part, args: DirectiveParameters<this>) {
+      update(part: ChildPart, args: DirectiveParameters<this>) {
           let cont = partToScheduler.get(part);
           if(!cont) {
             cont = new Scheduler(renderer, part);
@@ -61,22 +62,22 @@ function makeVirtual() {
   return virtual;
 }
 
-function teardownOnRemove(cont: BaseScheduler<object, NodePart, Renderer, NodePart>, part: NodePart, node = part.startNode): void {
-  let frag = node.parentNode!;
+function teardownOnRemove(cont: BaseScheduler<object, ChildPart, Renderer, ChildPart>, part: ChildPart, node = part.startNode): void {
+  let frag = node!.parentNode!;
   let mo = new MutationObserver(mutations => {
     for(let mutation of mutations) {
       if(includes.call(mutation.removedNodes, node)) {
         mo.disconnect();
 
-        if(node.parentNode instanceof ShadowRoot) {
+        if(node!.parentNode instanceof ShadowRoot) {
           teardownOnRemove(cont, part);
         } else {
           cont.teardown();
         }
         break;
-      } else if(includes.call(mutation.addedNodes, node.nextSibling)) {
+      } else if(includes.call(mutation.addedNodes, node!.nextSibling)) {
         mo.disconnect();
-        teardownOnRemove(cont, part, node.nextSibling || undefined);
+        teardownOnRemove(cont, part, node!.nextSibling || undefined);
         break;
       }
     }
