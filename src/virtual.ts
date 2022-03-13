@@ -1,4 +1,4 @@
-import { Directive, directive, DirectiveParameters, ChildPart, Part } from 'lit/directive.js';
+import { Directive, directive, DirectiveParameters, ChildPart, PartInfo } from 'lit/directive.js';
 import { AsyncDirective } from 'lit/async-directive.js';
 import { GenericRenderer } from './core';
 import { BaseScheduler } from './scheduler';
@@ -9,36 +9,41 @@ interface Renderer extends GenericRenderer<ChildPart> {
   (this: ChildPart, ...args: unknown[]): unknown | void;
 }
 
-function makeVirtual() : any {
-  const partToScheduler: WeakMap<ChildPart, Scheduler> = new WeakMap();
-  const schedulerToPart: WeakMap<Scheduler, ChildPart> = new WeakMap();
+let partToScheduler: WeakMap<ChildPart, Scheduler> = new WeakMap();
+let schedulerToPart: WeakMap<Scheduler, ChildPart> = new WeakMap();
 
-  class Scheduler extends BaseScheduler<object, ChildPart, Renderer, ChildPart> {
-    args!: unknown[];
+class Scheduler extends BaseScheduler<object, ChildPart, Renderer, ChildPart> {
+  args!: unknown[];
 
-    constructor(renderer: Renderer, part: ChildPart) {
-      super(renderer, part);
-      this.state.virtual = true;
-    }
-
-    render(): unknown {
-      return this.state.run(() => this.renderer.apply(this.host, this.args));
-    }
-
-    commit(result: unknown): void {
-      // this.host.setValue(result);
-      // this.host.commit();
-    }
-
-    teardown(): void {
-      super.teardown();
-      let part = schedulerToPart.get(this);
-      partToScheduler.delete(part!);
-    }
+  constructor(renderer: Renderer, part: ChildPart) {
+    super(renderer, part);
+    this.state.virtual = true;
   }
+
+  render(): unknown {
+    return this.state.run(() => this.renderer.apply(this.host, this.args));
+  }
+
+  commit(result: unknown): void {
+    // this.host.setValue(result);
+    // this.host.commit();
+  }
+
+  teardown(): void {
+    super.teardown();
+    let part = schedulerToPart.get(this);
+    partToScheduler.delete(part!);
+  }
+}
+
+function makeVirtual() : any {
 
   function virtual(renderer: Renderer) {
     class VirtualDirective extends Directive {
+
+      constructor(partInfo: PartInfo) {
+        super(partInfo);
+      }
 
       update(part: ChildPart, args: DirectiveParameters<this>) {
           let cont = partToScheduler.get(part);
@@ -50,9 +55,12 @@ function makeVirtual() : any {
           }
           cont.args = args;
           cont.update();
-          this.render(...args);
+          const value = cont.render();
+          return this.render(value);
       }
       render(...args: unknown[]) {
+        return args;
+
       }
     }
 
