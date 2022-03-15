@@ -10,6 +10,9 @@ interface Renderer extends GenericRenderer<ChildPart> {
   (this: ChildPart, ...args: unknown[]): unknown | void;
 }
 
+const partToScheduler: WeakMap<ChildPart, Scheduler> = new WeakMap();
+const schedulerToPart: WeakMap<Scheduler, ChildPart> = new WeakMap();
+
 class Scheduler extends BaseScheduler<object, ChildPart, Renderer, ChildPart> {
   args!: unknown[];
   setValue: Function;
@@ -30,6 +33,8 @@ class Scheduler extends BaseScheduler<object, ChildPart, Renderer, ChildPart> {
 
   teardown(): void {
     super.teardown();
+    let part = schedulerToPart.get(this);
+    partToScheduler.delete(part!);
   }
 }
 
@@ -38,16 +43,19 @@ function makeVirtual() : any {
   function virtual(renderer: Renderer) {
     class VirtualDirective extends AsyncDirective {
 
-      cont: Scheduler | null;
+      cont: Scheduler | undefined;
 
       constructor(partInfo: PartInfo) {
         super(partInfo);
-        this.cont = null;
+        this.cont = undefined;
       }
 
       update(part: ChildPart, args: DirectiveParameters<this>) {
-        if (this.cont === null) {
+        this.cont = partToScheduler.get(part);
+        if (!this.cont) {
           this.cont = new Scheduler(renderer, part, (r: unknown) => {this.setValue(r)});
+          partToScheduler.set(part, this.cont);
+          schedulerToPart.set(this.cont, part);
           teardownOnRemove(this.cont, part);
         }
         this.cont.args = args;
