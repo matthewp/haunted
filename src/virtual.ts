@@ -1,4 +1,5 @@
-import { Directive, directive, DirectiveParameters, ChildPart, PartInfo } from 'lit/directive.js';
+import { directive, DirectiveParameters, ChildPart, PartInfo } from 'lit/directive.js';
+import { noChange } from 'lit';
 import { AsyncDirective } from 'lit/async-directive.js';
 import { GenericRenderer } from './core';
 import { BaseScheduler } from './scheduler';
@@ -11,10 +12,12 @@ interface Renderer extends GenericRenderer<ChildPart> {
 
 class Scheduler extends BaseScheduler<object, ChildPart, Renderer, ChildPart> {
   args!: unknown[];
+  setValue: Function;
 
-  constructor(renderer: Renderer, part: ChildPart) {
+  constructor(renderer: Renderer, part: ChildPart, setValue: Function) {
     super(renderer, part);
     this.state.virtual = true;
+    this.setValue = setValue;
   }
 
   render(): unknown {
@@ -22,8 +25,7 @@ class Scheduler extends BaseScheduler<object, ChildPart, Renderer, ChildPart> {
   }
 
   commit(result: unknown): void {
-    // this.host.setValue(result);
-    // this.host.commit();
+    this.setValue(result);
   }
 
   teardown(): void {
@@ -34,27 +36,27 @@ class Scheduler extends BaseScheduler<object, ChildPart, Renderer, ChildPart> {
 function makeVirtual() : any {
 
   function virtual(renderer: Renderer) {
-    class VirtualDirective extends Directive {
+    class VirtualDirective extends AsyncDirective {
 
-      cont: Scheduler | undefined;
+      cont: Scheduler | null;
 
       constructor(partInfo: PartInfo) {
         super(partInfo);
-        this.cont = undefined;
+        this.cont = null;
       }
 
       update(part: ChildPart, args: DirectiveParameters<this>) {
-          if (!this.cont) {
-            this.cont = new Scheduler(renderer, part);
-            teardownOnRemove(this.cont, part);
-          }
-          this.cont.args = args;
-          this.cont.update();
-          const value = this.cont.render();
-          return this.render(value);
+        if (this.cont === null) {
+          this.cont = new Scheduler(renderer, part, (r: unknown) => {this.setValue(r)});
+          teardownOnRemove(this.cont, part);
+        }
+        this.cont.args = args;
+        this.cont.update();
+        return this.render(args);
       }
+
       render(args: unknown) {
-        return args;
+        return noChange;
       }
     }
 
