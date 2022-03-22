@@ -52,7 +52,7 @@ function makeVirtual() : any {
 
       update(part: ChildPart, args: DirectiveParameters<this>) {
         this.cont = partToScheduler.get(part);
-        if (!this.cont) {
+        if (!this.cont || this.cont.renderer !== renderer) {
           this.cont = new Scheduler(renderer, part, (r: unknown) => {this.setValue(r)});
           partToScheduler.set(part, this.cont);
           schedulerToPart.set(this.cont, part);
