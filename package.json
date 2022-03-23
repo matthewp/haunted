@@ -40,7 +40,7 @@
     "@rocket/cli": "^0.9.8",
     "@rocket/launch": "^0.5.4",
     "@rocket/search": "^0.4.1",
-    "cem-plugin-jsdoc-function": "^0.0.2",
+    "cem-plugin-jsdoc-function": "^0.0.4",
     "eleventy-plugin-helmet": "^0.2.2",
     "rocket-preset-code-tabs": "^0.2.4",
     "rocket-preset-custom-elements-manifest": "^0.1.7",
