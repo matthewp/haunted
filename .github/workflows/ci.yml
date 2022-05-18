@@ -1,0 +1,146 @@
+name: CI
+
+on: [push]
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      
+      - name: Setup Node
+        uses: actions/setup-node@v2
+        with:
+          node-version: 16
+
+      - name: Cache Node Modules
+        id: cache-node
+        uses: actions/cache@v2
+        with:
+          path: "**/node_modules"
+          key: cache-node_modules-${{ runner.os }}-${{ hashFiles('**/package-lock.json') }}-${{ github.run_id }}
+          restore-keys: |
+            cache-node_modules-${{ runner.os }}-${{ hashFiles('**/package-lock.json') }}-${{ github.run_id }}
+            cache-node_modules-${{ runner.os }}-${{ hashFiles('**/package-lock.json') }}-
+
+      - name: Install NPM Dependencies
+        run: npm ci
+
+      - name: Build JavaScript
+        run: |
+          npm run build
+
+      - name: Upload Package Artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: artifacts
+          path: |
+            lib/**
+          if-no-files-found: error
+
+  test:
+    name: 'Test: ${{ matrix.os }} (node@${{ matrix.node_version }})'
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        node_version: [16]
+      fail-fast: false
+    needs: [build]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup node@${{ matrix.node_version }}
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node_version }}
+
+      - name: Download Build Artifacts
+        uses: actions/download-artifact@v2
+
+      - name: Extract Artifacts
+        run: ./.github/extract-artifacts.sh
+
+      - name: Cache Node Modules
+        id: cache-node
+        uses: actions/cache@v2
+        with:
+          path: "**/node_modules"
+          key: cache-node_modules-${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}-${{ github.run_id }}
+          restore-keys: |
+            cache-node_modules-${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}-${{ github.run_id }}
+            cache-node_modules-${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}-
+
+      - name: Install NPM Dependencies
+        run: npm ci
+        env:
+          CI: true
+
+      - name: Run tests
+        run: npm run test
+        env:
+          CI: true
+
+  changelog:
+    name: Changelog PR or Release
+    if: ${{ github.ref_name == 'main' && github.repository_owner == 'matthewp' }}
+    needs: [test]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Node
+        uses: actions/setup-node@v2
+        with:
+          node-version: 16
+      
+      - name: Download Build Artifacts
+        uses: actions/download-artifact@v2
+
+      - name: Extract Artifacts
+        run: ./.github/extract-artifacts.sh
+
+      - name: Cache Node Modules
+        id: cache-node
+        uses: actions/cache@v2
+        with:
+          path: "**/node_modules"
+          key: cache-node_modules-${{ runner.os }}-${{ hashFiles('**/package-lock.json') }}-${{ github.run_id }}
+          restore-keys: |
+            cache-node_modules-${{ runner.os }}-${{ hashFiles('**/package-lock.json') }}-${{ github.run_id }}
+            cache-node_modules-${{ runner.os }}-${{ hashFiles('**/package-lock.json') }}-
+
+      - name: Install NPM Dependencies
+        run: npm ci
+
+      - name: Extract package version
+        id: extract_version
+        uses: Saionaro/extract-package-version@v1.0.6
+      
+      - name: Create Release Pull Request or Publish to npm
+        id: changesets
+        uses: changesets/action@v1
+        with:
+          publish: npm run changeset publish
+          commit: '[ci] release'
+          title: '[ci] release'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      # - name: Publish to cdn.spooky.click
+      #   if: steps.changesets.outputs.published == 'true'
+      #   uses: matthewp/cdn-spooky-deploy-action@v4
+      #   with:
+      #     key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      #     access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      #     pkg: 'haunted'
+      #     source: 'lib'
+      #     version: ${{ steps.extract_version.outputs.version }}
+      #     symlink: true
+      #     entry: main.js
