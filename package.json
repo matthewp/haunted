@@ -40,7 +40,7 @@
     "@open-wc/testing": "^3.1.2",
     "@rocket/cli": "^0.9.8",
     "@rocket/launch": "^0.5.4",
-    "@rocket/search": "^0.4.1",
+    "@rocket/search": "^0.6.0",
     "@web/dev-server-esbuild": "^0.2.14",
     "@web/test-runner": "^0.13.18",
     "cem-plugin-jsdoc-function": "^0.0.2",
