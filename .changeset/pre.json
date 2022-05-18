@@ -1,0 +1,8 @@
+{
+  "mode": "pre",
+  "tag": "next",
+  "initialVersions": {
+    "haunted": "5.0.0"
+  },
+  "changesets": []
+}
