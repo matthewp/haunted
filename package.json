@@ -23,7 +23,11 @@
     "type": "git",
     "url": "git+https://github.com/matthewp/haunted.git"
   },
-  "keywords": ["haunted", "lit", "web-components"],
+  "keywords": [
+    "haunted",
+    "lit",
+    "web-components"
+  ],
   "author": "",
   "license": "BSD-2-Clause",
   "bugs": {
@@ -40,6 +44,7 @@
     "@rocket/cli": "^0.9.8",
     "@rocket/launch": "^0.5.4",
     "@rocket/search": "^0.4.1",
+    "@types/mocha": "^9.1.1",
     "@web/dev-server-esbuild": "^0.3.0",
     "@web/test-runner": "^0.13.18",
     "cem-plugin-jsdoc-function": "^0.0.5",

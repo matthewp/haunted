@@ -45,7 +45,7 @@ class HauntedControllerHost implements ReactiveControllerHost {
   requestUpdate(): void {
     if (!this._updatePending) {
       this._updatePending = true;
-      microtask.then(() => this.kick(this.count + 1));
+      microtask.then(() => this.kick(this.count += 1));
     }
   }
 
