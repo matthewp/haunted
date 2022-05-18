@@ -5,6 +5,7 @@
     "haunted": "5.0.0"
   },
   "changesets": [
-    "chilly-ants-swim"
+    "chilly-ants-swim",
+    "khaki-elephants-fold"
   ]
 }
