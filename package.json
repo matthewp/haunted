@@ -8,6 +8,7 @@
   "customElements": "custom-elements.json",
   "scripts": {
     "build": "tsc",
+    "changeset": "changeset",
     "analyze": "tsc; cem analyze",
     "preversion": "tsc",
     "test": "web-test-runner \"test/**/*.test.ts\" --node-resolve",
@@ -31,6 +32,7 @@
   "homepage": "https://github.com/matthewp/haunted#readme",
   "typings": "lib/haunted.d.ts",
   "devDependencies": {
+    "@changesets/cli": "^2.16.0",
     "@custom-elements-manifest/analyzer": "^0.4.12",
     "@esm-bundle/chai": "^4.3.4-fix.0",
     "@matthewp/compile": "^3.0.0",
