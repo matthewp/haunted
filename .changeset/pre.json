@@ -4,5 +4,7 @@
   "initialVersions": {
     "haunted": "5.0.0"
   },
-  "changesets": []
+  "changesets": [
+    "chilly-ants-swim"
+  ]
 }
