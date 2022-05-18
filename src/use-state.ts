@@ -35,7 +35,7 @@ const useState = hook(class<T> extends Hook {
       value = updaterFn(previousValue);
     }
 
-    if (previousValue === value) {
+    if (Object.is(previousValue, value)) {
       return;
     }
 
