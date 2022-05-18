@@ -11,11 +11,11 @@ lib/*.js: src/*.ts
 
 haunted.js: lib/*.js
 	$(COMPILE) -f es -o $@ -e lit-html lib/haunted.js
-	./sed.sh -i.bu 's/lit-html/https:\/\/unpkg\.com\/lit-html@\^1\.0\.0\/lit-html\.js/' $@
+	./sed.sh -i.bu 's/lit/https:\/\/unpkg\.com\/lit\?module/' $@
 	rm -f $@.bu
 
 web.js: haunted.js
-	./sed.sh 's/https:\/\/unpkg\.com\/lit-html@\^1\.0\.0\/lit-html\.js/\.\.\/lit-html\/lit-html\.js/' $^ > $@
+	./sed.sh 's/https:\/\/unpkg\.com\/lit\?module/\.\.\/lit\/index.js/' $^ > $@
 
 clean:
 	@rm -rf lib haunted.js web.js

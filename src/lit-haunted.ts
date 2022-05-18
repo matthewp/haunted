@@ -1,4 +1,4 @@
-import { html, render } from 'lit-html';
+import { html, render } from 'lit';
 import haunted from './core';
 import { makeVirtual } from './virtual';
 

@@ -23,6 +23,31 @@ describe('virtual()', () => {
     expect(el.firstElementChild.textContent).to.equal('1');
   });
 
+  it('Conditionally renders virtual components in the same part of a template', async () => {
+    let el = document.createElement('div');
+    let set;
+
+    const virtual1 = virtual(() => html`v1`);
+    const virtual2 = virtual(() => html`v2`);
+
+    const App = virtual(() => {
+      const [condition, setCondition] = useState(true);
+      set = setCondition;
+
+      return html`<button>${condition ? virtual1() : virtual2()}</button>`;
+    });
+
+    render(App(), el);
+
+    await nextFrame();
+    expect(el.firstElementChild.textContent).to.equal('v1');
+
+    set(false);
+    await nextFrame();
+    expect(el.firstElementChild.textContent).to.equal('v2');
+
+  });
+
   it('Rendering children doesn\'t rerender the parent', async () => {
     let el = document.createElement('div');
     let set;
