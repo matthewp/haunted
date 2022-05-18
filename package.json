@@ -41,7 +41,7 @@
     "@rocket/cli": "^0.9.8",
     "@rocket/launch": "^0.5.4",
     "@rocket/search": "^0.4.1",
-    "@web/dev-server-esbuild": "^0.2.14",
+    "@web/dev-server-esbuild": "^0.3.0",
     "@web/test-runner": "^0.13.18",
     "cem-plugin-jsdoc-function": "^0.0.2",
     "eleventy-plugin-helmet": "^0.2.2",
