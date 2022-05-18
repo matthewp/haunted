@@ -43,7 +43,7 @@
     "@rocket/search": "^0.4.1",
     "@web/dev-server-esbuild": "^0.2.14",
     "@web/test-runner": "^0.13.18",
-    "cem-plugin-jsdoc-function": "^0.0.2",
+    "cem-plugin-jsdoc-function": "^0.0.5",
     "eleventy-plugin-helmet": "^0.2.2",
     "rocket-preset-code-tabs": "^0.2.4",
     "rocket-preset-custom-elements-manifest": "^0.1.7",
