@@ -29,7 +29,6 @@ jobs:
         run: npm ci
 
       - name: Build JavaScript
-        if: ${{ github.ref_name == 'main' }}
         run: |
           npm run build
 
