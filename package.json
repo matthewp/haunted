@@ -41,7 +41,7 @@
     "@esm-bundle/chai": "^4.3.4-fix.0",
     "@matthewp/compile": "^3.0.0",
     "@open-wc/testing": "^3.1.2",
-    "@rocket/cli": "^0.9.8",
+    "@rocket/cli": "^0.20.3",
     "@rocket/launch": "^0.5.4",
     "@rocket/search": "^0.4.1",
     "@types/mocha": "^9.1.1",
