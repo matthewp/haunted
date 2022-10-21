@@ -46,7 +46,7 @@
     "@rocket/search": "^0.4.1",
     "@types/mocha": "^9.1.1",
     "@web/dev-server-esbuild": "^0.3.0",
-    "@web/test-runner": "^0.13.18",
+    "@web/test-runner": "^0.15.0",
     "cem-plugin-jsdoc-function": "^0.0.5",
     "eleventy-plugin-helmet": "^0.2.2",
     "rocket-preset-code-tabs": "^0.2.4",
