@@ -76,7 +76,7 @@ function makeContext(component: ComponentCreator): Creator {
         const context = useContext(Context);
 
         return render(context);
-      }),
+      }, { useShadowDOM: false }),
 
       defaultValue,
     };
