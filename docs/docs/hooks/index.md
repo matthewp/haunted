@@ -10,6 +10,7 @@ Currently Haunted supports the following hooks:
 - [useEffect](./useEffect/)
 - [useLayoutEffect](./useLayoutEffect/)
 - [useMemo](./useMemo/)
+- [useProvideContext](./useProvideContext/)
 - [useReducer](./useReducer/)
 - [useRef](./useRef/)
 - [useState](./useState/)

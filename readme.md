@@ -45,6 +45,7 @@ Currently Haunted supports the following hooks:
 - [useEffect](https://hauntedhooks.netlify.app/docs/hooks/useEffect/)
 - [useLayoutEffect](https://hauntedhooks.netlify.app/docs/hooks/useLayoutEffect/)
 - [useMemo](https://hauntedhooks.netlify.app/docs/hooks/useMemo/)
+- [useProvideContext](https://hauntedhooks.netlify.app/docs/hooks/useProvideContext/)
 - [useReducer](https://hauntedhooks.netlify.app/docs/hooks/useReducer/)
 - [useRef](https://hauntedhooks.netlify.app/docs/hooks/useRef/)
 - [useState](https://hauntedhooks.netlify.app/docs/hooks/useState/)
