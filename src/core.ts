@@ -33,6 +33,7 @@ export { useState } from './use-state';
 export { useReducer } from './use-reducer';
 export { useMemo } from './use-memo';
 export { useContext } from './use-context';
+export { useProvideContext } from './use-provide-context';
 export { useRef } from './use-ref';
 export { hook, Hook } from './hook';
 export { BaseScheduler } from './scheduler';
