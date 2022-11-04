@@ -19,6 +19,7 @@
 - [useEffect](./hooks/useEffect/)
 - [useLayoutEffect](./hooks/useLayoutEffect/)
 - [useMemo](./hooks/useMemo/)
+- [useProvideContext](./hooks/useProvideContext/)
 - [useReducer](./hooks/useReducer/)
 - [useRef](./hooks/useRef/)
 - [useState](./hooks/useState/)

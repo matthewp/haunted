@@ -1,4 +1,4 @@
-import { component, html, createContext, useContext, useState } from '../src/haunted.js';
+import { component, html, createContext, useContext, useState, useProvideContext } from '../src/haunted.js';
 import { fixture, expect, nextFrame } from '@open-wc/testing';
 
 describe('context', function() {
@@ -37,16 +37,25 @@ describe('context', function() {
     component(ProviderWithSlots)
   );
 
+  function CustomProvider(host) {
+    const {value} = host;
+    useProvideContext(Context, value, [value]);
+  }
+
+  customElements.define('custom-provider', component(CustomProvider));
+
   let withProviderValue, withProviderUpdate;
   let rootProviderValue, rootProviderUpdate;
   let nestedProviderValue, nestedProviderUpdate;
   let genericConsumerValue, genericConsumerUpdate;
+  let customProviderValue, customProviderUpdate;
 
   function Tests() {
     [withProviderValue, withProviderUpdate] = useState();
     [rootProviderValue, rootProviderUpdate] = useState('root');
     [nestedProviderValue, nestedProviderUpdate] = useState('nested');
     [genericConsumerValue, genericConsumerUpdate] = useState('generic');
+    [customProviderValue, customProviderUpdate] = useState('custom');
 
     return html`
       <div id="without-provider">
@@ -80,6 +89,12 @@ describe('context', function() {
             <context-consumer></context-consumer>
           </slotted-context-provider>
         </context-provider>
+      </div>
+
+      <div id="custom-provider">
+        <custom-provider .value=${customProviderValue}>
+          <context-consumer></context-consumer>
+        </custom-provider>
       </div>
     `;
   }
@@ -120,6 +135,10 @@ describe('context', function() {
 
   it('uses slotted value when slotted provider is found', async () => {
     expect(getResults('#with-slotted-provider slotted-context-provider context-consumer')[0]).to.equal('slotted');
+  });
+
+  it('uses custom value when custom provider is found', async () => {
+    expect(getResults('#custom-provider context-consumer')[0]).to.equal('custom');
   });
 
   describe('with generic consumer component', function () {
