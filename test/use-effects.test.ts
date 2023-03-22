@@ -176,4 +176,25 @@ describe('useEffect', () => {
     expect(parentEffects).to.equal(2);
     expect(childEffects).to.equal(2);
   });
+
+  it("Avoids causing infinite loops when the callback schedules an update, but then throws an exception", async () => {
+    function App() {
+      const [state, setState] = useState(0);
+
+      useEffect(() => {
+        // an update is scheduled
+        setState((state) => state! + 1);
+        // an error is thrown
+        throw new Error("Unexpected error");
+      }, []);
+
+      return state;
+    }
+
+    customElements.define("infinite-loop-test", component(App));
+
+    const el = await fixture(html`<infinite-loop-test></infinite-loop-test>`);
+    expect(el).to.be.ok;
+    expect(el.shadowRoot!.textContent).to.equal("1");
+  });
 });

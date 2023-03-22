@@ -21,10 +21,12 @@ function createEffect(setEffects: (state: State, cb: Callable) => void) {
     }
 
     call(): void {
-      if(!this.values || this.hasChanged()) {
+      const hasChanged = !this.values || this.hasChanged();
+      this.lastValues = this.values;
+
+      if(hasChanged) {
         this.run();
       }
-      this.lastValues = this.values;
     }
 
     run(): void {
