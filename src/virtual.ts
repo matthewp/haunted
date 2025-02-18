@@ -1,5 +1,5 @@
 import { directive, DirectiveParameters, ChildPart, PartInfo } from 'lit-html/directive.js';
-import { noChange } from 'lit';
+import { noChange } from 'lit-html';
 import { AsyncDirective } from 'lit-html/async-directive.js';
 import { GenericRenderer } from './core';
 import { BaseScheduler } from './scheduler';
