@@ -93,7 +93,7 @@ describe('context', function() {
   }
 
   function getContentResults(selector: string) {
-    return [...document.querySelector('context-tests').shadowRoot.querySelectorAll(selector)].map((consumer) => (consumer).shadowRoot.textContent);
+    return [...document.querySelector('context-tests').shadowRoot.querySelectorAll(selector)].map((consumer) => (consumer).textContent);
   }
 
   beforeEach(async () => {
