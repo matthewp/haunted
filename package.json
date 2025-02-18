@@ -38,23 +38,22 @@
   "devDependencies": {
     "@changesets/cli": "^2.16.0",
     "@custom-elements-manifest/analyzer": "^0.5.7",
-    "@esm-bundle/chai": "^4.3.4-fix.0",
     "@matthewp/compile": "^3.0.0",
-    "@open-wc/testing": "^3.1.2",
+    "@open-wc/testing": "^4.0.0",
     "@rocket/cli": "^0.9.8",
     "@rocket/launch": "^0.5.4",
     "@rocket/search": "^0.4.1",
-    "@types/mocha": "^9.1.1",
-    "@web/dev-server-esbuild": "^0.3.0",
-    "@web/test-runner": "^0.13.18",
+    "@types/mocha": "^10.0.0",
+    "@web/dev-server-esbuild": "^1.0.0",
+    "@web/test-runner": "^0.20.0",
     "cem-plugin-jsdoc-function": "^0.0.5",
     "eleventy-plugin-helmet": "^0.2.2",
     "rocket-preset-code-tabs": "^0.2.4",
     "rocket-preset-custom-elements-manifest": "^0.1.7",
     "rocket-preset-playground-elements": "^0.1.4",
-    "typescript": "^4.3.5"
+    "typescript": "^5.2.0"
   },
   "dependencies": {
-    "lit": "^2.0.0"
+    "lit": "^2.0.0 || ^3.0.0"
   }
 }

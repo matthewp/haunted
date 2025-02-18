@@ -33,7 +33,7 @@ function use<P extends unknown[], R, H = unknown>(Hook: CustomHook<P, R, H>, ...
 }
 
 function hook<P extends unknown[], R, H = unknown>(Hook: CustomHook<P, R, H>): (...args: P) => R {
-  return use.bind<null, CustomHook<P, R, H>, P, R>(null, Hook);
+  return use.bind<null, [CustomHook<P, R, H>], P, R>(null, Hook);
 }
 
 export { hook, Hook };
