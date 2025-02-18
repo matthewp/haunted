@@ -54,6 +54,7 @@
     "typescript": "^5.2.0"
   },
   "dependencies": {
-    "lit": "^2.0.0 || ^3.0.0"
+    "lit": "^3.0.0",
+    "lit-html": "^3.0.0"
   }
 }
