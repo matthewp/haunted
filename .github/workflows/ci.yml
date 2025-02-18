@@ -8,16 +8,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
-      
+        uses: actions/checkout@v4
+
       - name: Setup Node
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v4
         with:
-          node-version: 16
+          node-version: 22
 
       - name: Cache Node Modules
         id: cache-node
-        uses: actions/cache@v2
+        uses: actions/cache@v4
         with:
           path: "**/node_modules"
           key: cache-node_modules-${{ runner.os }}-${{ hashFiles('**/package-lock.json') }}-${{ github.run_id }}
@@ -33,7 +33,7 @@ jobs:
           npm run build
 
       - name: Upload Package Artifacts
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: artifacts
           path: |
@@ -46,27 +46,27 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest]
-        node_version: [16]
+        node_version: [22]
       fail-fast: false
     needs: [build]
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Setup node@${{ matrix.node_version }}
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node_version }}
 
       - name: Download Build Artifacts
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v4
 
       - name: Extract Artifacts
         run: ./.github/extract-artifacts.sh
 
       - name: Cache Node Modules
         id: cache-node
-        uses: actions/cache@v2
+        uses: actions/cache@v4
         with:
           path: "**/node_modules"
           key: cache-node_modules-${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}-${{ github.run_id }}
@@ -90,24 +90,24 @@ jobs:
     needs: [test]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Setup Node
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v4
         with:
-          node-version: 16
-      
+          node-version: 22
+
       - name: Download Build Artifacts
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v4
 
       - name: Extract Artifacts
         run: ./.github/extract-artifacts.sh
 
       - name: Cache Node Modules
         id: cache-node
-        uses: actions/cache@v2
+        uses: actions/cache@v4
         with:
           path: "**/node_modules"
           key: cache-node_modules-${{ runner.os }}-${{ hashFiles('**/package-lock.json') }}-${{ github.run_id }}
@@ -120,8 +120,8 @@ jobs:
 
       - name: Extract package version
         id: extract_version
-        uses: Saionaro/extract-package-version@v1.0.6
-      
+        uses: Saionaro/extract-package-version@v1.3.0
+
       - name: Create Release Pull Request or Publish to npm
         id: changesets
         uses: changesets/action@v1
