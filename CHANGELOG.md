@@ -1,5 +1,16 @@
 # haunted
 
+## 6.0.0-next.2
+
+### Minor Changes
+
+- 18127bb: Add support for lit 3
+
+### Patch Changes
+
+- f359e21: Don't use Shadow Root for contexts.
+- 7e17c42: Prevent infinite loops if effect schedules an update and then throws.
+
 ## 6.0.0-next.1
 
 ### Patch Changes
