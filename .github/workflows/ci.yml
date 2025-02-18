@@ -14,16 +14,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 22
-
-      - name: Cache Node Modules
-        id: cache-node
-        uses: actions/cache@v4
-        with:
-          path: "**/node_modules"
-          key: cache-node_modules-${{ runner.os }}-${{ hashFiles('**/package-lock.json') }}-${{ github.run_id }}
-          restore-keys: |
-            cache-node_modules-${{ runner.os }}-${{ hashFiles('**/package-lock.json') }}-${{ github.run_id }}
-            cache-node_modules-${{ runner.os }}-${{ hashFiles('**/package-lock.json') }}-
+          cache: 'npm'
 
       - name: Install NPM Dependencies
         run: npm ci
@@ -56,16 +47,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node_version }}
-
-      - name: Cache Node Modules
-        id: cache-node
-        uses: actions/cache@v4
-        with:
-          path: "**/node_modules"
-          key: cache-node_modules-${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}-${{ github.run_id }}
-          restore-keys: |
-            cache-node_modules-${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}-${{ github.run_id }}
-            cache-node_modules-${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}-
+          cache: "npm"
 
       - name: Install NPM Dependencies
         run: npm ci
@@ -91,16 +73,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 22
-
-      - name: Cache Node Modules
-        id: cache-node
-        uses: actions/cache@v4
-        with:
-          path: "**/node_modules"
-          key: cache-node_modules-${{ runner.os }}-${{ hashFiles('**/package-lock.json') }}-${{ github.run_id }}
-          restore-keys: |
-            cache-node_modules-${{ runner.os }}-${{ hashFiles('**/package-lock.json') }}-${{ github.run_id }}
-            cache-node_modules-${{ runner.os }}-${{ hashFiles('**/package-lock.json') }}-
+          cache: 'npm'
 
       - name: Install NPM Dependencies
         run: npm ci
