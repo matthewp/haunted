@@ -29,16 +29,22 @@ interface Options<P> {
 function makeComponent(render: RenderFunction): Creator {
   class Scheduler<P extends object> extends BaseScheduler<P, HTMLElement, Renderer<P>, Component<P>> {
     frag: DocumentFragment | HTMLElement;
+    isFirstRender: boolean;
 
     constructor(renderer: Renderer<P>, frag: DocumentFragment, host: HTMLElement);
     constructor(renderer: Renderer<P>, host: HTMLElement);
     constructor(renderer: Renderer<P>, frag: DocumentFragment | HTMLElement, host?: HTMLElement) {
       super(renderer, (host || frag) as Component<P>);
       this.frag = frag;
+      this.isFirstRender = true;
     }
 
     commit(result: unknown): void {
+      // Clear component's content before first render
+      // Needed by lit-html v2. See https://lit.dev/docs/releases/upgrade/#lit-html
+      if (this.isFirstRender) clearContent(this.frag);
       render(result, this.frag);
+      this.isFirstRender = false;
     }
   }
 
@@ -148,6 +154,16 @@ function makeComponent(render: RenderFunction): Creator {
   }
 
   return component;
+}
+
+// Clear content of element or fragment
+// Same as element.innerHTML = '', but works on fragments as well
+function clearContent(frag: DocumentFragment | HTMLElement) {
+  if (frag.replaceChildren) {
+    frag.replaceChildren() // New API
+  } else {
+    while (frag.firstChild) frag.removeChild(frag.lastChild!); // Fallback for old browsers
+  }
 }
 
 export { makeComponent, Component, Constructor as ComponentConstructor, Creator as ComponentCreator };
