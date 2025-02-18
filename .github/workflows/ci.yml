@@ -35,13 +35,12 @@ jobs:
       - name: Upload Package Artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: artifacts
-          path: |
-            lib/**
+          name: build
+          path: lib/
           if-no-files-found: error
 
   test:
-    name: 'Test: ${{ matrix.os }} (node@${{ matrix.node_version }})'
+    name: "Test: ${{ matrix.os }} (node@${{ matrix.node_version }})"
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -60,9 +59,9 @@ jobs:
 
       - name: Download Build Artifacts
         uses: actions/download-artifact@v4
-
-      - name: Extract Artifacts
-        run: ./.github/extract-artifacts.sh
+        with:
+          name: build
+          path: lib/
 
       - name: Cache Node Modules
         id: cache-node
@@ -99,12 +98,6 @@ jobs:
         with:
           node-version: 22
 
-      - name: Download Build Artifacts
-        uses: actions/download-artifact@v4
-
-      - name: Extract Artifacts
-        run: ./.github/extract-artifacts.sh
-
       - name: Cache Node Modules
         id: cache-node
         uses: actions/cache@v4
@@ -118,29 +111,17 @@ jobs:
       - name: Install NPM Dependencies
         run: npm ci
 
-      - name: Extract package version
-        id: extract_version
-        uses: Saionaro/extract-package-version@v1.3.0
+      - name: Build JavaScript
+        run: |
+          npm run build
 
       - name: Create Release Pull Request or Publish to npm
         id: changesets
         uses: changesets/action@v1
         with:
           publish: npm run changeset publish
-          commit: '[ci] release'
-          title: '[ci] release'
+          commit: "[ci] release"
+          title: "[ci] release"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-
-      # - name: Publish to cdn.spooky.click
-      #   if: steps.changesets.outputs.published == 'true'
-      #   uses: matthewp/cdn-spooky-deploy-action@v4
-      #   with:
-      #     key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-      #     access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      #     pkg: 'haunted'
-      #     source: 'lib'
-      #     version: ${{ steps.extract_version.outputs.version }}
-      #     symlink: true
-      #     entry: main.js
