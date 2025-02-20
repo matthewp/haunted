@@ -1,8 +1,8 @@
-import { GenericRenderer, RenderFunction } from './core';
-import { BaseScheduler } from './scheduler';
+import { GenericRenderer, RenderFunction } from "./core";
+import { BaseScheduler } from "./scheduler";
 
-const toCamelCase = (val = ''): string =>
-  val.replace(/-+([a-z])?/g, (_, char) => char ? char.toUpperCase() : '');
+const toCamelCase = (val = ""): string =>
+  val.replace(/-+([a-z])?/g, (_, char) => (char ? char.toUpperCase() : ""));
 
 interface Renderer<P extends object> extends GenericRenderer<HTMLElement, P> {
   (this: Component<P>, host: Component<P>): unknown | void;
@@ -15,8 +15,15 @@ type Constructor<P extends object> = new (...args: unknown[]) => Component<P>;
 
 interface Creator {
   <P extends object>(renderer: Renderer<P>): Constructor<P>;
-  <P extends object>(renderer: Renderer<P>, options: Options<P>): Constructor<P>;
-  <P extends object>(renderer: Renderer<P>, baseElement: Constructor<{}>, options: Omit<Options<P>, 'baseElement'>): Constructor<P>;
+  <P extends object>(
+    renderer: Renderer<P>,
+    options: Options<P>
+  ): Constructor<P>;
+  <P extends object>(
+    renderer: Renderer<P>,
+    baseElement: Constructor<{}>,
+    options: Omit<Options<P>, "baseElement">
+  ): Constructor<P>;
 }
 
 interface Options<P> {
@@ -27,12 +34,25 @@ interface Options<P> {
 }
 
 function makeComponent(render: RenderFunction): Creator {
-  class Scheduler<P extends object> extends BaseScheduler<P, HTMLElement, Renderer<P>, Component<P>> {
+  class Scheduler<P extends object> extends BaseScheduler<
+    P,
+    HTMLElement,
+    Renderer<P>,
+    Component<P>
+  > {
     frag: DocumentFragment | HTMLElement;
 
-    constructor(renderer: Renderer<P>, frag: DocumentFragment, host: HTMLElement);
+    constructor(
+      renderer: Renderer<P>,
+      frag: DocumentFragment,
+      host: HTMLElement
+    );
     constructor(renderer: Renderer<P>, host: HTMLElement);
-    constructor(renderer: Renderer<P>, frag: DocumentFragment | HTMLElement, host?: HTMLElement) {
+    constructor(
+      renderer: Renderer<P>,
+      frag: DocumentFragment | HTMLElement,
+      host?: HTMLElement
+    ) {
       super(renderer, (host || frag) as Component<P>);
       this.frag = frag;
     }
@@ -43,11 +63,28 @@ function makeComponent(render: RenderFunction): Creator {
   }
 
   function component<P extends object>(renderer: Renderer<P>): Constructor<P>;
-  function component<P extends object>(renderer: Renderer<P>, options: Options<P>): Constructor<P>;
-  function component<P extends object>(renderer: Renderer<P>, baseElement: Constructor<P>, options: Omit<Options<P>, 'baseElement'>): Constructor<P>;
-  function component<P extends object>(renderer: Renderer<P>, baseElementOrOptions?: Constructor<P> | Options<P>, options?: Options<P>): Constructor<P> {
-    const BaseElement = (options || baseElementOrOptions as Options<P> || {}).baseElement || HTMLElement;
-    const {observedAttributes = [], useShadowDOM = true, shadowRootInit = {}} = options || baseElementOrOptions as Options<P> || {};
+  function component<P extends object>(
+    renderer: Renderer<P>,
+    options: Options<P>
+  ): Constructor<P>;
+  function component<P extends object>(
+    renderer: Renderer<P>,
+    baseElement: Constructor<P>,
+    options: Omit<Options<P>, "baseElement">
+  ): Constructor<P>;
+  function component<P extends object>(
+    renderer: Renderer<P>,
+    baseElementOrOptions?: Constructor<P> | Options<P>,
+    options?: Options<P>
+  ): Constructor<P> {
+    const BaseElement =
+      (options || (baseElementOrOptions as Options<P>) || {}).baseElement ||
+      HTMLElement;
+    const {
+      observedAttributes = [],
+      useShadowDOM = true,
+      shadowRootInit = {},
+    } = options || (baseElementOrOptions as Options<P>) || {};
 
     class Element extends BaseElement {
       _scheduler: Scheduler<P>;
@@ -61,7 +98,7 @@ function makeComponent(render: RenderFunction): Creator {
         if (useShadowDOM === false) {
           this._scheduler = new Scheduler(renderer, this);
         } else {
-          this.attachShadow({ mode: 'open', ...shadowRootInit });
+          this.attachShadow({ mode: "open", ...shadowRootInit });
           this._scheduler = new Scheduler(renderer, this.shadowRoot!, this);
         }
       }
@@ -74,14 +111,18 @@ function makeComponent(render: RenderFunction): Creator {
         this._scheduler.teardown();
       }
 
-      attributeChangedCallback(name: string, oldValue: unknown, newValue: unknown): void {
-        if(oldValue === newValue) {
+      attributeChangedCallback(
+        name: string,
+        oldValue: unknown,
+        newValue: unknown
+      ): void {
+        if (oldValue === newValue) {
           return;
         }
-        let val = newValue === '' ? true : newValue;
+        let val = newValue === "" ? true : newValue;
         Reflect.set(this, toCamelCase(name), val);
       }
-    };
+    }
 
     function reflectiveProp<T>(initialValue: T): Readonly<PropertyDescriptor> {
       let value = initialValue;
@@ -97,11 +138,11 @@ function makeComponent(render: RenderFunction): Creator {
           if (isSetup && value === newValue) return;
           isSetup = true;
           value = newValue;
-          if(this._scheduler) {
+          if (this._scheduler) {
             this._scheduler.update();
           }
-        }
-      })
+        },
+      });
     }
 
     const proto = new Proxy(BaseElement.prototype, {
@@ -111,35 +152,35 @@ function makeComponent(render: RenderFunction): Creator {
 
       set(target, key: string, value, receiver): boolean {
         let desc: PropertyDescriptor | undefined;
-        if(key in target) {
+        if (key in target) {
           desc = Object.getOwnPropertyDescriptor(target, key);
-          if(desc && desc.set) {
+          if (desc && desc.set) {
             desc.set.call(receiver, value);
             return true;
           }
 
           Reflect.set(target, key, value, receiver);
-          return true
+          return true;
         }
 
-        if(typeof key === 'symbol' || key[0] === '_') {
+        if (typeof key === "symbol" || key[0] === "_") {
           desc = {
             enumerable: true,
             configurable: true,
             writable: true,
-            value
+            value,
           };
         } else {
           desc = reflectiveProp(value);
         }
         Object.defineProperty(receiver, key, desc);
 
-        if(desc.set) {
+        if (desc.set) {
           desc.set.call(receiver, value);
         }
 
         return true;
-      }
+      },
     });
 
     Object.setPrototypeOf(Element.prototype, proto);
@@ -150,4 +191,9 @@ function makeComponent(render: RenderFunction): Creator {
   return component;
 }
 
-export { makeComponent, Component, Constructor as ComponentConstructor, Creator as ComponentCreator };
+export {
+  makeComponent,
+  Component,
+  Constructor as ComponentConstructor,
+  Creator as ComponentCreator,
+};

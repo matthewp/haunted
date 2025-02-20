@@ -1,9 +1,9 @@
-import { ComponentConstructor, ComponentCreator } from './component';
-import { contextEvent } from './symbols';
-import { useContext } from './use-context';
+import { ComponentConstructor, ComponentCreator } from "./component";
+import { contextEvent } from "./symbols";
+import { useContext } from "./use-context";
 
 interface ConsumerProps<T> {
-  render: (value: T) => unknown,
+  render: (value: T) => unknown;
 }
 
 interface Creator {
@@ -72,11 +72,14 @@ function makeContext(component: ComponentCreator): Creator {
         }
       },
 
-      Consumer: component<ConsumerProps<T>>(function({ render }: ConsumerProps<T>): unknown {
-        const context = useContext(Context);
+      Consumer: component<ConsumerProps<T>>(
+        function ({ render }: ConsumerProps<T>): unknown {
+          const context = useContext(Context);
 
-        return render(context);
-      }, { useShadowDOM: false }),
+          return render(context);
+        },
+        { useShadowDOM: false }
+      ),
 
       defaultValue,
     };

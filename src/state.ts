@@ -1,6 +1,11 @@
-import { Hook } from './hook';
-import { setCurrent, clear } from './interface';
-import { hookSymbol, effectsSymbol, layoutEffectsSymbol, EffectsSymbols } from './symbols';
+import { Hook } from "./hook";
+import { setCurrent, clear } from "./interface";
+import {
+  hookSymbol,
+  effectsSymbol,
+  layoutEffectsSymbol,
+  EffectsSymbols,
+} from "./symbols";
 
 interface Callable {
   call: (state: State) => void;
@@ -32,7 +37,7 @@ class State<H = unknown> {
   _runEffects(phase: EffectsSymbols): void {
     let effects = this[phase];
     setCurrent(this);
-    for(let effect of effects) {
+    for (let effect of effects) {
       effect.call(this);
     }
     clear();
@@ -48,11 +53,11 @@ class State<H = unknown> {
 
   teardown(): void {
     let hooks = this[hookSymbol];
-    hooks.forEach(hook => {
-      if (typeof hook.teardown === 'function') {
+    hooks.forEach((hook) => {
+      if (typeof hook.teardown === "function") {
         hook.teardown();
       }
-    })
+    });
   }
 }
 

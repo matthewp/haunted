@@ -1,4 +1,4 @@
-import { useMemo } from './use-memo';
+import { useMemo } from "./use-memo";
 
 /**
  * @function
@@ -6,8 +6,12 @@ import { useMemo } from './use-memo';
  * @param   {T} initialValue
  * @return  {{ current: T }} Ref
  */
-const useRef = <T>(initialValue: T) => useMemo(() => ({
-    current: initialValue
-}), []);
+const useRef = <T>(initialValue: T) =>
+  useMemo(
+    () => ({
+      current: initialValue,
+    }),
+    []
+  );
 
-export { useRef }
+export { useRef };

@@ -1,8 +1,13 @@
-import { directive, DirectiveParameters, ChildPart, PartInfo } from 'lit-html/directive.js';
-import { noChange } from 'lit-html';
-import { AsyncDirective } from 'lit-html/async-directive.js';
-import { GenericRenderer } from './core';
-import { BaseScheduler } from './scheduler';
+import {
+  directive,
+  DirectiveParameters,
+  ChildPart,
+  PartInfo,
+} from "lit-html/directive.js";
+import { noChange } from "lit-html";
+import { AsyncDirective } from "lit-html/async-directive.js";
+import { GenericRenderer } from "./core";
+import { BaseScheduler } from "./scheduler";
 
 const includes = Array.prototype.includes;
 
@@ -38,11 +43,9 @@ class Scheduler extends BaseScheduler<object, ChildPart, Renderer, ChildPart> {
   }
 }
 
-function makeVirtual() : any {
-
+function makeVirtual(): any {
   function virtual(renderer: Renderer) {
     class VirtualDirective extends AsyncDirective {
-
       cont: Scheduler | undefined;
 
       constructor(partInfo: PartInfo) {
@@ -53,7 +56,9 @@ function makeVirtual() : any {
       update(part: ChildPart, args: DirectiveParameters<this>) {
         this.cont = partToScheduler.get(part);
         if (!this.cont || this.cont.renderer !== renderer) {
-          this.cont = new Scheduler(renderer, part, (r: unknown) => {this.setValue(r)});
+          this.cont = new Scheduler(renderer, part, (r: unknown) => {
+            this.setValue(r);
+          });
           partToScheduler.set(part, this.cont);
           schedulerToPart.set(this.cont, part);
           teardownOnRemove(this.cont, part);
@@ -74,20 +79,24 @@ function makeVirtual() : any {
   return virtual;
 }
 
-function teardownOnRemove(cont: BaseScheduler<object, ChildPart, Renderer, ChildPart>, part: ChildPart, node = part.startNode): void {
+function teardownOnRemove(
+  cont: BaseScheduler<object, ChildPart, Renderer, ChildPart>,
+  part: ChildPart,
+  node = part.startNode
+): void {
   let frag = node!.parentNode!;
-  let mo = new MutationObserver(mutations => {
-    for(let mutation of mutations) {
-      if(includes.call(mutation.removedNodes, node)) {
+  let mo = new MutationObserver((mutations) => {
+    for (let mutation of mutations) {
+      if (includes.call(mutation.removedNodes, node)) {
         mo.disconnect();
 
-        if(node!.parentNode instanceof ShadowRoot) {
+        if (node!.parentNode instanceof ShadowRoot) {
           teardownOnRemove(cont, part);
         } else {
           cont.teardown();
         }
         break;
-      } else if(includes.call(mutation.addedNodes, node!.nextSibling)) {
+      } else if (includes.call(mutation.addedNodes, node!.nextSibling)) {
         mo.disconnect();
         teardownOnRemove(cont, part, node!.nextSibling || undefined);
         break;
