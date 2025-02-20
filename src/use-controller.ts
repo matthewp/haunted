@@ -4,10 +4,13 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-import { ReactiveController, ReactiveControllerHost } from '@lit/reactive-element';
+import {
+  ReactiveController,
+  ReactiveControllerHost,
+} from "@lit/reactive-element";
 
-import { useLayoutEffect } from './use-layout-effect';
-import { useState } from './use-state';
+import { useLayoutEffect } from "./use-layout-effect";
+import { useState } from "./use-state";
 
 const microtask = Promise.resolve();
 
@@ -27,7 +30,7 @@ class HauntedControllerHost implements ReactiveControllerHost {
   private _resolveUpdate!: (value: boolean | PromiseLike<boolean>) => void;
 
   constructor(private count: number, private kick: (x: number) => void) {
-    this._updateCompletePromise = new Promise(res => {
+    this._updateCompletePromise = new Promise((res) => {
       this._resolveUpdate = res;
     });
   }
@@ -39,13 +42,14 @@ class HauntedControllerHost implements ReactiveControllerHost {
   removeController(controller: ReactiveController): void {
     // Note, if the indexOf is -1, the >>> will flip the sign which makes the
     // splice do nothing.
-    this._controllers && this._controllers.splice(this._controllers.indexOf(controller) >>> 0, 1);
+    this._controllers &&
+      this._controllers.splice(this._controllers.indexOf(controller) >>> 0, 1);
   }
 
   requestUpdate(): void {
     if (!this._updatePending) {
       this._updatePending = true;
-      microtask.then(() => this.kick(this.count += 1));
+      microtask.then(() => this.kick((this.count += 1)));
     }
   }
 
@@ -54,15 +58,17 @@ class HauntedControllerHost implements ReactiveControllerHost {
   }
 
   connected() {
-    this._controllers.forEach(c => c.hostConnected && c.hostConnected());
+    this._controllers.forEach((c) => c.hostConnected && c.hostConnected());
   }
 
   disconnected() {
-    this._controllers.forEach(c => c.hostDisconnected && c.hostDisconnected());
+    this._controllers.forEach(
+      (c) => c.hostDisconnected && c.hostDisconnected()
+    );
   }
 
   update() {
-    this._controllers.forEach(c => c.hostUpdate && c.hostUpdate());
+    this._controllers.forEach((c) => c.hostUpdate && c.hostUpdate());
   }
 
   updated() {
@@ -70,10 +76,10 @@ class HauntedControllerHost implements ReactiveControllerHost {
     const resolve = this._resolveUpdate;
     // Create a new updateComplete Promise for the next update,
     // before resolving the current one.
-    this._updateCompletePromise = new Promise(res => {
+    this._updateCompletePromise = new Promise((res) => {
       this._resolveUpdate = res;
     });
-    this._controllers.forEach(c => c.hostUpdated && c.hostUpdated());
+    this._controllers.forEach((c) => c.hostUpdated && c.hostUpdated());
     resolve(this._updatePending);
   }
 }
@@ -89,7 +95,7 @@ class HauntedControllerHost implements ReactiveControllerHost {
  * create function is only called once per component.
  * @return {ReactiveController} the controller instance
  */
-export function useController <C extends ReactiveController>(
+export function useController<C extends ReactiveController>(
   createController: (host: ReactiveControllerHost) => C
 ): C {
   const [count, kick] = useState(0);

@@ -1,7 +1,15 @@
-import { State } from './state';
-import { commitSymbol, phaseSymbol, updateSymbol, effectsSymbol, Phase, layoutEffectsSymbol, EffectsSymbols } from './symbols';
-import { GenericRenderer, ComponentOrVirtualComponent } from './core';
-import { ChildPart } from 'lit/html';
+import { State } from "./state";
+import {
+  commitSymbol,
+  phaseSymbol,
+  updateSymbol,
+  effectsSymbol,
+  Phase,
+  layoutEffectsSymbol,
+  EffectsSymbols,
+} from "./symbols";
+import { GenericRenderer, ComponentOrVirtualComponent } from "./core";
+import { ChildPart } from "lit/html";
 
 const defer = Promise.resolve().then.bind(Promise.resolve());
 
@@ -13,14 +21,14 @@ function runner() {
     id = null;
     let t = tasks;
     tasks = [];
-    for(var i = 0, len = t.length; i < len; i++) {
+    for (var i = 0, len = t.length; i < len; i++) {
       t[i]();
     }
   }
 
-  return function(task: VoidFunction) {
+  return function (task: VoidFunction) {
     tasks.push(task);
-    if(id == null) {
+    if (id == null) {
       id = defer(runTasks);
     }
   };
@@ -29,7 +37,12 @@ function runner() {
 const read = runner();
 const write = runner();
 
-abstract class BaseScheduler<P extends object, T extends HTMLElement|ChildPart, R extends GenericRenderer<T, P>, H extends ComponentOrVirtualComponent<T, P>> {
+abstract class BaseScheduler<
+  P extends object,
+  T extends HTMLElement | ChildPart,
+  R extends GenericRenderer<T, P>,
+  H extends ComponentOrVirtualComponent<T, P>
+> {
   renderer: R;
   host: H;
   state: State<H>;
@@ -45,7 +58,7 @@ abstract class BaseScheduler<P extends object, T extends HTMLElement|ChildPart, 
   }
 
   update(): void {
-    if(this._updateQueued) return;
+    if (this._updateQueued) return;
     read(() => {
       let result = this.handlePhase(updateSymbol);
       write(() => {
@@ -65,18 +78,20 @@ abstract class BaseScheduler<P extends object, T extends HTMLElement|ChildPart, 
   handlePhase(phase: typeof effectsSymbol): void;
   handlePhase(phase: Phase, arg?: unknown) {
     this[phaseSymbol] = phase;
-    switch(phase) {
+    switch (phase) {
       case commitSymbol:
         this.commit(arg);
         this.runEffects(layoutEffectsSymbol);
         return;
-      case updateSymbol: return this.render();
-      case effectsSymbol: return this.runEffects(effectsSymbol);
+      case updateSymbol:
+        return this.render();
+      case effectsSymbol:
+        return this.runEffects(effectsSymbol);
     }
   }
 
   render(): unknown {
-    return this.state.run(() => this.renderer.call(this.host, this.host))
+    return this.state.run(() => this.renderer.call(this.host, this.host));
   }
 
   runEffects(phase: EffectsSymbols): void {

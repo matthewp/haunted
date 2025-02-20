@@ -1,4 +1,4 @@
-import { State } from './state';
+import { State } from "./state";
 
 let current: State | null;
 let currentId = 0;
@@ -16,4 +16,4 @@ function notify(): number {
   return currentId++;
 }
 
-export { clear, current, setCurrent, notify }
+export { clear, current, setCurrent, notify };

@@ -1,6 +1,6 @@
-import { current, notify } from './interface';
-import { State } from './state';
-import { hookSymbol } from './symbols';
+import { current, notify } from "./interface";
+import { State } from "./state";
+import { hookSymbol } from "./symbols";
 
 abstract class Hook<P extends unknown[] = unknown[], R = unknown, H = unknown> {
   id: number;
@@ -15,16 +15,23 @@ abstract class Hook<P extends unknown[] = unknown[], R = unknown, H = unknown> {
   teardown?(): void;
 }
 
-interface CustomHook<P extends unknown[] = unknown[], R = unknown, H = unknown> {
+interface CustomHook<
+  P extends unknown[] = unknown[],
+  R = unknown,
+  H = unknown
+> {
   new (id: number, state: State<H>, ...args: P): Hook<P, R, H>;
 }
 
-function use<P extends unknown[], R, H = unknown>(Hook: CustomHook<P, R, H>, ...args: P): R {
+function use<P extends unknown[], R, H = unknown>(
+  Hook: CustomHook<P, R, H>,
+  ...args: P
+): R {
   let id = notify();
   let hooks = current![hookSymbol];
 
   let hook = hooks.get(id) as Hook<P, R, H> | undefined;
-  if(!hook) {
+  if (!hook) {
     hook = new Hook(id, current as State<H>, ...args);
     hooks.set(id, hook);
   }
@@ -32,7 +39,9 @@ function use<P extends unknown[], R, H = unknown>(Hook: CustomHook<P, R, H>, ...
   return hook.update(...args);
 }
 
-function hook<P extends unknown[], R, H = unknown>(Hook: CustomHook<P, R, H>): (...args: P) => R {
+function hook<P extends unknown[], R, H = unknown>(
+  Hook: CustomHook<P, R, H>
+): (...args: P) => R {
   return use.bind<null, [CustomHook<P, R, H>], P, R>(null, Hook);
 }
 

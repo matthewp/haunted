@@ -1,4 +1,4 @@
-import { useMemo } from './use-memo';
+import { useMemo } from "./use-memo";
 
 /**
  * @function
@@ -7,6 +7,7 @@ import { useMemo } from './use-memo';
  * @param    {unknown[]} inputs - dependencies to callback memoization
  * @return   {T}
  */
-const useCallback = <T extends Function>(fn: T, inputs: unknown[]) => useMemo(() => fn, inputs);
+const useCallback = <T extends Function>(fn: T, inputs: unknown[]) =>
+  useMemo(() => fn, inputs);
 
 export { useCallback };
