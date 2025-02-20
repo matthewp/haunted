@@ -1,31 +1,32 @@
-import { component, html, hook, Hook } from '../src/haunted.js';
-import { State } from '../src/state.js';
-import { fixture, fixtureCleanup, expect } from '@open-wc/testing';
+import { component, html, hook, Hook } from "../src/haunted.js";
+import { State } from "../src/state.js";
+import { fixture, fixtureCleanup, expect } from "@open-wc/testing";
 
 let constructorRan = false;
 let updateRan = false;
 let teardownRan = false;
 
-const useCustomHook = hook(class extends Hook {
-  constructor(id: number, el: State) {
-    super(id, el);
-    constructorRan = true;
+const useCustomHook = hook(
+  class extends Hook {
+    constructor(id: number, el: State) {
+      super(id, el);
+      constructorRan = true;
+    }
+
+    update() {
+      updateRan = true;
+      return "just a test";
+    }
+
+    teardown() {
+      teardownRan = true;
+    }
   }
+);
 
-  update() {
-    updateRan = true;
-    return 'just a test';
-  }
-
-  teardown() {
-    teardownRan = true;
-  }
-
-});
-
-describe('custom hook', () => {
-  it('can use all hook lifecycle methods', async () => {
-    const tag = 'custom-hook-test';
+describe("custom hook", () => {
+  it("can use all hook lifecycle methods", async () => {
+    const tag = "custom-hook-test";
 
     function App() {
       const val = useCustomHook();

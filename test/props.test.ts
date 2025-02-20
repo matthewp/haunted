@@ -1,14 +1,14 @@
-import { component, html } from '../src/haunted.js';
-import { later } from './helpers.js';
-import { fixture, expect, nextFrame } from '@open-wc/testing';
+import { component, html } from "../src/haunted.js";
+import { later } from "./helpers.js";
+import { fixture, expect, nextFrame } from "@open-wc/testing";
 
 interface TestProps {
   prop: unknown;
 }
 
-describe('Passing props', () => {
-  it('Are passed in the initial render', async () => {
-    const tag = 'props-first-run-test';
+describe("Passing props", () => {
+  it("Are passed in the initial render", async () => {
+    const tag = "props-first-run-test";
     let runs = 0;
 
     function Child({ prop }) {
@@ -17,8 +17,10 @@ describe('Passing props', () => {
       return html`testing ${prop.id}`;
     }
 
-    customElements.define(tag + '-child',
-        component<HTMLElement & TestProps>(Child));
+    customElements.define(
+      tag + "-child",
+      component<HTMLElement & TestProps>(Child)
+    );
 
     function App() {
       return html`
@@ -34,8 +36,8 @@ describe('Passing props', () => {
     expect(runs).to.equal(1);
   });
 
-  it('Only update if prop value changed', async () => {
-    const tag = 'only-update-if-prop-value-changed';
+  it("Only update if prop value changed", async () => {
+    const tag = "only-update-if-prop-value-changed";
     let runs = 0;
 
     function App({ prop }) {
@@ -74,8 +76,13 @@ describe('Passing props', () => {
       expect(this instanceof HTMLElement).to.be.true;
       return html`testing this`;
     }
-    customElements.define('this-intersection-element', component<HTMLElement & TestProps>(App));
-    await fixture(html`<this-intersection-element></this-intersection-element>`);
+    customElements.define(
+      "this-intersection-element",
+      component<HTMLElement & TestProps>(App)
+    );
+    await fixture(
+      html`<this-intersection-element></this-intersection-element>`
+    );
   });
 
   it('"this" can be interface that extends HTMLElement', async () => {
@@ -88,14 +95,17 @@ describe('Passing props', () => {
       expect(this instanceof HTMLElement).to.be.true;
       return html`testing this`;
     }
-    customElements.define('this-extends-element', component<AppNProps>(App));
+    customElements.define("this-extends-element", component<AppNProps>(App));
     await fixture(html`<this-extends-element></this-extends-element>`);
   });
 });
 
 // check that Typescript correctly infers class instance type from this type of renderer
 export function TypeChecking() {
-  const Class = component(function App(this: HTMLElement & { prop: number }, { prop = 1 }) {
+  const Class = component(function App(
+    this: HTMLElement & { prop: number },
+    { prop = 1 }
+  ) {
     return html`prop is ${prop}`;
   });
 
