@@ -1,6 +1,6 @@
 import { useMemo } from "./use-memo";
 
-interface Ref<T> {
+export interface Ref<T> {
   current: T;
 }
 
