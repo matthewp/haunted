@@ -53,3 +53,4 @@ export { BaseScheduler } from "./scheduler";
 export { State } from "./state";
 export type { Ref } from "./use-ref";
 export type { Options as ComponentOptions } from "./component";
+export type { StateUpdater } from "./use-state";
