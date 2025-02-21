@@ -26,7 +26,7 @@ interface Creator {
   ): Constructor<P>;
 }
 
-interface Options<P> {
+export interface Options<P> {
   baseElement?: Constructor<{}>;
   observedAttributes?: (keyof P)[];
   useShadowDOM?: boolean;

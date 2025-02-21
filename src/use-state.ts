@@ -1,38 +1,46 @@
 import { hook, Hook } from "./hook";
 import { State } from "./state";
 
-type NewState<T> = T | ((previousState?: T) => T);
-type StateUpdater<T> = (value: NewState<T>) => void;
+export type InitialState<T> = T | (() => T);
+export type NewState<T> = T | ((previousState: T) => T);
+export type StateUpdater<T> = (value: NewState<T>) => void;
+export type StateTuple<T> = readonly [T, StateUpdater<T>];
+
+export interface UseState {
+  <T>(): StateTuple<T | undefined>;
+  <T>(value?: InitialState<T>): StateTuple<T>;
+}
 
 /**
  * @function
  * @template {*} T
  * @param {T} [initialState] - Optional initial state
- * @return {readonly [state: T, updaterFn: StateUpdater<T>]} stateTuple - Tuple of current state and state updater function
+ * @return {StateTuple<T>} stateTuple - Tuple of current state and state updater function
  */
 const useState = hook(
   class<T> extends Hook {
-    args!: readonly [T, StateUpdater<T>];
+    args!: StateTuple<T>;
 
-    constructor(id: number, state: State, initialValue: T) {
+    constructor(id: number, state: State, initialValue: InitialState<T>) {
       super(id, state);
       this.updater = this.updater.bind(this);
 
       if (typeof initialValue === "function") {
-        initialValue = initialValue();
+        const initFn = initialValue as () => T;
+        initialValue = initFn();
       }
 
       this.makeArgs(initialValue);
     }
 
-    update(): readonly [T, StateUpdater<T>] {
+    update(): StateTuple<T> {
       return this.args;
     }
 
     updater(value: NewState<T>): void {
       const [previousValue] = this.args;
       if (typeof value === "function") {
-        const updaterFn = value as (previousState?: T) => T;
+        const updaterFn = value as (previousState: T) => T;
         value = updaterFn(previousValue);
       }
 
@@ -45,14 +53,9 @@ const useState = hook(
     }
 
     makeArgs(value: T): void {
-      this.args = Object.freeze([value, this.updater] as const);
+      this.args = Object.freeze([value, this.updater]);
     }
   }
-) as <T>(
-  initialValue?: T
-) => readonly [
-  T extends (...args: any[]) => infer R ? R : T,
-  StateUpdater<T extends (...args: any[]) => infer S ? S : T>
-];
+) as UseState;
 
 export { useState };
