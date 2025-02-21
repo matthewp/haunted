@@ -1,5 +1,15 @@
 # haunted
 
+## 6.1.0
+
+### Minor Changes
+
+- 3bdc4b0: Export type `Options` from component as `ComponentOptions`.
+- 7303994: Allow omitting initialValue from useRef.
+- 4705ede: Infer `virtual` type definition from renderer arguments.
+- 17190b1: export Ref type
+- 8ff7db9: Improve the defintion of useState, better handling initial value.
+
 ## 6.0.0
 
 ### Major Changes
