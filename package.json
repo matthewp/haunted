@@ -37,7 +37,7 @@
   "typings": "lib/haunted.d.ts",
   "devDependencies": {
     "@changesets/cli": "^2.16.0",
-    "@custom-elements-manifest/analyzer": "^0.5.7",
+    "@custom-elements-manifest/analyzer": "^0.10.4",
     "@matthewp/compile": "^3.0.0",
     "@open-wc/testing": "^4.0.0",
     "@rocket/cli": "^0.9.8",
