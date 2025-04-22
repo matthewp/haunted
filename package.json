@@ -40,7 +40,7 @@
     "@custom-elements-manifest/analyzer": "^0.5.7",
     "@matthewp/compile": "^3.0.0",
     "@open-wc/testing": "^4.0.0",
-    "@rocket/cli": "^0.9.8",
+    "@rocket/cli": "^0.21.0",
     "@rocket/launch": "^0.5.4",
     "@rocket/search": "^0.4.1",
     "@types/mocha": "^10.0.0",
