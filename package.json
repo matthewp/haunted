@@ -51,7 +51,7 @@
     "rocket-preset-code-tabs": "^0.2.4",
     "rocket-preset-custom-elements-manifest": "^0.1.7",
     "rocket-preset-playground-elements": "^0.1.4",
-    "typescript": "^5.2.0"
+    "typescript": "^6.0.2"
   },
   "dependencies": {
     "lit": "^3.0.0",
